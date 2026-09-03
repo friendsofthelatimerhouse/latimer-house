@@ -1,0 +1,92 @@
+---
+/**
+ * The signup band. Copy Deck, Section 1.3.
+ *
+ * The form posts straight to Kit. Until the form ID is filled in on
+ * site.config the field and button render disabled rather than pointing
+ * at nothing, so a half configured build cannot silently swallow an
+ * address. No JavaScript: a plain HTML POST cannot break.
+ */
+import { newsletter } from "../site.config";
+
+const ready = Boolean(newsletter.action);
+---
+
+<section class="signup">
+  <div class="container signup__inner">
+    <div class="signup__text">
+      <p class="eyebrow signup__eyebrow">Stay connected</p>
+      <p class="signup__body">
+        What we uncover, when we are working, and how to join in.
+      </p>
+    </div>
+
+    <form
+      class="signup__form"
+      action={newsletter.action || undefined}
+      method="post"
+    >
+      <label class="visually-hidden" for="signup-email">Email address</label>
+      <input
+        class="signup__field"
+        id="signup-email"
+        type="email"
+        name={newsletter.emailField}
+        placeholder="Email address"
+        autocomplete="email"
+        required
+        disabled={!ready}
+      />
+      <button class="btn btn--primary" type="submit" disabled={!ready}>
+        Sign up
+      </button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .signup {
+    background: var(--bg-sunken, var(--parchment-200));
+    padding-block: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+  }
+
+  .signup__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  }
+
+  .signup__text { flex: 1 1 20rem; }
+  .signup__eyebrow { color: var(--hewn-600); }
+  .signup__body {
+    margin-block-start: 0.6rem;
+    font-size: var(--type-lead-size);
+    line-height: var(--type-lead-line);
+    color: var(--text-secondary);
+    max-width: 34ch;
+  }
+
+  .signup__form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    flex: 1 1 22rem;
+    max-width: 30rem;
+  }
+
+  .signup__field {
+    flex: 1 1 12rem;
+    min-width: 0;
+    padding: 0.9rem 1rem;
+    font-size: var(--type-body-size);
+    background: var(--bg-raised, #fff);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    color: var(--text-primary);
+  }
+  .signup__field::placeholder { color: var(--text-muted); }
+  .signup__field:disabled { opacity: 0.6; cursor: not-allowed; }
+  .signup__form button:disabled { opacity: 0.6; cursor: not-allowed; }
+</style>

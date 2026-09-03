@@ -17,11 +17,8 @@ export const org = {
     "The nonprofit that looks after the Latimer House, a 1790's log house in Sumner County, Tennessee.",
   ein: "41-4875485",
   /**
-   * NOTE, OPEN ITEM: the donation receipt and the deed give the mailing
-   * address of record as 1578 Latimer Lane, Hendersonville TN 37075.
-   * The site currently publishes the address the house STANDS at.
-   * These are different claims and both may be correct, but this must
-   * be settled before launch. See the Launch Plan, Section 7.
+   * SETTLED. The physical location of the house, and the address this
+   * site publishes. Does not get relitigated.
    */
   streetAddress: "300 Wolfpack Way",
   addressLocality: "Gallatin",
@@ -75,6 +72,19 @@ export const give = {
       ? `https://www.paypal.com/donate/?hosted_button_id=${this.paypalHostedButtonId}`
       : "/give/";
   },
+} as const;
+
+/**
+ * Kit, formerly ConvertKit. Free to 10,000 subscribers with unlimited
+ * sends, which this organization will not approach for years.
+ *
+ * `action` is the form POST endpoint Kit gives you when the form is
+ * created under the ORGANISATION's Kit account. Until it is filled in the
+ * signup band renders disabled rather than posting into a void.
+ */
+export const newsletter = {
+  action: "",
+  emailField: "email_address",
 } as const;
 
 export const socials = [

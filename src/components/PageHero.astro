@@ -1,0 +1,64 @@
+---
+/**
+ * The forest hero that opens every interior page.
+ *
+ * `crumbs` is the small uppercase line above the headline. On a top level
+ * page it is one item ("THE STORY"); on a sub page it is the trail
+ * ("THE STORY · THE LOG HOUSE"). Passing an array rather than a string
+ * keeps the middle dot out of the copy, so the separator can change once.
+ */
+interface Props {
+  crumbs: string[];
+  headline: string;
+  /** Optional standfirst. Some heroes are headline only. */
+  lead?: string;
+}
+
+const { crumbs, headline, lead } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <p class="eyebrow page-hero__crumbs">
+      {crumbs.map((crumb, i) => (
+        <>
+          {i > 0 && <span class="page-hero__sep" aria-hidden="true">·</span>}
+          <span>{crumb}</span>
+        </>
+      ))}
+    </p>
+    <h1 class="t-display">{headline}</h1>
+    {lead && <p class="lead page-hero__lead">{lead}</p>}
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    background: var(--forest-950);
+    color: var(--parchment-200);
+    padding-block: clamp(3rem, 1.75rem + 6vw, 7rem)
+      clamp(4.5rem, 3rem + 7vw, 8.5rem);
+  }
+
+  .page-hero__crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    color: var(--hewn-300);
+  }
+  .page-hero__sep { color: var(--sage-600); }
+
+  .page-hero h1 {
+    color: var(--parchment-50);
+    max-width: 20ch;
+    margin-block-start: 1.25rem;
+  }
+
+  /* Wider than the standard measure. The hero standfirst sits under a
+     display line and reads as part of it, not as body copy. */
+  .page-hero__lead {
+    color: var(--parchment-200);
+    max-width: 52ch;
+    margin-block-start: 1.5rem;
+  }
+</style>

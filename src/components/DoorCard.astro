@@ -1,0 +1,101 @@
+---
+/**
+ * A "door" into part of the story. Four of these sit on The Story page.
+ * The whole card is the link target, with the visible GO IN affordance
+ * left in place because a card that looks clickable and a card that is
+ * clickable should be the same card.
+ */
+interface Props {
+  number: string;
+  title: string;
+  body: string;
+  href: string;
+  /** Link label. GO IN on The Story, READ on News. */
+  cta?: string;
+}
+
+const { number, title, body, href, cta = "Go in" } = Astro.props;
+---
+
+<article class="door">
+  <p class="door__number">{number}</p>
+  <h3 class="door__title">
+    <a class="door__link" href={href}>{title}</a>
+  </h3>
+  <p class="door__body">{body}</p>
+  <p class="door__cta" aria-hidden="true">
+    {cta} <span class="door__arrow">&rarr;</span>
+  </p>
+</article>
+
+<style>
+  .door {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+    background: var(--bg-surface, var(--parchment-50));
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+    transition: border-color 150ms ease, transform 150ms ease;
+  }
+  .door:hover {
+    border-color: var(--accent-secondary);
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .door:hover { transform: none; }
+  }
+
+  .door__number {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--type-overline-size);
+    letter-spacing: var(--type-overline-track);
+    color: var(--hewn-600);
+  }
+
+  .door__title {
+    margin-block-start: 0.85rem;
+    font-size: var(--type-h3-size);
+    line-height: var(--type-h3-line);
+  }
+
+  .door__link {
+    text-decoration: none;
+    color: var(--text-heading);
+  }
+  /* Stretches the anchor over the whole card so the entire block is the
+     hit area, while the accessible name stays the title alone. */
+  .door__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .door__body {
+    margin-block-start: 0.85rem;
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-line);
+    color: var(--text-secondary);
+  }
+
+  .door__cta {
+    margin-block-start: auto;
+    padding-block-start: 1.5rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--type-label-size);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+  }
+  .door__arrow {
+    display: inline-block;
+    transition: transform 150ms ease;
+  }
+  .door:hover .door__arrow { transform: translateX(3px); }
+  @media (prefers-reduced-motion: reduce) {
+    .door:hover .door__arrow { transform: none; }
+  }
+</style>

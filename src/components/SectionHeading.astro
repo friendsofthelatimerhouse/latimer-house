@@ -1,0 +1,60 @@
+---
+/**
+ * Eyebrow, heading and optional standfirst. Every band on every interior
+ * page opens with this, which is why it is a component rather than three
+ * tags repeated fourteen times.
+ *
+ * `action` puts a button to the right of the heading on desktop and tucks
+ * it under on tablet and mobile, which is the rule set on the Give page.
+ */
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  lead?: string;
+  action?: { label: string; href: string };
+  /** Heading level. Defaults to h2; sub sections pass 3. */
+  level?: 2 | 3;
+}
+
+const { eyebrow, heading, lead, action, level = 2 } = Astro.props;
+const Heading = `h${level}` as "h2" | "h3";
+---
+
+<div class="section-heading">
+  <div class="section-heading__text">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <Heading class="section-heading__title">{heading}</Heading>
+    {lead && <p class="lead measure section-heading__lead">{lead}</p>}
+  </div>
+
+  {action && (
+    <a class="btn btn--primary section-heading__action" href={action.href}>
+      {action.label}
+    </a>
+  )}
+</div>
+
+<style>
+  .section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  }
+
+  .section-heading__text { flex: 1 1 22rem; }
+  .section-heading__title { margin-block-start: 0.75rem; }
+  .section-heading__lead { margin-block-start: 1rem; }
+
+  .section-heading__action {
+    flex-shrink: 0;
+    /* Sits on the heading's baseline block on desktop. Below 52rem the
+       flex-wrap above drops it under the text on its own line. */
+    margin-block-start: 0.5rem;
+  }
+
+  @media (max-width: 52rem) {
+    .section-heading__action { margin-block-start: 0; }
+  }
+</style>

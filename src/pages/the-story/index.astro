@@ -1,0 +1,90 @@
+---
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import StatsStrip from "../../components/StatsStrip.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
+import DoorCard from "../../components/DoorCard.astro";
+import GiveBand from "../../components/GiveBand.astro";
+import NewsletterBand from "../../components/NewsletterBand.astro";
+
+/** Copy Deck, Section 4. */
+const stats = [
+  { figure: "The 1790's", label: "When it was raised" },
+  { figure: "0.805 acres", label: "The park today" },
+  { figure: "Two families", label: "Latimers and Browns" },
+];
+
+const doors = [
+  {
+    number: "01",
+    title: "The Log House",
+    href: "/the-story/the-log-house/",
+    body:
+      "Hand hewn logs, cut on this ground and raised in the 1790's. Somebody covered them in brick a hundred years later. We are taking it off by hand.",
+  },
+  {
+    number: "02",
+    title: "The Latimers",
+    href: "/the-story/the-latimers/",
+    body:
+      "Charles Latimer built the house. His father Jonathan came home from Saratoga, put the family in ox carts, and brought them to Tennessee.",
+  },
+  {
+    number: "03",
+    title: "The Browns",
+    href: "/the-story/the-browns/",
+    body:
+      "The last family to own it privately, and the reason it is still standing. They had no obligation to this house and they took it on anyway.",
+  },
+  {
+    number: "04",
+    title: "The Park",
+    href: "/the-story/the-park/",
+    body:
+      "0.805 acres, with the house at the middle of it, named in the codicil as the park's centerpiece.",
+  },
+];
+---
+
+<Base
+  title="The Story"
+  description="Two families, two hundred years, and a house that outlasted both of them. Four ways into the story of the Latimer House."
+>
+  <PageHero
+    crumbs={["The Story"]}
+    headline="The Latimers built it. The Browns saved it. We keep it."
+    lead="Two families, two hundred years, and a house that outlasted both of them. Four doors in. Start wherever you like."
+  />
+  <div class="torn-edge" aria-hidden="true"></div>
+
+  <StatsStrip stats={stats} />
+
+  <section class="band band--parchment">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Four ways in"
+        heading="Where to start."
+        lead="Each door opens on a different part of the story."
+      />
+
+      <div class="doors">
+        {doors.map((door) => <DoorCard {...door} />)}
+      </div>
+    </div>
+  </section>
+
+  <GiveBand />
+  <NewsletterBand />
+</Base>
+
+<style>
+  /* Four cards at 1440, two at tablet, one on a phone, and the change
+     happens because the cards run out of room rather than at a breakpoint
+     somebody guessed. */
+  .doors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: clamp(1rem, 0.5rem + 1.5vw, 1.75rem);
+    margin-block-start: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  }
+</style>

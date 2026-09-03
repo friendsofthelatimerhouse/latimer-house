@@ -1,0 +1,74 @@
+---
+/**
+ * The three figure strip that sits directly under every hero.
+ *
+ * Figures are display type and labels are overline type. Three is the
+ * designed count; the grid takes any number and wraps rather than
+ * squashing, so a page that needs four will not break.
+ */
+interface Stat {
+  figure: string;
+  label: string;
+}
+interface Props {
+  stats: Stat[];
+}
+
+const { stats } = Astro.props;
+---
+
+<section class="stats">
+  <div class="container">
+    <dl class="stats__grid">
+      {stats.map((stat) => (
+        <div class="stats__item">
+          <dt class="stats__figure">{stat.figure}</dt>
+          <dd class="stats__label">{stat.label}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .stats {
+    background: var(--bg-surface, var(--parchment-50));
+    padding-block: clamp(2rem, 1.25rem + 3vw, 3.25rem);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  /* auto-fit rather than a fixed three column rule, so the strip reflows
+     continuously instead of snapping at a device width. */
+  .stats__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+    margin: 0;
+  }
+
+  .stats__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .stats__figure {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--type-h2-size);
+    line-height: var(--type-h2-line);
+    letter-spacing: var(--type-h2-track);
+    color: var(--text-heading);
+  }
+
+  .stats__label {
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--type-overline-size);
+    line-height: var(--type-overline-line);
+    letter-spacing: var(--type-overline-track);
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+</style>
