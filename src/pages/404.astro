@@ -1,0 +1,60 @@
+---
+/**
+ * Served by Cloudflare for any path that does not exist, because
+ * wrangler.jsonc sets not_found_handling to "404-page".
+ */
+import Base from "../layouts/Base.astro";
+---
+
+<Base
+  title="Page not found"
+  description="That page is not here. The story of the Latimer House starts on The Story."
+>
+  <section class="notfound">
+    <div class="container">
+      <p class="eyebrow notfound__eyebrow">404</p>
+      <h1>That page is not here.</h1>
+      <p class="lead notfound__lead">
+        The link may be old, or the page may have moved. Everything about the
+        house is a click away.
+      </p>
+      <div class="notfound__actions">
+        <a class="btn btn--primary" href="/the-story/">
+          The story <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="btn btn--secondary notfound__secondary" href="/">Home</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .notfound {
+    background: var(--forest-950);
+    color: var(--parchment-200);
+    padding-block: clamp(4rem, 2.5rem + 8vw, 9rem);
+  }
+  .notfound__eyebrow { color: var(--hewn-300); }
+  .notfound h1 {
+    color: var(--parchment-50);
+    max-width: 16ch;
+    margin-block-start: 1.25rem;
+  }
+  .notfound__lead {
+    color: var(--parchment-200);
+    max-width: 44ch;
+    margin-block-start: 1.5rem;
+  }
+  .notfound__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-block-start: 2.25rem;
+  }
+  .notfound__secondary { color: var(--parchment-100); }
+  .notfound__secondary:hover {
+    background: var(--parchment-100);
+    color: var(--forest-950);
+    border-color: var(--parchment-100);
+  }
+</style>

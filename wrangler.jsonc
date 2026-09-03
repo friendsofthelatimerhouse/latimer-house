@@ -1,0 +1,19 @@
+{
+  // Deploy configuration for Cloudflare Workers static assets.
+  //
+  // This is an assets only Worker: there is no server script, and no
+  // "main" entry. Cloudflare serves the built files in dist/ directly.
+  //
+  // The two handling options below mirror astro.config.mjs. Astro is set
+  // to trailingSlash "always" with build.format "directory", so every
+  // page is a folder containing index.html and every URL ends in a
+  // slash. force-trailing-slash makes Cloudflare agree, rather than
+  // guessing per request.
+  "name": "latimer-house",
+  "compatibility_date": "2026-09-03",
+  "assets": {
+    "directory": "./dist/",
+    "html_handling": "force-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
