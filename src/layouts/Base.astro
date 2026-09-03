@@ -1,0 +1,78 @@
+---
+import "@fontsource/playfair-display/400.css";
+import "@fontsource/playfair-display/600.css";
+import "@fontsource/playfair-display/700.css";
+import "@fontsource/playfair-display/900.css";
+import "@fontsource/playfair-display/400-italic.css";
+import "@fontsource-variable/inter";
+
+import "../styles/tokens.css";
+import "../styles/global.css";
+
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { site, org } from "../site.config";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Omit the page title suffix on the home page. */
+  bare?: boolean;
+}
+
+const { title, description = site.description, bare = false } = Astro.props;
+const fullTitle = bare ? title : `${title} · ${site.title}`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/lmark_forest.png" />
+
+    <!-- Structured data. Helps a local nonprofit show up correctly in
+         search and maps, and costs nothing to include. -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "NGO",
+        name: org.legalName,
+        alternateName: org.shortName,
+        url: site.url,
+        description: org.tagline,
+        email: org.email,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: org.streetAddress,
+          addressLocality: org.addressLocality,
+          addressRegion: org.addressRegion,
+          postalCode: org.postalCode,
+          addressCountry: "US",
+        },
+      })}
+    />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

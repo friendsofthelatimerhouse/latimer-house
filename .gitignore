@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+shot-*.png
+shot.mjs
+.env
+.env.production

@@ -1,0 +1,172 @@
+---
+import { nav, give, org } from "../site.config";
+
+const path = Astro.url.pathname;
+/** Give is reached by the button, so no nav item is active on that page. */
+const isCurrent = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <button
+      class="site-header__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+      data-nav-toggle
+    >
+      <span class="site-header__bars" aria-hidden="true"></span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+
+    <a class="site-header__brand" href="/">
+      <img src="/lmark-reversed.png" alt="" width="44" height="45" />
+      <span class="visually-hidden">{org.shortName}, home</span>
+    </a>
+
+    <nav id="primary-nav" class="site-header__nav" aria-label="Primary">
+      <ul role="list">
+        {nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isCurrent(item.href) ? "page" : undefined}
+            >{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <a class="btn btn--primary site-header__give" href={give.href}>{give.label}</a>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+  const header = document.querySelector<HTMLElement>(".site-header");
+  toggle?.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    header?.classList.toggle("is-open", !open);
+  });
+  /* Close on Escape so keyboard users are never trapped. */
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && header?.classList.contains("is-open")) {
+      toggle?.setAttribute("aria-expanded", "false");
+      header.classList.remove("is-open");
+      toggle?.focus();
+    }
+  });
+</script>
+
+<style>
+  .site-header {
+    background: var(--forest-950);
+    color: var(--parchment-200);
+    position: relative;
+    z-index: 10;
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 6rem;
+  }
+
+  .site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .site-header__brand img { width: 44px; height: auto; }
+
+  .site-header__nav {
+    margin-inline-start: auto;
+  }
+  .site-header__nav ul {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 0.25rem + 1.6vw, 2.25rem);
+    padding: 0;
+    list-style: none;
+  }
+  .site-header__nav a {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--type-overline-size);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--parchment-300);
+    white-space: nowrap;
+    transition: color 150ms ease;
+  }
+  .site-header__nav a:hover { color: var(--parchment-50); }
+  .site-header__nav a[aria-current="page"] { color: var(--parchment-50); }
+
+  .site-header__give { flex-shrink: 0; }
+
+  /* Hamburger, hidden until the nav needs to collapse. */
+  .site-header__toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    background: color-mix(in srgb, var(--sage-600) 45%, transparent);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--parchment-100);
+  }
+  .site-header__bars,
+  .site-header__bars::before,
+  .site-header__bars::after {
+    display: block;
+    width: 1.05rem;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+  .site-header__bars { position: relative; }
+  .site-header__bars::before,
+  .site-header__bars::after {
+    content: "";
+    position: absolute;
+    left: 0;
+  }
+  .site-header__bars::before { top: -6px; }
+  .site-header__bars::after { top: 6px; }
+
+  /* The nav collapses when the six items stop fitting, not at a device
+     width. 60rem is where the labels begin to crowd the Give button. */
+  @media (max-width: 60rem) {
+    .site-header__inner { gap: 1rem; min-height: 5rem; }
+    .site-header__toggle { display: inline-flex; }
+    .site-header__brand { margin-inline: auto; }
+
+    .site-header__nav {
+      position: absolute;
+      inset-inline: 0;
+      top: 100%;
+      margin: 0;
+      background: var(--forest-950);
+      border-block-start: 1px solid color-mix(in srgb, var(--parchment-300) 18%, transparent);
+      display: none;
+    }
+    .site-header.is-open .site-header__nav { display: block; }
+    .site-header__nav ul {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding-block: 0.5rem;
+    }
+    .site-header__nav a {
+      display: block;
+      padding: 0.9rem var(--gutter);
+      font-size: var(--type-label-size);
+    }
+  }
+</style>
