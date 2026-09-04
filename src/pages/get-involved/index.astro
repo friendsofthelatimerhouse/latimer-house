@@ -1,0 +1,326 @@
+---
+/**
+ * Get Involved. Built section for section to "Get Involved · Desktop" on
+ * the Visual Concepts page, node 279:812.
+ *
+ * Canvas order: Header, Page Hero, Torn Edge, How to help, Membership,
+ * Give band, Footer. No newsletter band.
+ *
+ * MIXED alignment, which is unusual and is transcribed rather than chosen.
+ * "How to help" is counterAxisAlignItems MIN, so it sits on the left gutter
+ * like the rest of the panel pages. "Membership" is CENTER, so its blocks
+ * are centred on the page centre line while the text inside them stays left
+ * aligned, the same construction the narrative pages use. Do not make the
+ * two sections agree.
+ */
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import GiveBand from "../../components/GiveBand.astro";
+import { org, give } from "../../site.config";
+
+const stats = [
+  { figure: "Workdays", label: "On the house itself" },
+  { figure: "Every trade", label: "Skilled and unskilled" },
+  { figure: "No experience", label: "Needed to start" },
+] as const;
+
+/** Membership tiers, in the canvas order. */
+const tiers = [
+  { amount: "$25", label: "Family. One household, for the year." },
+  { amount: "$100", label: "Sponsor." },
+  { amount: "$250", label: "Patron." },
+  { amount: "$500", label: "Benefactor." },
+] as const;
+---
+
+<Base
+  title="Get Involved"
+  description="There is more work in this house than a board can do on its own. Workdays, trades, gifts, and the photographs and papers we are still looking for."
+>
+  <PageHero
+    crumbs={[{ label: "Get Involved" }]}
+    headline="We need hands."
+    lead="There is more work in this house than a board can do on its own. Some of it takes a trade and some of it just takes showing up. If you can swing a hammer, or want to learn, we would be glad of you."
+    image="/img/get-involved-hero"
+    imageAlt="A group gathered outside the house, looking at the brick wall where the work is under way."
+    stats={stats}
+    /* Third hero in a row that needs this. Any photograph with bright grass
+       or sky in its lower half puts the stat labels on a light ground, and
+       the canvas scrim only reaches 0.45 at the foot. */
+    scrim={[0.94, 0.86, 0.7]}
+  />
+  <div class="torn-edge" style="--torn-fill: var(--parchment-200);" aria-hidden="true"></div>
+
+  <!-- How to help ------------------------------------------------------ -->
+  <section class="band band--help">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">How to help</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        Where we need you.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        Four things that would help right now.
+      </p>
+
+      <div class="help">
+        <article class="help__block" data-aos="fade-up">
+          <h3 class="help__title">Come to a workday</h3>
+          <p class="help__body">
+            Workdays are where most of the labour happens. Clearing, hauling,
+            stripping back, cleaning up behind the trades, and the hundred small
+            jobs that keep a restoration moving. Bring gloves and boots and we
+            will show you the rest.
+          </p>
+        </article>
+
+        <article class="help__block" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="help__title">Bring a trade</h3>
+          <p class="help__body">
+            Carpenters, masons, roofers, electricians, plumbers, and anyone who
+            has worked on an old building before. Hand hewn log work is its own
+            trade, and we would far rather learn it from people who already know
+            it than guess at it.
+          </p>
+        </article>
+
+        <article class="help__block" data-aos="fade-up">
+          <h3 class="help__title">
+            <a class="help__title-link" href={give.href}>Give</a>
+          </h3>
+          <p class="help__body">
+            Every gift goes into the house and the ground around it. Materials,
+            labour, and the professional work the restoration needs. There is no
+            paid staff and very little overhead.
+          </p>
+        </article>
+
+        <article class="help__block" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="help__title">Photographs and papers</h3>
+          <p class="help__body">
+            The photographic record of this house is thinner than it should be.
+            If your family holds pictures, letters or deeds touching the house or
+            the families in it, <a class="sec__link" href={`mailto:${org.email}`}>we
+            would be glad to hear from you</a>, and we return anything you lend
+            us.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Membership ------------------------------------------------------- -->
+  <section id="membership" class="band band--membership band--forest">
+    <div class="container">
+      <div class="mem__column" data-aos="fade-up">
+        <p class="eyebrow">Membership</p>
+        <h2 class="mem__headline">Join the Friends.</h2>
+        <p class="mem__body">
+          Membership runs the calendar year, January through December. It is the
+          steadiest money the house gets, and it is what lets us plan further
+          ahead than one season at a time.
+        </p>
+      </div>
+
+      <ul class="tiers" role="list">
+        {tiers.map((t, i) => (
+          <li class="tier" data-aos="fade-up" data-aos-delay={i * 80}>
+            <span class="tier__rule" aria-hidden="true"></span>
+            <p class="tier__amount">{t.amount}</p>
+            <p class="tier__label">{t.label}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mem__column mem__column--foot" data-aos="fade-up">
+        <p class="mem__body">
+          Members hear first about workdays, open houses and talks.
+        </p>
+        {/* Now on the canvas too. Forest rather than hewn, because this is
+            a membership and not a gift, and the site keeps those two things
+            in different colours. It points at Give for the moment, since
+            that is where the PayPal buttons will live, but membership needs
+            its own tiered button there rather than the plain donate one. */}
+        <p class="mem__actions">
+          <a class="btn btn--join" href={give.href}>Join the Friends</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <GiveBand />
+</Base>
+
+<style>
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem); }
+  .band--help { background: var(--parchment-200); }
+  .band--membership {
+    background: var(--forest-950);
+    padding-block: clamp(4rem, 2.5rem + 5vw, 7rem);
+  }
+
+  /* 52px on the canvas, as on Visit. */
+  .sec__headline {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 3.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.029em;
+    color: var(--forest-900);
+  }
+  .sec__lead {
+    margin-block-start: 1.125rem;
+    max-width: 43.75rem;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+
+  .sec__link,
+  .help__title-link {
+    color: var(--forest-800);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--hewn-400);
+    text-underline-offset: 0.2em;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .sec__link:hover, .sec__link:focus-visible,
+  .help__title-link:hover, .help__title-link:focus-visible {
+    color: var(--hewn-700);
+  }
+  .help__title-link {
+    color: inherit;
+    text-decoration-color: var(--hewn-400);
+    text-underline-offset: 0.14em;
+  }
+
+  /* ---------- HOW TO HELP ----------
+     Two columns of 588 with a 56 gutter, one column on a phone. Same
+     construction as the Visit cards: space and type, no boxes. */
+  .help {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 1.5rem + 1.5vw, 2.75rem);
+    margin-block-start: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+  }
+  @media (min-width: 48rem) {
+    .help {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2rem, 0.5rem + 4vw, 3.5rem);
+    }
+  }
+
+  .help__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.25rem + 0.9vw, 1.875rem);
+    line-height: 1.2;
+    letter-spacing: -0.017em;
+    color: var(--forest-900);
+  }
+  /* The canvas sets these at 15px. Jeremy asked for them larger: these are
+     the only real paragraphs on the page and 15px reads as a caption next
+     to a 30px heading. 16 to 17px, and the line height comes down a little
+     to keep the block from opening up as the type grows. */
+  .help__body {
+    margin-block-start: 0.75rem;
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem);
+    line-height: 1.55;
+    color: var(--charcoal-700);
+  }
+
+  /* ---------- MEMBERSHIP ----------
+     Centred blocks with left aligned text inside them, which is what the
+     canvas does. The colours are restated here rather than left to the
+     .band--forest rules in global.css, because these are this component's
+     own selectors and carry the [data-astro-cid-*] that outranks them. */
+  .mem__column {
+    max-width: 42.5rem;
+    margin-inline: auto;
+  }
+  .mem__column--foot {
+    margin-block-start: clamp(2rem, 1.5rem + 1.5vw, 3.5rem);
+  }
+  .mem__headline {
+    margin-block-start: 1.125rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 1.5rem + 2vw, 2.5rem);
+    line-height: 1.18;
+    letter-spacing: -0.0375em;
+    color: var(--parchment-50);
+  }
+  .mem__body {
+    margin-block-start: 1.625rem;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--parchment-200);
+  }
+  .mem__column--foot .mem__body { margin-block-start: 0; }
+  /* Centred inside the 680 column, under the left aligned sentence. */
+  .mem__actions {
+    margin-block-start: 1.75rem;
+    text-align: center;
+  }
+  /* Full width on a phone, as the canvas has every mobile button. */
+  @media (max-width: 29.99rem) {
+    .mem__actions .btn { display: flex; justify-content: center; width: 100%; }
+  }
+
+  /* Centred from tablet up, left aligned on a phone. The canvas centres
+     the tiers and the closing line on desktop and tablet and leaves them
+     ranged left on mobile, where a centred column of four short labels
+     reads as a poem rather than a price list. */
+  @media (min-width: 48rem) {
+    .tier { text-align: center; }
+    .tier__rule { margin-inline: auto; }
+    .mem__column--foot .mem__body { text-align: center; }
+  }
+
+  .tiers {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+    margin: 0;
+    margin-block-start: clamp(2.5rem, 1.75rem + 2.5vw, 4.5rem);
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 30rem) {
+    .tiers { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+  }
+  @media (min-width: 64rem) {
+    .tiers { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
+  }
+
+  /* The canvas left aligns the tiers. Jeremy centred the button and asked
+     for these and the closing sentence to follow, so the whole foot of the
+     section reads as one centred block. The rule has to be centred by hand
+     because text-align does nothing to a block element. */
+  .tier__rule {
+    display: block;
+    width: 3rem;
+    height: 3px;
+    background: var(--hewn-400);
+  }
+  .tier__amount {
+    margin-block-start: 0.75rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 2.5rem);
+    line-height: 1.32;
+    letter-spacing: -0.025em;
+    color: var(--parchment-50);
+  }
+  .tier__label {
+    margin-block-start: 0.75rem;
+    font-size: 0.90625rem;
+    line-height: 1.58;
+    color: var(--sage-300);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sec__link, .help__title-link { transition: none; }
+  }
+</style>

@@ -86,6 +86,21 @@ export const tabBar = [
   { label: "Give", href: "/give/", icon: "give" },
 ] as const;
 
+/**
+ * Membership. A different thing from a gift and a different PayPal object,
+ * so it gets its own destination rather than sharing the Give page's.
+ *
+ * `href` points at the membership section of Get Involved for now. Once the
+ * tiered PayPal button exists, the button in that section posts straight to
+ * PayPal and this stays as the route people arrive by.
+ */
+export const membership = {
+  href: "/get-involved/#membership",
+  label: "Join the Friends",
+  /** PayPal hosted button with the four tiers on a dropdown. Not yet made. */
+  paypalHostedButtonId: "",
+} as const;
+
 export const give = {
   href: "/give/",
   label: "Give",

@@ -1,0 +1,194 @@
+---
+/**
+ * Visit. Built section for section to "Visit · Desktop" on the Visual
+ * Concepts page, node 270:780.
+ *
+ * NOT AT LAUNCH. The canvas frame carries that label and it is not
+ * decoration. Everything in the four cards below is a promise the charity
+ * cannot keep yet: the house is mid restoration, the brick is still coming
+ * off, and there is no posted schedule.
+ *
+ * DECIDED 4 September 2026. The page stays visible and stays in the nav for
+ * now, because the site is not public yet: Cloudflare has not cleared it to
+ * publish and the board still has to review it, so the only people who can
+ * reach this page are the people who are meant to be reviewing it. At the
+ * hard launch, when the site is advertised, Visit comes out of the nav and
+ * the sitemap unless the programme is real by then.
+ *
+ * So do NOT remove the noindex as a tidy up. It is already set the way the
+ * page is meant to ship, which means one less thing to remember on launch
+ * day. Hiding it at launch is two more steps, both outside this file:
+ *   1. comment the Visit item out of `nav` in site.config.ts
+ *   2. exclude it from the sitemap, once there is one. There is no sitemap
+ *      integration in astro.config yet. Whoever adds one should filter on
+ *      noindex rather than hard coding a list of pages.
+ *
+ * Canvas order: Header, Page Hero, Torn Edge, Before you come, Give band,
+ * Footer. One content section only, and no newsletter band.
+ *
+ * A PANEL page, like The Restoration and The Log House: the section is
+ * counterAxisAlignItems MIN, so everything sits on the left gutter.
+ */
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import GiveBand from "../../components/GiveBand.astro";
+import { org, mapUrl } from "../../site.config";
+
+const stats = [
+  { figure: "300 Wolfpack Way", label: "Gallatin, Tennessee" },
+  { figure: "Dawn to dusk", label: "The park, every day" },
+  { figure: "Free", label: "Admission, always" },
+] as const;
+---
+
+<Base
+  title="Visit"
+  description="The park is open every day and the house opens on posted dates. There is no charge for any of it."
+  noindex
+>
+  <PageHero
+    crumbs={[{ label: "Visit" }]}
+    headline="Come and walk through it."
+    lead="The Friends of the Latimer House operate the house as a history museum. The park is open every day and the house opens on posted dates. There is no charge for any of it."
+    image="/img/story-hero"
+    imageAlt="The Latimer House and the ground around it."
+    stats={stats}
+    /* story-hero is bright across its lower half, which is exactly where
+       the stat row sits, so the foot of the scrim is strengthened well past
+       the canvas value. Dark scrim under light type, never the reverse. */
+    scrim={[0.92, 0.84, 0.74]}
+  />
+  <div class="torn-edge" style="--torn-fill: var(--parchment-200);" aria-hidden="true"></div>
+
+  <section class="band band--know">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">Before you come</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        What to know.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        Four things worth knowing before you make the trip.
+      </p>
+
+      <div class="know">
+        <article class="know__card" data-aos="fade-up">
+          <h3 class="know__title">Getting here</h3>
+          <p class="know__body">
+            <a class="sec__link" href={mapUrl} target="_blank" rel="noopener">300
+            Wolfpack Way, Gallatin</a>, on the Liberty Creek campus. Park in the
+            lot and follow the path to the house. The walk is short and the
+            ground is level.
+          </p>
+        </article>
+
+        <article class="know__card" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="know__title">Open houses</h3>
+          <p class="know__body">
+            One Saturday a month, April through December, the house is open and
+            someone will take you through it. Two floors, hand hewn logs at both
+            levels, the fireplace, and the places where the brick came away.
+            Allow about half an hour.
+          </p>
+        </article>
+
+        <article class="know__card" data-aos="fade-up">
+          <h3 class="know__title">The talk</h3>
+          <p class="know__body">
+            One Sunday a month, May through October, we give a talk on the house
+            and on the two families who built it and kept it. It runs about an
+            hour, and there is no need to book a place.
+          </p>
+        </article>
+
+        <article class="know__card" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="know__title">Groups and gatherings</h3>
+          <p class="know__body">
+            Schools, historical societies and civic groups are welcome outside
+            the posted dates, and so are gatherings that suit the house. <a
+              class="sec__link"
+              href={`mailto:${org.email}`}>Get in touch</a> and we will find a date
+            and put someone with you who knows the place.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <GiveBand />
+</Base>
+
+<style>
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem); }
+  .band--know { background: var(--parchment-200); }
+
+  /* 52px on the canvas, the same weight as the reveal heading on The
+     Restoration rather than the 44px used for numbered sections. This page
+     has one section, so its heading carries the whole page. */
+  .sec__headline {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 3.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.029em;
+    color: var(--forest-900);
+  }
+
+  .sec__lead {
+    margin-block-start: 1.125rem;
+    max-width: 43.75rem;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+
+  .sec__link {
+    color: var(--forest-800);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--hewn-400);
+    text-underline-offset: 0.2em;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .sec__link:hover,
+  .sec__link:focus-visible { color: var(--hewn-700); }
+
+  /* Two columns of 588 with a 56 gutter on the canvas, one column on a
+     phone. No rules, no cards, no boxes: the canvas sets these four apart
+     with space and type alone. */
+  .know {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 1.5rem + 1.5vw, 2.75rem);
+    margin-block-start: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+  }
+  @media (min-width: 48rem) {
+    .know {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2rem, 0.5rem + 4vw, 3.5rem);
+    }
+  }
+
+  .know__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.25rem + 0.9vw, 1.875rem);
+    line-height: 1.2;
+    letter-spacing: -0.017em;
+    color: var(--forest-900);
+  }
+  /* The canvas sets these at 15px. Jeremy asked for them larger: these are
+     the only real paragraphs on the page and 15px reads as a caption next
+     to a 30px heading. 16 to 17px, and the line height comes down a little
+     to keep the block from opening up as the type grows. */
+  .know__body {
+    margin-block-start: 0.75rem;
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem);
+    line-height: 1.55;
+    color: var(--charcoal-700);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sec__link { transition: none; }
+  }
+</style>

@@ -9,4 +9,14 @@ export default defineConfig({
   trailingSlash: "always",
   build: { format: "directory" },
   compressHTML: true,
+  /**
+   * Bind the dev server to every interface rather than localhost only, so
+   * a phone on the same wifi can reach it. Without this astro dev listens
+   * on 127.0.0.1 and nothing off this machine can see it, which looks
+   * exactly like the site being broken on mobile.
+   *
+   * Dev and preview only. It has no bearing on the static build or on what
+   * Cloudflare serves.
+   */
+  server: { host: true },
 });

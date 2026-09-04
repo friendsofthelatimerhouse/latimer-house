@@ -7,7 +7,7 @@
  * ask, not the ask itself. MAKE A GIFT belongs on the Give page only.
  * Copy Deck, Section 1.6.
  */
-import { give } from "../site.config";
+import { give, membership } from "../site.config";
 ---
 
 <section class="give-band">
@@ -20,9 +20,16 @@ import { give } from "../site.config";
         Every gift goes into the house and the ground around it. Thank you.
       </p>
     </div>
-    <p class="give-band__actions" data-aos="fade-up" data-aos-delay="200">
+    <div class="give-band__actions" data-aos="fade-up" data-aos-delay="200">
       <a class="btn btn--primary" href={give.href}>Help uncover it</a>
-    </p>
+      {/* Membership gets a route from every page, but a quieter one. Two
+          buttons of equal weight here would split a closing ask that has
+          one job, and the copy above is about gifts rather than joining. */}
+      <a class="give-band__alt" href={membership.href}>
+        Or join the Friends
+        <span class="give-band__alt-arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -62,5 +69,56 @@ import { give } from "../site.config";
     color: var(--parchment-300);
   }
 
-  .give-band__actions { flex-shrink: 0; }
+  .give-band__actions {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  .give-band__alt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--parchment-200);
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .give-band__alt:hover,
+  .give-band__alt:focus-visible { color: var(--parchment-50); }
+  /* The arrow steps right on hover and slides back when the pointer
+     leaves, because the transition is on the arrow itself rather than on
+     the hover state. 4px is enough to read as movement without the link
+     appearing to come apart. */
+  .give-band__alt-arrow {
+    font-weight: 400;
+    font-size: 0.875rem;
+    transition: transform 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .give-band__alt:hover .give-band__alt-arrow,
+  .give-band__alt:focus-visible .give-band__alt-arrow {
+    transform: translateX(0.25rem);
+  }
+
+  /* The button goes full width on a phone, as it does on the canvas, and
+     the link centres under it. */
+  @media (max-width: 29.99rem) {
+    /* align-self: stretch does nothing here. The actions block is a flex
+       item in a row, so stretch works on the cross axis, which is height.
+       Width is what we want, so ask for it. */
+    .give-band__actions { width: 100%; }
+    .give-band__actions .btn { justify-content: center; width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .give-band__alt,
+    .give-band__alt-arrow { transition: none; }
+    .give-band__alt:hover .give-band__alt-arrow { transform: none; }
+  }
 </style>

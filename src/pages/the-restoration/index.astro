@@ -1,0 +1,861 @@
+---
+/**
+ * The Restoration. Built section for section to "The Restoration · Desktop"
+ * on the Visual Concepts page, node 118:110.
+ *
+ * Canvas order: Header, Page Hero, Torn Edge, 01 Archive, 02 Condition,
+ * 03 The Reveal, 04 The Vision, 05 Watch, Give band, Footer. No newsletter
+ * band, as on The Story.
+ *
+ * This is a PANEL page, not a narrative one: every section on the canvas is
+ * counterAxisAlignItems MIN, so headings, copy and media all sit on the
+ * left gutter. Do not centre these blocks the way The Latimers and The Park
+ * are centred.
+ *
+ * Section grounds are transcribed from the canvas, not chosen:
+ * parchment-50, parchment-200, forest-950, parchment-50, charcoal-900.
+ * Note the first band is parchment-50 rather than the usual parchment-100,
+ * which is why the torn edge above it has to be told what to fill with.
+ *
+ * Every photograph and every film opens in the shared Lightbox.
+ */
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import GiveBand from "../../components/GiveBand.astro";
+import Lightbox from "../../components/Lightbox.astro";
+import { org } from "../../site.config";
+
+/**
+ * SETTLED, 4 September 2026. May 2025 is the first soft deconstruction, when
+ * the brick came off and the logs were exposed. That is what this page is
+ * about and it is what the hero, the stat and section 03 all refer to.
+ *
+ * June 2026 is a SECOND deconstruction, on the inside, so the architect
+ * could produce an as built drawing of the current structure. We have that
+ * drawing. It is a different event and it does not belong in this date.
+ * Some section 03 photographs carry June 2026 camera dates in their Figma
+ * layer names, so check which shoot each one came from before dating a
+ * caption. The Log House page carries the same distinction in its section
+ * 01 note.
+ *
+ * A record claim, so it lives here once and every mention derives from it.
+ */
+const REVEAL = "May 2025";
+
+const stats = [
+  { figure: "The 1790's", label: "When it was raised" },
+  { figure: REVEAL, label: "When the brick came off" },
+  { figure: "Eight films", label: "Kept as we went" },
+] as const;
+
+/** 01. The four historic images, left to right as on the canvas. */
+const archive = [
+  {
+    stem: "/img/restoration-archive-1",
+    /* The canvas reads "Undated exterior" here, written before anyone had
+       seen the file. The photograph is a print being held up in front of
+       the house, which is a better thing to say than what the canvas
+       guessed. */
+    caption: "An undated print, held up to the house",
+    alt: "A hand holds a faded, undated print up in front of the brick house.",
+  },
+  {
+    stem: "/img/restoration-archive-2",
+    caption: "Family photograph",
+    alt: "A man seated in a chair against a whitewashed log wall, beside a panelled door.",
+  },
+  {
+    stem: "/img/restoration-archive-3",
+    caption: "Undated interior",
+    alt: "The stone fireplace and mantel inside the house, with a clock and ornaments on the shelf.",
+  },
+  {
+    stem: "/img/restoration-archive-4",
+    caption: "Undated exterior",
+    alt: "The brick house in late autumn, seen through bare trees.",
+  },
+] as const;
+const ARCHIVE_W = [600, 900, 1500] as const;
+
+/** 02. The two interiors that stack beside the big exterior. */
+const interiors = [
+  {
+    stem: "/img/restoration-condition-interior-1",
+    caption: "Interior, May 2025",
+    alt: "A room with red carpet and a stone fireplace, the log walls whitewashed between the courses.",
+  },
+  {
+    stem: "/img/restoration-condition-interior-2",
+    caption: "Interior, May 2025",
+    alt: "A staircase with red carpet, the walls panelled in wood.",
+  },
+] as const;
+const INTERIOR_W = [600, 950, 1400] as const;
+
+/**
+ * 03. The canvas reads "Caption" in all four slots, and names them Brick
+ * before, Veneer coming down, Hand hewn logs. The exported files do not
+ * arrive in that order, so the ROW is ordered here rather than the files
+ * being renamed: brick on, wall opened, logs bare. Captions are written
+ * from the photographs themselves.
+ */
+const reveal = [
+  {
+    stem: "/img/restoration-reveal-2",
+    caption: "The side of the house.",
+    alt: "The side of the house under brick, its windows boarded, with a red metal roof.",
+  },
+  {
+    stem: "/img/restoration-reveal-3",
+    caption:
+      "The original 1790's structure, with the addition put on the back in the early 1800's.",
+    alt: "The house from the yard, the original log structure at one end and the later addition behind it.",
+  },
+  {
+    stem: "/img/restoration-reveal-1",
+    caption: "Hand hewn logs, exposed.",
+    alt: "A stretch of hand hewn log wall with the chinking gone from between the courses.",
+  },
+] as const;
+const REVEAL_W = [500, 800, 1200] as const;
+
+/**
+ * 05. Eight films. `youtube` is the video id. A card with no id renders as
+ * an empty poster and is not clickable, so the page never offers a film it
+ * cannot play.
+ *
+ * `poster` says whether there is a still behind the card. The stills are
+ * YouTube's own poster frames, pulled down once and served from our domain
+ * rather than hotlinked, so a visitor who never presses play never talks to
+ * Google at all. A card with poster false falls back to the bare dark panel
+ * the canvas draws, which is what a new film looks like until its still is
+ * dropped into photo-drop as restoration-film-NN.jpg.
+ */
+const films = [
+  { n: "01", title: "History", part: "Part 1", youtube: "PXEjxgWLANs", poster: true },
+  { n: "02", title: "History", part: "Part 2", youtube: "l-PuB1effes", poster: true },
+  { n: "03", title: "Background", part: "Part 1", youtube: "7-e_GwrQSpg", poster: true },
+  { n: "04", title: "Background", part: "Part 2", youtube: "0hQvCANZ0pM", poster: true },
+  { n: "05", title: "Construction", part: "Part 1", youtube: "AFh_iU6a1Q8", poster: true },
+  { n: "06", title: "Construction", part: "Part 2", youtube: "z4H37Y1_wWw", poster: true },
+  { n: "07", title: "Construction", part: "Part 3", youtube: "ddv1Cg71oN8", poster: true },
+  { n: "08", title: "Construction", part: "Part 4", youtube: "5Hnjovs8RT0", poster: true },
+] as const;
+const FILM_W = [400, 640, 1280] as const;
+
+/** Widths that do not exist on disk hand the browser a 404 to choose. */
+const set = (ext: string, stem: string, ws: readonly number[]) =>
+  ws.map((w) => `${stem}-${w}.${ext} ${w}w`).join(", ");
+const full = (stem: string, ws: readonly number[]) =>
+  `${stem}-${ws[ws.length - 1]}.jpg`;
+---
+
+<Base
+  title="The Restoration"
+  description="For most of a century this house wore a brick coat. We are taking it off by hand. The running record of that work, in photographs and film."
+>
+  <PageHero
+    crumbs={[{ label: "The Restoration" }]}
+    headline="Uncovering a 1790's log house."
+    lead={`For most of a century this house wore a brick coat, and almost nobody knew what was underneath it. In ${REVEAL} we started taking the brick off by hand. This page is the running record of that work, in photographs and film, kept as we go.`}
+    image="/img/restoration-hero"
+    imageAlt="The stone fireplace and hearth inside the house, the log wall whitewashed between the courses."
+    stats={stats}
+    scrim={[0.95, 0.88, 0.82]}
+  />
+  <div class="torn-edge" style="--torn-fill: var(--parchment-50);" aria-hidden="true"></div>
+
+  <!-- 01 ------------------------------------------------------------- -->
+  <section class="band band--archive">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">01 &middot; Archive</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        The earliest images we have.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        These are the earliest photographs of the house we have been able to
+        find. The record is thinner than it should be. If your family holds
+        photographs of this house, <a class="sec__link" href={`mailto:${org.email}`}>we would be glad to hear from you</a>.
+      </p>
+
+      <ul class="shots shots--archive" role="list">
+        {archive.map((a, i) => (
+          <li class="shot" data-aos="fade-up" data-aos-delay={i * 80}>
+            <button
+              class="shot__btn"
+              type="button"
+              data-lb="image"
+              data-lb-src={full(a.stem, ARCHIVE_W)}
+              data-lb-alt={a.alt}
+              data-lb-caption={a.caption}
+              aria-label={`Open ${a.caption.toLowerCase()} at full size`}
+            >
+              <span class="shot__frame">
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset={set("webp", a.stem, ARCHIVE_W)}
+                    sizes="(min-width: 79rem) 290px, (min-width: 48rem) 23vw, 44vw"
+                  />
+                  <img
+                    src={`${a.stem}-600.jpg`}
+                    srcset={set("jpg", a.stem, ARCHIVE_W)}
+                    sizes="(min-width: 79rem) 290px, (min-width: 48rem) 23vw, 44vw"
+                    alt={a.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+              </span>
+            </button>
+            <p class="shot__caption">{a.caption}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 02 ------------------------------------------------------------- -->
+  <section class="band band--condition">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">02 &middot; Condition</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        The house we were handed.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        This is how it stood when the county placed it in our care. Paneling
+        on the walls, carpet on the floors, and a brick skin over the whole of
+        it.
+      </p>
+
+      <div class="condition">
+        <div class="shot condition__exterior" data-aos="fade-up">
+          <button
+            class="shot__btn"
+            type="button"
+            data-lb="image"
+            data-lb-src={full("/img/restoration-condition-exterior", [700, 1100, 1600])}
+            data-lb-alt="The side of the house under its brick veneer, the ground around it overgrown."
+            data-lb-caption="The brick veneer, October 2024"
+            aria-label="Open the brick veneer photograph at full size"
+          >
+            <span class="shot__frame shot__frame--exterior">
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset={set("webp", "/img/restoration-condition-exterior", [700, 1100, 1600])}
+                  sizes="(min-width: 64rem) 736px, 92vw"
+                />
+                <img
+                  src="/img/restoration-condition-exterior-1100.jpg"
+                  srcset={set("jpg", "/img/restoration-condition-exterior", [700, 1100, 1600])}
+                  sizes="(min-width: 64rem) 736px, 92vw"
+                  alt="The side of the house under its brick veneer, the ground around it overgrown."
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+            </span>
+          </button>
+          <p class="shot__caption">The brick veneer, October 2024</p>
+        </div>
+
+        <ul class="condition__interiors" role="list">
+          {interiors.map((s, i) => (
+            <li class="shot" data-aos="fade-up" data-aos-delay={(i + 1) * 100}>
+              <button
+                class="shot__btn"
+                type="button"
+                data-lb="image"
+                data-lb-src={full(s.stem, INTERIOR_W)}
+                data-lb-alt={s.alt}
+                data-lb-caption={s.caption}
+                aria-label={`Open ${s.caption.toLowerCase()} at full size`}
+              >
+                <span class="shot__frame shot__frame--interior">
+                  <picture>
+                    <source
+                      type="image/webp"
+                      srcset={set("webp", s.stem, INTERIOR_W)}
+                      sizes="(min-width: 64rem) 472px, (min-width: 30rem) 45vw, 92vw"
+                    />
+                    <img
+                      src={`${s.stem}-600.jpg`}
+                      srcset={set("jpg", s.stem, INTERIOR_W)}
+                      sizes="(min-width: 64rem) 472px, (min-width: 30rem) 45vw, 92vw"
+                      alt={s.alt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
+                </span>
+              </button>
+              <p class="shot__caption">{s.caption}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 ------------------------------------------------------------- -->
+  <section class="band band--reveal band--forest">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">03 &middot; The Reveal</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        The brick comes off.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        In {REVEAL} the veneer began coming away, and the hand hewn logs came
+        out from under it for the first time in about a hundred years. They
+        were cut on this ground. They are still standing.
+      </p>
+
+      <div class="shot reveal__lead" data-aos="fade-up">
+        <button
+          class="shot__btn"
+          type="button"
+          data-lb="image"
+          data-lb-src={full("/img/restoration-reveal-lead", [800, 1232, 2000])}
+          data-lb-alt="Hand hewn logs and a heavy header beam, exposed where the brick has been opened."
+          data-lb-caption="Hand hewn logs, out from under the brick."
+          aria-label="Open the exposed logs photograph at full size"
+        >
+          <span class="shot__frame shot__frame--lead">
+            <picture>
+              <source
+                type="image/webp"
+                srcset={set("webp", "/img/restoration-reveal-lead", [800, 1232, 2000])}
+                sizes="(min-width: 79rem) 1232px, 92vw"
+              />
+              <img
+                src="/img/restoration-reveal-lead-1232.jpg"
+                srcset={set("jpg", "/img/restoration-reveal-lead", [800, 1232, 2000])}
+                sizes="(min-width: 79rem) 1232px, 92vw"
+                alt="Hand hewn logs and a heavy header beam, exposed where the brick has been opened."
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </span>
+        </button>
+        <p class="shot__caption">Hand hewn logs, out from under the brick.</p>
+      </div>
+
+      <ul class="shots shots--reveal" role="list">
+        {reveal.map((s, i) => (
+          <li class="shot" data-aos="fade-up" data-aos-delay={i * 100}>
+            <button
+              class="shot__btn"
+              type="button"
+              data-lb="image"
+              data-lb-src={full(s.stem, REVEAL_W)}
+              data-lb-alt={s.alt}
+              data-lb-caption={s.caption}
+              aria-label="Open this photograph at full size"
+            >
+              <span class="shot__frame shot__frame--reveal">
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset={set("webp", s.stem, REVEAL_W)}
+                    sizes="(min-width: 79rem) 395px, 30vw"
+                  />
+                  <img
+                    src={`${s.stem}-500.jpg`}
+                    srcset={set("jpg", s.stem, REVEAL_W)}
+                    sizes="(min-width: 79rem) 395px, 30vw"
+                    alt={s.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+              </span>
+            </button>
+            <p class="shot__caption">{s.caption}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 04 ------------------------------------------------------------- -->
+  <section class="band band--vision">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">04 &middot; The Vision</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        What it can be again.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        A house people can walk into, on ground people can walk across, in a
+        county that knows whose it was and how it got here.
+      </p>
+
+      <div class="shot vision" data-aos="fade-up">
+        <button
+          class="shot__btn"
+          type="button"
+          data-lb="image"
+          data-lb-src={full("/img/restoration-rendering", [800, 1232, 2000])}
+          data-lb-alt="A rendering of the log house restored, a split rail fence around it."
+          data-lb-caption="Artist's rendering of the house restored to its 1790's form. Not a photograph."
+          aria-label="Open the rendering at full size"
+        >
+          <span class="shot__frame shot__frame--vision">
+            <picture>
+              <source
+                type="image/webp"
+                srcset={set("webp", "/img/restoration-rendering", [800, 1232, 2000])}
+                sizes="(min-width: 79rem) 1232px, 92vw"
+              />
+              <img
+                src="/img/restoration-rendering-1232.jpg"
+                srcset={set("jpg", "/img/restoration-rendering", [800, 1232, 2000])}
+                sizes="(min-width: 79rem) 1232px, 92vw"
+                alt="A rendering of the log house restored, a split rail fence around it."
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+            <span class="chip">Rendering</span>
+          </span>
+        </button>
+        <p class="shot__caption">
+          Artist's rendering of the house restored to its 1790's form. Not a
+          photograph.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 ------------------------------------------------------------- -->
+  <section class="band band--watch">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">05 &middot; Watch</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        The house history and progress.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        Short films on the house, the family and the work, made while it was
+        underway rather than afterwards.
+      </p>
+
+      <ul class="films" role="list">
+        {films.map((f, i) => (
+          <li class="film" data-aos="fade-up" data-aos-delay={(i % 4) * 80}>
+            {f.youtube ? (
+              <button
+                class="film__btn"
+                type="button"
+                data-lb="video"
+                data-lb-video={f.youtube}
+                data-lb-caption={`${f.title}, ${f.part}`}
+                aria-label={`Play ${f.title}, ${f.part}`}
+              >
+                <span class:list={["film__poster", f.poster && "film__poster--shot"]}>
+                  {f.poster && (
+                    <picture>
+                      <source
+                        type="image/webp"
+                        srcset={set("webp", `/img/restoration-film-${f.n}`, FILM_W)}
+                        sizes="(min-width: 79rem) 290px, (min-width: 48rem) 23vw, 44vw"
+                      />
+                      <img
+                        src={`/img/restoration-film-${f.n}-640.jpg`}
+                        srcset={set("jpg", `/img/restoration-film-${f.n}`, FILM_W)}
+                        sizes="(min-width: 79rem) 290px, (min-width: 48rem) 23vw, 44vw"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
+                  )}
+                  <span class="film__play" aria-hidden="true">
+                    <svg viewBox="0 0 12 16" width="12" height="16" focusable="false">
+                      <path d="M0 0l12 8-12 8z" fill="currentColor" />
+                    </svg>
+                  </span>
+                </span>
+                <span class="film__meta">
+                  <span class="film__n">{f.n}</span>
+                  <span class="film__title">{f.title}</span>
+                  <span class="film__part">{f.part}</span>
+                </span>
+              </button>
+            ) : (
+              <div class="film__btn film__btn--pending">
+                <span class="film__poster film__poster--empty">
+                  <span class="film__play" aria-hidden="true">
+                    <svg viewBox="0 0 12 16" width="12" height="16" focusable="false">
+                      <path d="M0 0l12 8-12 8z" fill="currentColor" />
+                    </svg>
+                  </span>
+                </span>
+                <span class="film__meta">
+                  <span class="film__n">{f.n}</span>
+                  <span class="film__title">{f.title}</span>
+                  <span class="film__part">{f.part}</span>
+                </span>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <GiveBand />
+  <Lightbox />
+</Base>
+
+<style>
+  /* ---------- BANDS ----------
+     Grounds transcribed from the canvas. Note archive and vision are
+     parchment-50, NOT the parchment-100 page ground the other pages use,
+     which is why the torn edge above section 01 carries --torn-fill. */
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem); }
+  .band--archive { background: var(--parchment-50); }
+  .band--condition { background: var(--parchment-200); }
+  .band--reveal { background: var(--forest-950); }
+  .band--vision { background: var(--parchment-50); }
+  .band--watch { background: var(--charcoal-900); }
+
+  .sec__headline {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 1.5rem + 3.2vw, 2.75rem);
+    line-height: 1.18;
+    letter-spacing: -0.023em;
+    color: var(--forest-900);
+    /* No character cap. The canvas lets these run the width of the copy
+       column, and a ch cap wraps them far earlier than the design does. */
+  }
+  /* The reveal is the loudest heading on the page: 52px on the canvas
+     where the others are 44px.
+
+     The colours have to be restated here. global.css inverts headings
+     inside .band--forest, but this component's own .sec__headline rule
+     carries an [data-astro-cid-*] attribute that raises its specificity
+     above the global one, so without these two lines the heading and the
+     standfirst render forest green on forest green. Same trap as the
+     footer socials, the header submenu and the prose eyebrows. */
+  .band--reveal .sec__headline {
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 3.25rem);
+    line-height: 1.15;
+    color: var(--parchment-50);
+  }
+  .band--reveal .sec__lead { color: var(--parchment-200); }
+
+  .sec__lead {
+    margin-block-start: 1.125rem;
+    max-width: 43.75rem;
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem);
+    line-height: 1.7;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+
+  /* The two dark bands invert. band--forest already does this for the
+     reveal; watch sits on charcoal and needs it spelled out. */
+  .band--watch .sec__headline { color: var(--parchment-50); }
+  .band--watch .sec__lead { color: var(--parchment-200); }
+  .band--watch .eyebrow { color: var(--hewn-300); }
+
+  /* An inline link in body copy DOES get an underline. The bare treatment
+     is for the footer and nav titles, where position makes them obviously
+     clickable. Here it sits mid sentence. */
+  .sec__link {
+    color: var(--forest-800);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--hewn-400);
+    text-underline-offset: 0.2em;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .sec__link:hover,
+  .sec__link:focus-visible { color: var(--hewn-700); }
+
+  /* ---------- THE SHARED PHOTOGRAPH ----------
+     Every picture on this page is a button that opens the lightbox, so the
+     frame, the caption and the hover are defined once. */
+  .shot { display: flex; flex-direction: column; }
+
+  .shot__btn {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    cursor: zoom-in;
+  }
+  .shot__btn:focus-visible { outline: 2px solid var(--hewn-400); outline-offset: 3px; }
+
+  .shot__frame {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--parchment-300);
+    aspect-ratio: 29 / 21;
+  }
+  /* <picture> is an inline box with no height of its own, so height:100%
+     on the img inside it resolves to auto and the photograph underfills
+     its frame. Giving the picture the frame's dimensions is what makes
+     every thumbnail fill its box, and all of them fill it the same way. */
+  .shot__frame picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .shot__frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .shot__btn:hover .shot__frame img,
+  .shot__btn:focus-visible .shot__frame img { transform: scale(1.035); }
+
+  .shot__caption {
+    margin-block-start: 0.75rem;
+    font-size: 12.5px;
+    line-height: 1.52;
+    color: var(--charcoal-700);
+  }
+  .band--reveal .shot__caption {
+    font-size: 13px;
+    line-height: 1.54;
+    color: var(--sage-300);
+  }
+
+  /* Aspect ratios are the canvas crops. The tablet frame shows these
+     photographs as portraits, which is the auto-layout holding a fixed
+     pixel height rather than an intention, so the desktop crop is used at
+     every width except where the canvas deliberately re-crops. */
+  .shot__frame--exterior { aspect-ratio: 736 / 471; }
+  .shot__frame--interior { aspect-ratio: 3 / 2; }
+  .shot__frame--reveal { aspect-ratio: 79 / 58; }
+  .shot__frame--lead { aspect-ratio: 4 / 3; }
+  .shot__frame--vision { aspect-ratio: 16 / 9; }
+
+  @media (min-width: 64rem) {
+    .shot__frame--interior { aspect-ratio: 59 / 26; }
+    .shot__frame--lead { aspect-ratio: 11 / 5; }
+    .shot__frame--vision { aspect-ratio: 308 / 135; }
+  }
+
+  /* ---------- 01 ARCHIVE ---------- */
+  .shots {
+    display: grid;
+    margin: 0;
+    margin-block-start: clamp(1.75rem, 1.25rem + 1.5vw, 2.75rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Two up on a phone, four up from tablet, as on the canvas. */
+  .shots--archive {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.875rem;
+  }
+  @media (min-width: 48rem) {
+    .shots--archive {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+  }
+
+  /* ---------- 02 CONDITION ---------- */
+  .condition {
+    display: grid;
+    gap: 1.25rem;
+    margin-block-start: clamp(1.75rem, 1.25rem + 1.5vw, 2.75rem);
+  }
+  .condition__interiors {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.875rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .condition { gap: 1.75rem; }
+    .condition__interiors {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.75rem;
+    }
+  }
+  /* The canvas two column form, 736 beside 472, only at desktop. */
+  @media (min-width: 64rem) {
+    .condition {
+      grid-template-columns: 736fr 472fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .condition__interiors { gap: 1.5rem; }
+  }
+
+  /* ---------- 03 THE REVEAL ---------- */
+  .reveal__lead { margin-block-start: clamp(1.75rem, 1.25rem + 1.5vw, 2.75rem); }
+  .shots--reveal {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 0.4rem + 1vw, 1.5rem);
+    margin-block-start: 1.5rem;
+  }
+
+  /* ---------- 04 THE VISION ---------- */
+  .vision { margin-block-start: clamp(1.75rem, 1.25rem + 1.5vw, 2.75rem); }
+
+  .chip {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: clamp(0.75rem, 0.4rem + 1vw, 1.5rem);
+    inset-inline-start: clamp(0.75rem, 0.4rem + 1vw, 1.5rem);
+    padding: 0.5rem 0.875rem;
+    border-radius: 2px;
+    background: var(--forest-950);
+    color: var(--parchment-50);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- 05 WATCH ---------- */
+  .films {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 0.875rem;
+    margin: 0;
+    margin-block-start: clamp(1.75rem, 1.25rem + 1.5vw, 2.75rem);
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .films {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.75rem 1.5rem;
+    }
+  }
+
+  .film__btn {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+  /* A film with no link yet is not a button and does not pretend to be. */
+  .film__btn--pending { cursor: default; }
+  .film__btn:focus-visible { outline: 2px solid var(--hewn-400); outline-offset: 3px; }
+
+  .film__poster {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    border-radius: 2px;
+    background: var(--charcoal-800);
+    overflow: hidden;
+  }
+  /* The picture has to be taken OUT of the grid, not just filled. As an
+     in flow grid item it was a zero height first row that stretched to
+     share the box with the play mark, which pushed the play mark 28px
+     below centre. Absolutely positioning it leaves the play mark as the
+     only item in the grid, so place-items actually centres it. */
+  .film__poster picture {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+  .film__poster img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* The eight stills are YouTube's own poster frames, so they are bright,
+     unlike each other, and some carry burned in titles. A thin forest wash
+     holds them together and keeps the parchment play mark legible on all
+     of them. It lifts on hover, which is also the affordance. */
+  .film__poster--shot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 25, 14, 0.4);
+    transition: background-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .film__btn:hover .film__poster--shot::after,
+  .film__btn:focus-visible .film__poster--shot::after {
+    background: rgba(0, 25, 14, 0.1);
+  }
+
+  .film__play {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    /* The triangle's optical centre is left of its bounding box. */
+    padding-inline-start: 3px;
+    border-radius: 50%;
+    background: var(--parchment-200);
+    color: var(--forest-950);
+    transition:
+      transform 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      background-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .film__btn:hover .film__play,
+  .film__btn:focus-visible .film__play {
+    transform: scale(1.08);
+    background: var(--parchment-50);
+  }
+  .film__btn--pending .film__play { opacity: 0.4; }
+
+  .film__meta { display: flex; flex-direction: column; gap: 0.3125rem; }
+  .film__n {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    color: var(--hewn-400);
+  }
+  .film__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--parchment-50);
+  }
+  .film__part {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 12.5px;
+    line-height: 1.44;
+    color: var(--stone-500);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shot__frame img,
+    .film__play,
+    .film__poster--shot::after,
+    .sec__link { transition: none; }
+    .shot__btn:hover .shot__frame img { transform: none; }
+  }
+</style>

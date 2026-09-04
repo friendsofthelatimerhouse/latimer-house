@@ -39,6 +39,18 @@ interface Props {
    */
   imageWidths?: readonly number[];
   /**
+   * Scrim opacity at top, middle and foot. The canvas values are the
+   * default and almost every hero should keep them.
+   *
+   * A page overrides this when its photograph is bright exactly where the
+   * type sits. The Restoration is the case that forced it: its hero is
+   * cropped low to show the hearth, which puts the brightest part of the
+   * picture directly under the stat row. Strengthening the foot is the
+   * honest fix. Lightening the type is not, because the rule here is dark
+   * scrim under light type, never the reverse.
+   */
+  scrim?: readonly [number, number, number];
+  /**
    * The three figures that sit at the FOOT of the hero, over the
    * photograph. On the canvas these live inside the Page Hero frame, not
    * in a band of their own below the torn edge.
@@ -49,7 +61,9 @@ interface Props {
 const {
   crumbs, headline, lead, image, imageAlt, stats,
   imageWidths = [700, 1000, 1440, 2000],
+  scrim = [0.95, 0.8, 0.45],
 } = Astro.props;
+const scrimVars = `--scrim-top:${scrim[0]};--scrim-mid:${scrim[1]};--scrim-foot:${scrim[2]};`;
 const srcset = (ext: string, stem: string, ws: readonly number[]) =>
   ws.map((w) => `${stem}-${w}.${ext} ${w}w`).join(", ");
 ---
@@ -72,7 +86,7 @@ const srcset = (ext: string, stem: string, ws: readonly number[]) =>
           fetchpriority="high"
         />
       </picture>
-      <div class="page-hero__scrim" aria-hidden="true"></div>
+      <div class="page-hero__scrim" style={scrimVars} aria-hidden="true"></div>
     </>
   )}
   <div class="container page-hero__inner">
@@ -152,9 +166,9 @@ const srcset = (ext: string, stem: string, ws: readonly number[]) =>
     inset: 0;
     background: linear-gradient(
       to bottom,
-      rgba(8, 28, 19, 0.95) 0%,
-      rgba(8, 28, 19, 0.8) 50%,
-      rgba(8, 28, 19, 0.45) 100%
+      rgba(8, 28, 19, var(--scrim-top, 0.95)) 0%,
+      rgba(8, 28, 19, var(--scrim-mid, 0.8)) 50%,
+      rgba(8, 28, 19, var(--scrim-foot, 0.45)) 100%
     );
   }
 

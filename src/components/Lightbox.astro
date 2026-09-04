@@ -1,0 +1,313 @@
+---
+/**
+ * One modal, two jobs: it shows a photograph at full size, and it plays a
+ * film. Nothing on the canvas describes it, because we never designed it
+ * in Figma. It is built to the same palette as the rest of the site so it
+ * reads as part of the page rather than a borrowed plugin.
+ *
+ * Include it ONCE per page. Any element on that page carrying data-lb
+ * opens it:
+ *
+ *   data-lb="image"  data-lb-src   data-lb-alt   data-lb-caption
+ *   data-lb="video"  data-lb-video (the YouTube id)  data-lb-caption
+ *
+ * Every data-lb="image" on the page is one gallery, in document order, so
+ * opening any photograph lets you walk the rest with the arrows, the arrow
+ * keys or a swipe. Films are not part of that walk: a film opens on its own
+ * and the arrows are hidden, because paging out of a playing video into a
+ * photograph is not something anybody wants.
+ *
+ * Films load from youtube-nocookie and only once somebody presses play, so
+ * arriving on the page makes no third party request at all.
+ *
+ * Native <dialog> does the hard parts for us: it traps focus, Escape
+ * closes it, and focus returns to the thumbnail that opened it. We do not
+ * reimplement any of that.
+ *
+ * The styles are is:global on purpose. Astro appends a [data-astro-cid-*]
+ * to every selector in a scoped block, and the img and iframe in here are
+ * built by script after the page has rendered, so they would never carry
+ * that attribute and would never match. Scoping the rules under .lb keeps
+ * them contained without relying on it.
+ */
+---
+
+<dialog class="lb" aria-label="Media viewer">
+  <button class="lb__close" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+      <path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <button class="lb__nav lb__nav--prev" type="button" aria-label="Previous photograph" hidden>
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+      <path d="M15 4L7 12l8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+  <button class="lb__nav lb__nav--next" type="button" aria-label="Next photograph" hidden>
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+      <path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <figure class="lb__figure">
+    <div class="lb__stage"></div>
+    <figcaption class="lb__caption" hidden></figcaption>
+    <p class="lb__count" hidden aria-live="polite"></p>
+  </figure>
+</dialog>
+
+<style is:global>
+  .lb {
+    width: 100%;
+    max-width: 100vw;
+    height: 100%;
+    max-height: 100vh;
+    padding: clamp(1rem, 0.5rem + 2vw, 3rem);
+    border: 0;
+    background: transparent;
+    color: var(--parchment-50);
+    overflow: hidden;
+  }
+  .lb[open] {
+    display: grid;
+    grid-template-rows: 1fr;
+    place-items: center;
+  }
+  .lb::backdrop { background: rgba(0, 25, 14, 0.94); }
+
+  .lb__figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.875rem;
+    margin: 0;
+    max-width: 100%;
+    max-height: 100%;
+    min-height: 0;
+  }
+
+  .lb__stage { display: flex; min-height: 0; max-width: 100%; }
+
+  .lb__stage img {
+    display: block;
+    max-width: 100%;
+    /* Room for the caption and the counter under it, at any viewport. */
+    max-height: calc(100vh - 11rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 2px;
+  }
+
+  /* A film keeps 16:9 and takes whichever of width or height runs out
+     first, so it never crops and never overflows the viewport. */
+  .lb__video {
+    position: relative;
+    width: min(92vw, calc((100vh - 11rem) * 16 / 9), 1200px);
+    aspect-ratio: 16 / 9;
+    background: var(--charcoal-950, #1a120f);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .lb__video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  .lb__caption {
+    max-width: 46rem;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--parchment-300);
+  }
+  .lb__count {
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--hewn-400);
+  }
+
+  /* ---- controls ---- */
+  .lb__close,
+  .lb__nav {
+    position: fixed;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid rgba(255, 244, 225, 0.28);
+    border-radius: 50%;
+    background: rgba(0, 25, 14, 0.55);
+    color: var(--parchment-50);
+    cursor: pointer;
+    transition:
+      background-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      border-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .lb__close:hover, .lb__close:focus-visible,
+  .lb__nav:hover, .lb__nav:focus-visible {
+    background: rgba(255, 244, 225, 0.16);
+    border-color: rgba(255, 244, 225, 0.55);
+  }
+
+  .lb__close {
+    inset-block-start: clamp(0.75rem, 0.25rem + 1.5vw, 1.5rem);
+    inset-inline-end: clamp(0.75rem, 0.25rem + 1.5vw, 1.5rem);
+  }
+  .lb__nav {
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+  }
+  .lb__nav--prev { inset-inline-start: clamp(0.5rem, 0.25rem + 1vw, 1.5rem); }
+  .lb__nav--next { inset-inline-end: clamp(0.5rem, 0.25rem + 1vw, 1.5rem); }
+
+  /* On a phone the arrows would sit on top of the picture, so they drop to
+     the bottom corners where the thumb already is. */
+  @media (max-width: 34rem) {
+    .lb__nav {
+      inset-block-start: auto;
+      inset-block-end: 1rem;
+      transform: none;
+    }
+  }
+
+  /* The page behind must not scroll while the modal is up. */
+  body:has(.lb[open]) { overflow: hidden; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lb__close, .lb__nav { transition: none; }
+  }
+</style>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>(".lb");
+
+  if (dlg) {
+    const stage = dlg.querySelector<HTMLElement>(".lb__stage")!;
+    const caption = dlg.querySelector<HTMLElement>(".lb__caption")!;
+    const count = dlg.querySelector<HTMLElement>(".lb__count")!;
+    const prevBtn = dlg.querySelector<HTMLButtonElement>(".lb__nav--prev")!;
+    const nextBtn = dlg.querySelector<HTMLButtonElement>(".lb__nav--next")!;
+
+    /* Every photograph on the page, in document order. Films are excluded
+       on purpose, so the gallery is a gallery and not a mixed bag. */
+    let gallery: HTMLElement[] = [];
+    let index = -1;
+
+    const setCaption = (text: string) => {
+      caption.textContent = text;
+      caption.hidden = text === "";
+    };
+
+    const showImage = (i: number) => {
+      const t = gallery[i];
+      if (!t) return;
+      index = i;
+      stage.replaceChildren();
+      const img = document.createElement("img");
+      img.src = t.dataset.lbSrc || "";
+      img.alt = t.dataset.lbAlt || "";
+      stage.append(img);
+      setCaption(t.dataset.lbCaption || "");
+
+      const many = gallery.length > 1;
+      count.textContent = many ? `${i + 1} / ${gallery.length}` : "";
+      count.hidden = !many;
+      prevBtn.hidden = !many;
+      nextBtn.hidden = !many;
+
+      /* Warm the neighbours so paging feels instant. */
+      for (const j of [i - 1, i + 1]) {
+        const n = gallery[(j + gallery.length) % gallery.length];
+        if (n && n !== t) new Image().src = n.dataset.lbSrc || "";
+      }
+    };
+
+    const step = (delta: number) => {
+      if (gallery.length < 2) return;
+      showImage((index + delta + gallery.length) % gallery.length);
+    };
+
+    const openFrom = (trigger: HTMLElement) => {
+      if (trigger.dataset.lb === "video") {
+        gallery = [];
+        index = -1;
+        prevBtn.hidden = true;
+        nextBtn.hidden = true;
+        count.hidden = true;
+        stage.replaceChildren();
+        const id = trigger.dataset.lbVideo;
+        if (!id) return;
+        const box = document.createElement("div");
+        box.className = "lb__video";
+        const frame = document.createElement("iframe");
+        frame.src =
+          "https://www.youtube-nocookie.com/embed/" +
+          encodeURIComponent(id) +
+          "?autoplay=1&rel=0&modestbranding=1";
+        frame.title = trigger.dataset.lbCaption || "Film";
+        frame.allow =
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        frame.allowFullscreen = true;
+        box.append(frame);
+        stage.append(box);
+        setCaption(trigger.dataset.lbCaption || "");
+      } else {
+        gallery = Array.from(
+          document.querySelectorAll<HTMLElement>('[data-lb="image"]')
+        );
+        const at = gallery.indexOf(trigger);
+        showImage(at < 0 ? 0 : at);
+      }
+      if (!dlg.open) dlg.showModal();
+    };
+
+    document.addEventListener("click", (event) => {
+      const trigger = (event.target as HTMLElement)?.closest<HTMLElement>("[data-lb]");
+      if (!trigger) return;
+      event.preventDefault();
+      openFrom(trigger);
+    });
+
+    prevBtn.addEventListener("click", () => step(-1));
+    nextBtn.addEventListener("click", () => step(1));
+
+    dlg.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") { event.preventDefault(); step(-1); }
+      if (event.key === "ArrowRight") { event.preventDefault(); step(1); }
+    });
+
+    /* Swipe, for the phone. Horizontal only, and only if the finger
+       travelled far enough to be a swipe rather than a tap. */
+    let startX = 0;
+    let startY = 0;
+    stage.addEventListener("touchstart", (e) => {
+      startX = e.changedTouches[0].clientX;
+      startY = e.changedTouches[0].clientY;
+    }, { passive: true });
+    stage.addEventListener("touchend", (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+    }, { passive: true });
+
+    /* Clicking the surround, rather than the picture, closes. */
+    dlg.addEventListener("click", (event) => {
+      if (event.target === dlg) dlg.close();
+    });
+
+    dlg.querySelector(".lb__close")?.addEventListener("click", () => dlg.close());
+
+    /* Emptying the stage on close is what stops a film playing on in the
+       background. Hiding the dialog alone would not. */
+    dlg.addEventListener("close", () => {
+      stage.replaceChildren();
+      gallery = [];
+      index = -1;
+    });
+  }
+</script>

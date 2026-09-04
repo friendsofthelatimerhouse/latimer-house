@@ -276,7 +276,26 @@ button, input, textarea, select { font: inherit; color: inherit; }
 }
 .btn--hero:hover { background: var(--forest-900); }
 
-.btn__arrow { font-weight: 400; }
+/* Membership is not a gift, and the buttons say so. Hewn means give,
+   forest means join. The rule has to hold on both pages that use it,
+   which is why this lives here rather than in a page's scoped block. */
+.btn--join {
+  background: var(--forest-900);
+  color: var(--parchment-50);
+}
+.btn--join:hover { background: var(--forest-800); }
+
+.btn__arrow {
+  font-weight: 400;
+  transition: transform 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.btn:hover .btn__arrow,
+.btn:focus-visible .btn__arrow { transform: translateX(0.25rem); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn__arrow { transition: none; }
+  .btn:hover .btn__arrow { transform: none; }
+}
 
 /* ============================================================
    TORN EDGE
