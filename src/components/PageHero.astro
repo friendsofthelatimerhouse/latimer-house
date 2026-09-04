@@ -19,7 +19,7 @@ const { crumbs, headline, lead } = Astro.props;
 
 <section class="page-hero">
   <div class="container page-hero__inner">
-    <p class="eyebrow page-hero__crumbs">
+    <p class="eyebrow page-hero__crumbs" data-aos="fade-up">
       {crumbs.map((crumb, i) => (
         <>
           {i > 0 && <span class="page-hero__sep" aria-hidden="true">·</span>}
@@ -27,8 +27,8 @@ const { crumbs, headline, lead } = Astro.props;
         </>
       ))}
     </p>
-    <h1 class="t-display">{headline}</h1>
-    {lead && <p class="lead page-hero__lead">{lead}</p>}
+    <h1 class="t-display" data-aos="fade-up" data-aos-delay="150">{headline}</h1>
+    {lead && <p class="lead page-hero__lead" data-aos="fade-up" data-aos-delay="300">{lead}</p>}
   </div>
 </section>
 

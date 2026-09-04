@@ -1,0 +1,116 @@
+---
+/**
+ * Mobile tab bar. Fixed to the bottom of the viewport at all times, with
+ * the page scrolling behind it.
+ *
+ * Built to the Figma "Nav / Tab Bar" component, Dark theme, which is the
+ * one placed on all seventeen mobile frames. Phones only: the canvas
+ * puts it on every Mobile frame and on none of the Tablet ones, so the
+ * breakpoint here stops below the 768 tablet width rather than at the
+ * 60rem where the header nav collapses.
+ *
+ * NOTE, worth resolving one day. The tab bar and the off canvas rail
+ * give the same glyph different meanings. In the rail, the house with a
+ * chimney is The Story and the people under a roof are The Latimers.
+ * Here, the house is Home and the people under a roof are The Story.
+ * This follows the canvas as drawn; it is not a transcription error.
+ */
+import { tabBar } from "../site.config";
+import NavIcon from "./NavIcon.astro";
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+---
+
+<nav class="tab-bar" aria-label="Quick links">
+  <ul role="list">
+    {tabBar.map((item) => (
+      <li>
+        <a
+          href={item.href}
+          aria-current={isCurrent(item.href) ? "page" : undefined}
+        >
+          <span class="tab-bar__slot">
+            <NavIcon name={item.icon} />
+          </span>
+          <span class="tab-bar__label">{item.label}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .tab-bar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    /* Above the page, below the off canvas rail and its scrim, so the
+       rail dims it rather than fighting it. */
+    z-index: 40;
+    display: none;
+    background: var(--forest-900);
+    border-block-start: 1px solid var(--forest-800);
+    /* The extra bottom padding is the iPhone home indicator. Without it
+       the labels sit under the gesture bar. */
+    padding-block: 0.75rem;
+    padding-block-end: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .tab-bar ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tab-bar li { flex: 1 1 0; min-width: 0; }
+
+  .tab-bar a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+    text-decoration: none;
+    color: var(--sage-300);
+    transition: color 150ms ease;
+  }
+
+  .tab-bar__slot {
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 2.125rem;
+    border-radius: 1.0625rem;
+    transition: background-color 150ms ease;
+  }
+
+  .tab-bar__label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    text-align: center;
+    /* Restoration is the longest label and must not wrap. */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* Active carries a pill behind the mark, which is how the component
+     draws it. On the dark bar the pill is a parchment tint rather than
+     the forest fill the light theme uses, which would be invisible here. */
+  .tab-bar a[aria-current="page"] {
+    color: var(--parchment-50);
+  }
+  .tab-bar a[aria-current="page"] .tab-bar__slot {
+    background: color-mix(in srgb, var(--parchment-100) 15%, transparent);
+  }
+
+  /* Phones only. The tablet frames on the canvas carry no tab bar. */
+  @media (max-width: 47.9375rem) {
+    .tab-bar { display: block; }
+  }
+</style>

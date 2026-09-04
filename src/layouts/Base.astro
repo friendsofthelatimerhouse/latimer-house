@@ -6,6 +6,7 @@ import "@fontsource/playfair-display/900.css";
 import "@fontsource/playfair-display/400-italic.css";
 import "@fontsource-variable/inter";
 
+import "aos/dist/aos.css";
 import "../styles/tokens.css";
 import "../styles/global.css";
 
@@ -18,9 +19,16 @@ interface Props {
   description?: string;
   /** Omit the page title suffix on the home page. */
   bare?: boolean;
+  /** Home only: float the header over the full bleed hero photograph. */
+  overlayHeader?: boolean;
 }
 
-const { title, description = site.description, bare = false } = Astro.props;
+const {
+  title,
+  description = site.description,
+  bare = false,
+  overlayHeader = false,
+} = Astro.props;
 const fullTitle = bare ? title : `${title} · ${site.title}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 ---
@@ -30,6 +38,14 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Runs before anything paints. Marks the page as having working
+         JavaScript, which is what lets global.css reveal the animated
+         elements when it does not. Inline and first on purpose: if this
+         were bundled it could arrive after the first paint. -->
+    <script is:inline>
+      document.documentElement.classList.add("has-js");
+    </script>
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -41,7 +57,23 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="icon" href="/lmark_forest.png" />
+    <!-- The L Mark is the secondary form, made for small sizes, which
+         is exactly what a favicon is. Forest, because the browser tab is
+         light. -->
+    <link rel="icon" href="/img/lmark-forest.svg" type="image/svg+xml" />
+
+    <!-- The hero photograph is the largest thing on the home page and the
+         first thing anyone sees, so the browser is told about it early.
+         Only on the page that actually uses it. -->
+    {overlayHeader && (
+      <link
+        rel="preload"
+        as="image"
+        href="/img/house-hero-1440.webp"
+        imagesrcset="/img/house-hero-700.webp 700w, /img/house-hero-1000.webp 1000w, /img/house-hero-1440.webp 1440w, /img/house-hero-2000.webp 2000w"
+        imagesizes="100vw"
+      />
+    )}
 
     <!-- Structured data. Helps a local nonprofit show up correctly in
          search and maps, and costs nothing to include. -->
@@ -69,10 +101,70 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
 
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <SiteHeader />
+    <SiteHeader overlay={overlayHeader} />
     <main id="main">
       <slot />
     </main>
     <SiteFooter />
+    {/*
+      The mobile tab bar is deliberately not mounted. The hamburger and
+      the off canvas rail already cover navigation on a phone, and a second
+      persistent bar competed with them, most visibly on the home page
+      where it cut into the hero.
+
+      TabBar.astro and the tabBar list in site.config.ts are kept, built
+      and working. Reinstating it is one line here plus restoring the
+      --tabbar-h override in global.css.
+    */}
+
+    <script>
+      /**
+       * Scroll animation.
+       *
+       * AOS supplies the CSS: the starting opacity and transform for each
+       * data-aos value, and the per element transition-delay. What it does
+       * NOT reliably supply is the repeat. Its own `mirror` and
+       * `once: false` options never removed the class again, so every
+       * element animated once on the way in and then stayed put forever,
+       * which reads as a page load effect rather than a scroll effect.
+       *
+       * So the class is driven here instead, with one IntersectionObserver
+       * that toggles `aos-animate` as elements enter and leave. Anything
+       * on screen is shown, anything off screen is reset, and the next
+       * pass animates again. Every pass, every direction, for the life of
+       * the page.
+       *
+       * The negative bottom rootMargin holds the trigger until an element
+       * is properly on screen rather than just poking over the edge.
+       *
+       * Duration and easing live in global.css, deliberately, so they are
+       * not subject to AOS's rule that these values only work in the fixed
+       * steps it happens to ship CSS for.
+       */
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      const animated = document.querySelectorAll("[data-aos]");
+
+      if (reducedMotion || !("IntersectionObserver" in window)) {
+        /* Show everything, permanently. global.css also covers this, but
+           belt and braces: nothing should ever be stuck invisible. */
+        animated.forEach((el) => el.classList.add("aos-animate"));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              entry.target.classList.toggle("aos-animate", entry.isIntersecting);
+            }
+          },
+          { rootMargin: "0px 0px -12% 0px", threshold: 0 },
+        );
+        animated.forEach((el) => {
+          el.classList.add("aos-init");
+          observer.observe(el);
+        });
+      }
+    </script>
   </body>
 </html>

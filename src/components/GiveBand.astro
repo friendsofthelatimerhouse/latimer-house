@@ -12,17 +12,17 @@ import { give } from "../site.config";
 
 <section class="give-band">
   <div class="container give-band__inner">
-    <div class="give-band__text">
+    <div class="give-band__text" data-aos="fade-up">
       <h2 class="give-band__heading">
-        There is a lot of work ahead, and we would be glad of your help.
+        There is a lot of work ahead, and we would welcome your help.
       </h2>
       <p class="give-band__body">
         Every gift goes into the house and the ground around it. Thank you.
       </p>
     </div>
-    <a class="btn btn--primary give-band__action" href={give.href}>
-      Help uncover it
-    </a>
+    <p class="give-band__actions" data-aos="fade-up" data-aos-delay="200">
+      <a class="btn btn--primary" href={give.href}>Help uncover it</a>
+    </p>
   </div>
 </section>
 
@@ -58,5 +58,5 @@ import { give } from "../site.config";
     color: var(--parchment-300);
   }
 
-  .give-band__action { flex-shrink: 0; }
+  .give-band__actions { flex-shrink: 0; }
 </style>

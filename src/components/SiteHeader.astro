@@ -1,31 +1,70 @@
 ---
-import { nav, give, org } from "../site.config";
+import { nav, storyChildren, contact, give, org } from "../site.config";
+import NavIcon from "./NavIcon.astro";
+
+interface Props {
+  /**
+   * Home only. The header sits on top of the full bleed photograph with
+   * no background of its own, exactly as the Figma "Home · Full Bleed"
+   * frame has it, and fades a solid forest bar in once the reader
+   * scrolls off the hero.
+   */
+  overlay?: boolean;
+}
+const { overlay = false } = Astro.props;
 
 const path = Astro.url.pathname;
 /** Give is reached by the button, so no nav item is active on that page. */
 const isCurrent = (href: string) =>
   href === "/" ? path === "/" : path.startsWith(href);
+/** A parent is only "current" when you are not on one of its children. */
+const isExactly = (href: string) => path === href;
 ---
 
-<header class="site-header">
+<header
+  class:list={["site-header", overlay && "site-header--overlay"]}
+  data-site-header
+>
   <div class="container site-header__inner">
     <button
       class="site-header__toggle"
       type="button"
       aria-expanded="false"
-      aria-controls="primary-nav"
-      data-nav-toggle
+      aria-controls="off-canvas-nav"
+      data-nav-open
     >
       <span class="site-header__bars" aria-hidden="true"></span>
-      <span class="visually-hidden">Menu</span>
+      <span class="visually-hidden">Open menu</span>
     </button>
 
     <a class="site-header__brand" href="/">
-      <img src="/lmark-reversed.png" alt="" width="44" height="45" />
+      {/*
+        Two marks, and which one shows is a brand rule rather than a
+        layout preference. The Master lockup gets the room it needs on
+        the home hero, where it is the first thing anyone sees. Once the
+        bar goes solid, and on every interior page, it swaps to the L
+        Mark, which is the secondary form made for small sizes.
+      */}
+      {overlay && (
+        <img
+          class="site-header__logo site-header__logo--master"
+          src="/img/logo-master-reversed.svg"
+          alt=""
+          width="165"
+          height="148"
+        />
+      )}
+      <img
+        class="site-header__logo site-header__logo--mark"
+        src="/img/lmark-reversed.svg"
+        alt=""
+        width="120"
+        height="122"
+      />
       <span class="visually-hidden">{org.shortName}, home</span>
     </a>
 
-    <nav id="primary-nav" class="site-header__nav" aria-label="Primary">
+    <nav class="site-header__nav" aria-label="Primary">
       <ul role="list">
         {nav.map((item) => (
           <li>
@@ -38,77 +77,286 @@ const isCurrent = (href: string) =>
       </ul>
     </nav>
 
-    <a class="btn btn--primary site-header__give" href={give.href}>{give.label}</a>
+    <a class="btn btn--give site-header__give" href={give.href}>{give.label}</a>
   </div>
 </header>
 
+{/*
+  OFF CANVAS RAIL. Mobile and tablet only.
+
+  Two states, hidden and open. The hamburger above opens it; the X inside
+  closes it, because once the panel is open it covers the hamburger and
+  that control cannot be reached. The scrim, a left swipe and Escape close
+  it as well.
+
+  It is NOT the collapsed 80px icon rail from the Figma library. That
+  variant is kept there for a possible desktop layout and is deliberately
+  unused here: an icon only rail spends too much of a phone on chrome, and
+  these page names cannot be told apart as glyphs.
+*/}
+<div class="off-canvas" data-off-canvas hidden>
+  <div class="off-canvas__scrim" data-nav-close-scrim></div>
+
+  <nav
+    id="off-canvas-nav"
+    class="off-canvas__panel"
+    aria-label="Site"
+    data-nav-panel
+  >
+    <div class="off-canvas__head">
+      <img src="/img/lmark-reversed.svg" alt="" width="120" height="122" />
+      <button class="off-canvas__close" type="button" data-nav-close>
+        <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true"
+             fill="none" stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round">
+          <path d="M0 0 L10 10 M10 0 L0 10" />
+        </svg>
+        <span class="visually-hidden">Close menu</span>
+      </button>
+    </div>
+
+    <div class="off-canvas__body">
+      <p class="off-canvas__eyebrow">Main menu</p>
+      <ul class="off-canvas__list" role="list">
+        {nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={
+                item.href === "/the-story/"
+                  ? isExactly(item.href) ? "page" : undefined
+                  : isCurrent(item.href) ? "page" : undefined
+              }
+            >
+              <NavIcon name={item.icon} />
+              <span>{item.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <p class="off-canvas__eyebrow">The Story</p>
+      <ul class="off-canvas__list" role="list">
+        {storyChildren.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isCurrent(item.href) ? "page" : undefined}
+            >
+              <NavIcon name={item.icon} />
+              <span>{item.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      {/* Give is not a nav item, it is the persistent button, so it sits
+          on its own with the emphasis the header button has. */}
+      <ul class="off-canvas__list off-canvas__list--give" role="list">
+        <li>
+          <a href={give.href} aria-current={isCurrent(give.href) ? "page" : undefined}>
+            <NavIcon name="give" />
+            <span>{give.label}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="off-canvas__foot">
+      <ul class="off-canvas__list" role="list">
+        <li>
+          <a href={contact.href}>
+            <NavIcon name={contact.icon} />
+            <span>{contact.label}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
 <script>
-  const toggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
-  const header = document.querySelector<HTMLElement>(".site-header");
-  toggle?.addEventListener("click", () => {
-    const open = toggle.getAttribute("aria-expanded") === "true";
-    toggle.setAttribute("aria-expanded", String(!open));
-    header?.classList.toggle("is-open", !open);
-  });
-  /* Close on Escape so keyboard users are never trapped. */
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && header?.classList.contains("is-open")) {
-      toggle?.setAttribute("aria-expanded", "false");
-      header.classList.remove("is-open");
-      toggle?.focus();
-    }
-  });
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  const shell = document.querySelector<HTMLElement>("[data-off-canvas]");
+  const panel = document.querySelector<HTMLElement>("[data-nav-panel]");
+  const openBtn = document.querySelector<HTMLButtonElement>("[data-nav-open]");
+  const closeBtn = document.querySelector<HTMLButtonElement>("[data-nav-close]");
+  const scrim = document.querySelector<HTMLElement>("[data-nav-close-scrim]");
+
+  if (shell && panel && openBtn) {
+    let lastFocused: HTMLElement | null = null;
+
+    const focusables = () =>
+      Array.from(
+        panel.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
+      ).filter((el) => el.offsetParent !== null);
+
+    const open = () => {
+      lastFocused = document.activeElement as HTMLElement;
+      shell.hidden = false;
+      /* Next frame, so the transition has a closed state to move from. */
+      requestAnimationFrame(() => shell.classList.add("is-open"));
+      openBtn.setAttribute("aria-expanded", "true");
+      /* Stop the page behind from scrolling under the panel. */
+      document.documentElement.style.overflow = "hidden";
+      focusables()[0]?.focus();
+    };
+
+    const close = () => {
+      shell.classList.remove("is-open");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.documentElement.style.overflow = "";
+      const done = () => { shell.hidden = true; };
+      /* Wait for the slide out, unless motion is off. */
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced) done();
+      else window.setTimeout(done, 260);
+      lastFocused?.focus();
+    };
+
+    openBtn.addEventListener("click", open);
+    closeBtn?.addEventListener("click", close);
+    scrim?.addEventListener("click", close);
+
+    document.addEventListener("keydown", (e) => {
+      if (shell.hidden) return;
+
+      if (e.key === "Escape") { close(); return; }
+
+      /* Focus trap. Without this a keyboard user tabs straight past the
+         open panel into the page behind it, which is invisible to them. */
+      if (e.key === "Tab") {
+        const items = focusables();
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    /* Swipe left to close. Touch only, and only a mostly horizontal
+       gesture, so it does not fight scrolling the panel itself. */
+    let startX = 0;
+    let startY = 0;
+    panel.addEventListener("touchstart", (e) => {
+      startX = e.changedTouches[0].clientX;
+      startY = e.changedTouches[0].clientY;
+    }, { passive: true });
+    panel.addEventListener("touchend", (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (dx < -55 && Math.abs(dx) > Math.abs(dy) * 1.5) close();
+    }, { passive: true });
+
+    /* If the window grows past the breakpoint while the panel is open,
+       the desktop nav takes over and the panel must not be left behind. */
+    const wide = window.matchMedia("(min-width: 60.0625rem)");
+    wide.addEventListener("change", (e) => {
+      if (e.matches && !shell.hidden) close();
+    });
+  }
+
+  /* Solid bar once the reader has left the top. Only the overlay header
+     changes appearance, but the class is harmless elsewhere.
+
+     A sentinel plus IntersectionObserver rather than a scroll listener,
+     so nothing runs on every frame while scrolling.
+
+     The sentinel sits only 24px down the page, and that number matters.
+     While the header is transparent, anything scrolling past runs under
+     a floating logo with nothing behind it, so the headline and the
+     lockup collide. Switching to the solid bar almost immediately means
+     content passes behind an opaque header instead. Do NOT do this with a
+     sentinel at y=0 and a negative rootMargin, which reports "not
+     intersecting" before any scrolling has happened at all. */
+  if (header) {
+    const sentinel = document.createElement("div");
+    sentinel.setAttribute("aria-hidden", "true");
+    sentinel.style.cssText =
+      "position:absolute;top:24px;left:0;height:1px;width:1px;pointer-events:none;";
+    document.body.prepend(sentinel);
+    new IntersectionObserver(([entry]) =>
+      header.classList.toggle("is-stuck", !entry.isIntersecting),
+    ).observe(sentinel);
+  }
 </script>
 
 <style>
+  /* Sticky, not fixed. Sticky keeps the header in the document flow, so
+     it needs no spacer beneath it and never covers the first line of a
+     page on load. */
   .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
     background: var(--forest-950);
     color: var(--parchment-200);
-    position: relative;
-    z-index: 10;
+    transition: background-color 160ms ease, box-shadow 160ms ease;
+  }
+
+  .site-header--overlay { background: transparent; }
+  .site-header--overlay.is-stuck {
+    background: var(--forest-950);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--parchment-300) 14%, transparent);
   }
 
   .site-header__inner {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    min-height: 6rem;
+    min-height: var(--header-h);
+    padding-block: 0.75rem;
   }
+  .site-header--overlay .site-header__inner { min-height: var(--header-overlay-h); }
+  .site-header--overlay.is-stuck .site-header__inner { min-height: var(--header-h); }
 
   .site-header__brand {
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
   }
-  .site-header__brand img { width: 44px; height: auto; }
+  .site-header__logo { width: auto; transition: height 160ms ease; }
 
-  .site-header__nav {
-    margin-inline-start: auto;
+  .site-header__logo--mark { height: 3rem; }
+  .site-header__logo--master { display: none; }
+  .site-header--overlay .site-header__logo--master {
+    display: block;
+    height: clamp(5.25rem, 3.5rem + 4.4vw, 8.75rem);
   }
+  .site-header--overlay .site-header__logo--mark { display: none; }
+  .site-header--overlay.is-stuck .site-header__logo--master { display: none; }
+  .site-header--overlay.is-stuck .site-header__logo--mark { display: block; }
+
+  .site-header__nav { margin-inline-start: auto; }
   .site-header__nav ul {
     display: flex;
     align-items: center;
-    gap: clamp(1rem, 0.25rem + 1.6vw, 2.25rem);
+    gap: clamp(1rem, 0.25rem + 1.6vw, 2.125rem);
     padding: 0;
     list-style: none;
   }
   .site-header__nav a {
     font-family: var(--font-body);
     font-weight: 500;
-    font-size: var(--type-overline-size);
-    letter-spacing: 0.1em;
+    font-size: 13px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     text-decoration: none;
     color: var(--parchment-300);
     white-space: nowrap;
     transition: color 150ms ease;
   }
-  .site-header__nav a:hover { color: var(--parchment-50); }
+  .site-header__nav a:hover,
   .site-header__nav a[aria-current="page"] { color: var(--parchment-50); }
 
   .site-header__give { flex-shrink: 0; }
 
-  /* Hamburger, hidden until the nav needs to collapse. */
   .site-header__toggle {
     display: none;
     align-items: center;
@@ -132,13 +380,141 @@ const isCurrent = (href: string) =>
   }
   .site-header__bars { position: relative; }
   .site-header__bars::before,
-  .site-header__bars::after {
-    content: "";
-    position: absolute;
-    left: 0;
-  }
+  .site-header__bars::after { content: ""; position: absolute; left: 0; }
   .site-header__bars::before { top: -6px; }
   .site-header__bars::after { top: 6px; }
+
+  /* ============================================================
+     OFF CANVAS RAIL
+     ============================================================ */
+
+  .off-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+  }
+
+  /* The media query below sets display:block at narrow widths, and that
+     rule beats the browser's [hidden] { display: none } because it comes
+     later in the cascade. Without this the closed panel keeps its scrim
+     over the whole page and swallows every click. Same specificity plus
+     the attribute, so no !important needed. */
+  .off-canvas[hidden] { display: none; }
+
+  .off-canvas__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgb(8 28 19 / 0.62);
+    opacity: 0;
+    transition: opacity 220ms ease;
+  }
+
+  .off-canvas__panel {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: min(270px, 78vw);
+    display: flex;
+    flex-direction: column;
+    background: var(--forest-950);
+    color: var(--parchment-300);
+    padding: 1.25rem 1rem 1.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(-100%);
+    transition: transform 260ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .off-canvas.is-open .off-canvas__scrim { opacity: 1; }
+  .off-canvas.is-open .off-canvas__panel { transform: translateX(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .off-canvas__scrim,
+    .off-canvas__panel { transition: none; }
+  }
+
+  .off-canvas__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-block-end: 1.5rem;
+  }
+  .off-canvas__head img { width: auto; height: 2.5rem; }
+
+  .off-canvas__close {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    color: var(--parchment-100);
+    background: color-mix(in srgb, var(--parchment-100) 13%, transparent);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .off-canvas__close:hover {
+    background: color-mix(in srgb, var(--parchment-100) 22%, transparent);
+  }
+
+  .off-canvas__body { flex: 1 0 auto; }
+  .off-canvas__foot { padding-block-start: 1.5rem; }
+
+  .off-canvas__eyebrow {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--hewn-400);
+    margin-block: 0 0.5rem;
+  }
+  .off-canvas__list + .off-canvas__eyebrow { margin-block-start: 1.5rem; }
+
+  .off-canvas__list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .off-canvas__list a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    color: var(--parchment-300);
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+  .off-canvas__list a:hover {
+    background: color-mix(in srgb, var(--parchment-100) 7%, transparent);
+    color: var(--parchment-50);
+  }
+
+  /* Active reads the same way it does in the desktop header: the label
+     and its mark lift to full parchment, everything else stays at 300. */
+  .off-canvas__list a[aria-current="page"] {
+    color: var(--parchment-50);
+    font-weight: 600;
+  }
+
+  /* Give keeps the emphasis it has as a button in the header. */
+  .off-canvas__list--give { margin-block-start: 1.25rem; }
+  .off-canvas__list--give a {
+    background: color-mix(in srgb, var(--parchment-100) 13%, transparent);
+    color: var(--parchment-50);
+    font-weight: 600;
+  }
+  .off-canvas__list--give a:hover {
+    background: color-mix(in srgb, var(--parchment-100) 20%, transparent);
+  }
 
   /* The nav collapses when the six items stop fitting, not at a device
      width. 60rem is where the labels begin to crowd the Give button. */
@@ -146,27 +522,14 @@ const isCurrent = (href: string) =>
     .site-header__inner { gap: 1rem; min-height: 5rem; }
     .site-header__toggle { display: inline-flex; }
     .site-header__brand { margin-inline: auto; }
-
-    .site-header__nav {
-      position: absolute;
-      inset-inline: 0;
-      top: 100%;
-      margin: 0;
-      background: var(--forest-950);
-      border-block-start: 1px solid color-mix(in srgb, var(--parchment-300) 18%, transparent);
-      display: none;
-    }
-    .site-header.is-open .site-header__nav { display: block; }
-    .site-header__nav ul {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0;
-      padding-block: 0.5rem;
-    }
-    .site-header__nav a {
-      display: block;
-      padding: 0.9rem var(--gutter);
-      font-size: var(--type-label-size);
-    }
+    /* The Master lockup is a desktop, home page only treatment. On a
+       phone or tablet it would eat most of the bar, and the hero copy
+       has to start somewhere. Everything narrow gets the L Mark, the
+       secondary form made for exactly this. */
+    .site-header--overlay .site-header__logo--master { display: none; }
+    .site-header--overlay .site-header__logo--mark { display: block; }
+    .site-header__logo--mark { height: 3rem; }
+    .site-header__nav { display: none; }
+    .off-canvas { display: block; }
   }
 </style>

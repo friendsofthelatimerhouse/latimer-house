@@ -14,7 +14,7 @@ const ready = Boolean(newsletter.action);
 
 <section class="signup">
   <div class="container signup__inner">
-    <div class="signup__text">
+    <div class="signup__text" data-aos="fade-up">
       <p class="eyebrow signup__eyebrow">Stay connected</p>
       <p class="signup__body">
         What we uncover, when we are working, and how to join in.
@@ -23,6 +23,8 @@ const ready = Boolean(newsletter.action);
 
     <form
       class="signup__form"
+      data-aos="fade-up"
+      data-aos-delay="200"
       action={newsletter.action || undefined}
       method="post"
     >

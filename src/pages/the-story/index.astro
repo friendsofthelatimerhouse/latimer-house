@@ -68,7 +68,7 @@ const doors = [
       />
 
       <div class="doors">
-        {doors.map((door) => <DoorCard {...door} />)}
+        {doors.map((door, i) => <DoorCard {...door} delay={i * 150} />)}
       </div>
     </div>
   </section>

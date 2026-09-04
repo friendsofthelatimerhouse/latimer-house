@@ -41,20 +41,49 @@ export const site = {
  * active nav item. See the Copy Deck, Section 1.5.
  */
 export const nav = [
-  { label: "The Story", href: "/the-story/" },
-  { label: "The Restoration", href: "/the-restoration/" },
-  { label: "Visit", href: "/visit/" },
-  { label: "Get Involved", href: "/get-involved/" },
-  { label: "News", href: "/news/" },
-  { label: "About", href: "/about/" },
+  { label: "The Story", href: "/the-story/", icon: "story" },
+  { label: "The Restoration", href: "/the-restoration/", icon: "restoration" },
+  { label: "Visit", href: "/visit/", icon: "visit" },
+  { label: "Get Involved", href: "/get-involved/", icon: "get-involved" },
+  { label: "News", href: "/news/", icon: "news" },
+  { label: "About", href: "/about/", icon: "about" },
 ] as const;
 
-/** Mobile tab bar, four slots. */
+/**
+ * The Story's four sub pages. The off canvas rail lists them as a group,
+ * because on a phone the only way to reach them otherwise is to land on
+ * The Story first and pick a door.
+ */
+export const storyChildren = [
+  { label: "The Log House", href: "/the-story/the-log-house/", icon: "log-house" },
+  { label: "The Latimers", href: "/the-story/the-latimers/", icon: "latimers" },
+  { label: "The Browns", href: "/the-story/the-browns/", icon: "browns" },
+  { label: "The Park", href: "/the-story/the-park/", icon: "park" },
+] as const;
+
+/**
+ * Getting in touch is not a page. It is section FOUR of About, which is
+ * why this is an anchor rather than a route of its own.
+ */
+export const contact = {
+  label: "Get in Touch",
+  href: "/about/#get-in-touch",
+  icon: "contact",
+} as const;
+
+/**
+ * Mobile tab bar, four slots. Phones only; the canvas places it on the
+ * Mobile frames and on none of the Tablet ones.
+ *
+ * The icons are the ones the Tab Bar component uses, which are not the
+ * same marks the rail gives these destinations. See the note in
+ * TabBar.astro.
+ */
 export const tabBar = [
-  { label: "Home", href: "/" },
-  { label: "The Story", href: "/the-story/" },
-  { label: "Restoration", href: "/the-restoration/" },
-  { label: "Give", href: "/give/" },
+  { label: "Home", href: "/", icon: "story" },
+  { label: "The Story", href: "/the-story/", icon: "latimers" },
+  { label: "Restoration", href: "/the-restoration/", icon: "restoration" },
+  { label: "Give", href: "/give/", icon: "give" },
 ] as const;
 
 export const give = {
@@ -83,7 +112,23 @@ export const give = {
  * signup band renders disabled rather than posting into a void.
  */
 export const newsletter = {
-  action: "",
+  /**
+   * Kit form 9881603, "Website Signup", created under the organisation's Kit
+   * account. This is the HTML embed endpoint, not the JavaScript one: the
+   * forms post straight to it with no script, so they cannot break if Kit's
+   * CDN is slow or blocked.
+   *
+   * Double opt-in is on at Kit's end, so a submission here sends a
+   * confirmation email and the person is not a subscriber until they click it.
+   *
+   * Because there is no JavaScript, the browser follows Kit's response after
+   * posting. Today that is Kit's own hosted success page. Once the site is
+   * published, set "After confirming redirect to" in the Kit form settings to
+   * https://friendsofthelatimerhouse.org/thank-you/ and the reader lands back
+   * on our own page instead.
+   */
+  action: "https://app.kit.com/forms/9881603/subscriptions",
+  formId: "9881603",
   emailField: "email_address",
 } as const;
 

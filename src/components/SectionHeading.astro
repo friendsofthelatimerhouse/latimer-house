@@ -20,7 +20,7 @@ const { eyebrow, heading, lead, action, level = 2 } = Astro.props;
 const Heading = `h${level}` as "h2" | "h3";
 ---
 
-<div class="section-heading">
+<div class="section-heading" data-aos="fade-up">
   <div class="section-heading__text">
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
     <Heading class="section-heading__title">{heading}</Heading>

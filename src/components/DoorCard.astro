@@ -12,12 +12,15 @@ interface Props {
   href: string;
   /** Link label. GO IN on The Story, READ on News. */
   cta?: string;
+  /** Milliseconds to stagger this card behind the one before it. */
+  delay?: number;
 }
 
-const { number, title, body, href, cta = "Go in" } = Astro.props;
+const { number, title, body, href, cta = "Go in", delay = 0 } = Astro.props;
 ---
 
-<article class="door">
+<div class="door-reveal" data-aos="fade-up" data-aos-delay={delay}>
+  <article class="door">
   <p class="door__number">{number}</p>
   <h3 class="door__title">
     <a class="door__link" href={href}>{title}</a>
@@ -26,11 +29,17 @@ const { number, title, body, href, cta = "Go in" } = Astro.props;
   <p class="door__cta" aria-hidden="true">
     {cta} <span class="door__arrow">&rarr;</span>
   </p>
-</article>
+  </article>
+</div>
 
 <style>
+  /* The reveal is a wrapper so the card keeps its own hover transition.
+     See the note in global.css. */
+  .door-reveal { display: flex; }
+
   .door {
     display: flex;
+    flex: 1;
     flex-direction: column;
     position: relative;
     padding: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);

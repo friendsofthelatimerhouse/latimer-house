@@ -18,6 +18,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* The header is sticky, so an in-page anchor would otherwise scroll
+     its target underneath it. This reserves the header's height. */
+  scroll-padding-block-start: 6.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -29,12 +32,25 @@ html {
   }
 }
 
+/* Sticky footer. The page is a column: header, main, footer. main takes
+   whatever height is left over, so on a short page the footer sits at
+   the bottom of the window instead of floating halfway up it, and on a
+   long page it behaves normally. 100dvh rather than 100vh because vh on
+   mobile Safari measures the window without the address bar. */
 body {
   background: var(--bg-canvas);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  /* Clears the fixed tab bar so the end of the footer stays reachable. */
+  padding-block-end: var(--tabbar-h);
+}
+
+body > main {
+  flex: 1 0 auto;
 }
 
 img, picture, svg, video {
@@ -94,6 +110,30 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
   /* Measure cap for reading copy, from the type guide: ~70 characters */
   --measure: 42rem;
+
+  /* Header heights. Two numbers because the home page header floats over
+     the hero photograph at a generous size and shrinks to the ordinary
+     bar once the reader scrolls. The home hero pulls itself up by
+     --header-overlay-h, so these must stay in step. */
+  --header-h: 5.5rem;
+  --header-overlay-h: clamp(7.25rem, 5rem + 5.4vw, 11rem);
+
+  /* Space reserved at the foot of the page for a fixed bottom bar.
+     Zero, because the mobile tab bar is not mounted; see Base.astro.
+     If it comes back, this becomes
+       @media (max-width: 47.9375rem) {
+         :root { --tabbar-h: calc(4.875rem + env(safe-area-inset-bottom, 0px)); }
+       }
+     and the measured 78px must be rechecked rather than trusted. */
+  --tabbar-h: 0px;
+}
+
+/* Below the nav breakpoint the home header shows the L Mark rather than
+   the Master lockup, so it no longer needs the extra room. The hero pulls
+   itself up by this same variable, which is why it has to change here
+   rather than in the header component. */
+@media (max-width: 60rem) {
+  :root { --header-overlay-h: var(--header-h); }
 }
 
 .container {
@@ -184,6 +224,30 @@ button, input, textarea, select { font: inherit; color: inherit; }
   border-color: var(--forest-900);
 }
 
+/* The persistent GIVE button in the header. Hewn, per the Figma. */
+.btn--give {
+  background: var(--hewn-600);
+  color: var(--parchment-50);
+  padding: 0.8rem 1.35rem;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  border-radius: 3px;
+}
+.btn--give:hover { background: var(--hewn-700); }
+
+/* The hero call to action on the home page. Sage rather than hewn,
+   because it sits on a photograph and needs to read as part of the
+   landscape rather than as a second GIVE button. */
+.btn--hero {
+  background: var(--sage-700);
+  color: var(--parchment-50);
+  padding: 1.35rem 2rem;
+  font-size: 14px;
+  letter-spacing: 0.09em;
+  border-radius: 3px;
+}
+.btn--hero:hover { background: var(--forest-900); }
+
 .btn__arrow { font-weight: 400; }
 
 /* ============================================================
@@ -208,3 +272,58 @@ button, input, textarea, select { font: inherit; color: inherit; }
   -webkit-mask-repeat: no-repeat;
   z-index: 2;
 }
+
+/* ============================================================
+   SCROLL ANIMATION (AOS)
+
+   Two safety rules, both of which matter more than the effect.
+
+   1. AOS works by setting elements to opacity 0 and revealing them
+      with JavaScript. If the script fails to load, every animated
+      element stays invisible and the site is a blank page. The
+      inline script in Base.astro adds .has-js to <html> before any
+      of this renders, so without JavaScript the content simply shows.
+
+   2. AOS is not initialised at all when the reader has asked their
+      system to reduce motion, which would leave those same elements
+      stuck at opacity 0. The media query below reveals them.
+
+   The distance override tones AOS's default 100px travel down to
+   something closer to a settle than a slide. This is a historic
+   organisation, not a product launch.
+   ============================================================ */
+
+html:not(.has-js) [data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* Pace. The selector is deliberately heavy: it has to beat both AOS's own
+   [data-aos] rule and any component scoped rule, since Astro adds a
+   [data-astro-cid-*] attribute to those and lifts their specificity.
+
+   Raise the duration here to slow everything down; the per element
+   data-aos-delay values set the stagger.
+
+   RULE: never put data-aos on an element that has its own transition.
+   This rule claims transition-property, so the element's own hover
+   transition would stop working, and its transform would fight the
+   animation's. Wrap it instead and animate the wrapper. */
+html [data-aos][data-aos] {
+  transition-property: opacity, transform;
+  transition-duration: 850ms;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+[data-aos="fade-up"] { transform: translate3d(0, 24px, 0); }
+[data-aos="fade-down"] { transform: translate3d(0, -24px, 0); }
+[data-aos="fade-right"] { transform: translate3d(-24px, 0, 0); }
+[data-aos="fade-left"] { transform: translate3d(24px, 0, 0); }

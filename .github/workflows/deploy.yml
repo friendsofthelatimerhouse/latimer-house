@@ -1,0 +1,49 @@
+# Fallback deploy to GitHub Pages. NOT the live host.
+#
+# The site deploys to Cloudflare. This exists only so that if Cloudflare
+# is ever unavailable, the site can be published from GitHub in about a
+# minute without anyone having to work out how.
+#
+# It is deliberately manual: it never runs on a push. To use it, enable
+# Pages in the repository settings with Source set to GitHub Actions, add
+# a file named CNAME to public/ containing friendsofthelatimerhouse.org,
+# then run this workflow from the Actions tab.
+name: Deploy to GitHub Pages (fallback, manual)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race each other. Queue instead.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

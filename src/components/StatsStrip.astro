@@ -20,8 +20,8 @@ const { stats } = Astro.props;
 <section class="stats">
   <div class="container">
     <dl class="stats__grid">
-      {stats.map((stat) => (
-        <div class="stats__item">
+      {stats.map((stat, i) => (
+        <div class="stats__item" data-aos="fade-up" data-aos-delay={i * 150}>
           <dt class="stats__figure">{stat.figure}</dt>
           <dd class="stats__label">{stat.label}</dd>
         </div>
