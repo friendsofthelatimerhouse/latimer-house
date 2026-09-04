@@ -28,9 +28,13 @@ import { give } from "../site.config";
 
 <style>
   .give-band {
-    background: var(--forest-950);
+    /* Sage on the canvas, not forest. It sits between a parchment band and
+       the forest footer, so a third value keeps the three bands reading as
+       three bands rather than two. */
+    background: var(--sage-700);
     color: var(--parchment-200);
-    padding-block: clamp(3rem, 2rem + 4vw, 5rem);
+    /* 196px tall on the canvas at desktop. */
+    padding-block: clamp(2.5rem, 1.75rem + 3vw, 3.75rem);
   }
 
   .give-band__inner {

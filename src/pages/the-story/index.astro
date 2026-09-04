@@ -1,24 +1,34 @@
 ---
+/**
+ * The Story lander. Built section for section to "The Story · Desktop"
+ * on the Visual Concepts page of the Figma file, node 190:618.
+ *
+ * Canvas order: Header, Page Hero (photograph, scrim, crumb, headline,
+ * lead, stats at the foot), Torn Edge, The four doors, Give band, Footer.
+ *
+ * Note there is NO newsletter band on this page on the canvas. An earlier
+ * version of this file added one. It has been removed to match.
+ */
 import Base from "../../layouts/Base.astro";
 import PageHero from "../../components/PageHero.astro";
-import StatsStrip from "../../components/StatsStrip.astro";
-import SectionHeading from "../../components/SectionHeading.astro";
 import DoorCard from "../../components/DoorCard.astro";
 import GiveBand from "../../components/GiveBand.astro";
-import NewsletterBand from "../../components/NewsletterBand.astro";
 
-/** Copy Deck, Section 4. */
+/** Copy Deck, Section 4. These sit inside the hero on the canvas. */
 const stats = [
   { figure: "The 1790's", label: "When it was raised" },
   { figure: "0.805 acres", label: "The park today" },
   { figure: "Two families", label: "Latimers and Browns" },
-];
+] as const;
 
 const doors = [
   {
     number: "01",
     title: "The Log House",
     href: "/the-story/the-log-house/",
+    image: "/img/door-log-house",
+    imageAlt:
+      "The log house standing among trees behind a split rail fence, its hand hewn logs and stone chimney visible.",
     body:
       "Hand hewn logs, cut on this ground and raised in the 1790's. Somebody covered them in brick a hundred years later. We are taking it off by hand.",
   },
@@ -26,6 +36,9 @@ const doors = [
     number: "02",
     title: "The Latimers",
     href: "/the-story/the-latimers/",
+    image: "/img/door-latimers",
+    imageAlt:
+      "A family travelling by ox cart along a wooded road, men walking alongside the team.",
     body:
       "Charles Latimer built the house. His father Jonathan came home from Saratoga, put the family in ox carts, and brought them to Tennessee.",
   },
@@ -33,6 +46,11 @@ const doors = [
     number: "03",
     title: "The Browns",
     href: "/the-story/the-browns/",
+    image: "/img/door-browns",
+    imageAlt: "Martha and Bill Brown, photographed together.",
+    /* The source export is 1001px wide, so this is all there is. Re-export
+       larger and this line can go. */
+    widths: [700, 1000],
     body:
       "The last family to own it privately, and the reason it is still standing. They had no obligation to this house and they took it on anyway.",
   },
@@ -40,10 +58,13 @@ const doors = [
     number: "04",
     title: "The Park",
     href: "/the-story/the-park/",
+    image: "/img/door-park",
+    imageAlt:
+      "The house and the ground around it seen from above, trees and paths across the parcel.",
     body:
       "0.805 acres, with the house at the middle of it, named in the codicil as the park's centerpiece.",
   },
-];
+] as const;
 ---
 
 <Base
@@ -51,40 +72,83 @@ const doors = [
   description="Two families, two hundred years, and a house that outlasted both of them. Four ways into the story of the Latimer House."
 >
   <PageHero
-    crumbs={["The Story"]}
+    crumbs={[{ label: "The Story" }]}
     headline="The Latimers built it. The Browns saved it. We keep it."
     lead="Two families, two hundred years, and a house that outlasted both of them. Four doors in. Start wherever you like."
+    image="/img/story-hero"
+    imageAlt="The Latimer House standing among trees, its logs and stone chimney visible."
+    stats={stats}
   />
   <div class="torn-edge" aria-hidden="true"></div>
 
-  <StatsStrip stats={stats} />
-
-  <section class="band band--parchment">
+  <section class="band doors">
     <div class="container">
-      <SectionHeading
-        eyebrow="Four ways in"
-        heading="Where to start."
-        lead="Each door opens on a different part of the story."
-      />
+      <p class="eyebrow" data-aos="fade-up">Four ways in</p>
+      <h2 class="doors__headline" data-aos="fade-up" data-aos-delay="100">
+        Where to start.
+      </h2>
+      <p class="doors__lead" data-aos="fade-up" data-aos-delay="200">
+        Each door opens on a different part of the story.
+      </p>
 
-      <div class="doors">
-        {doors.map((door, i) => <DoorCard {...door} delay={i * 150} />)}
+      <div class="doors__grid">
+        {doors.map((door, i) => (
+          <DoorCard
+            number={door.number}
+            title={door.title}
+            href={door.href}
+            image={door.image}
+            imageAlt={door.imageAlt}
+            widths={"widths" in door ? door.widths : undefined}
+            body={door.body}
+            delay={i * 100}
+          />
+        ))}
       </div>
     </div>
   </section>
 
   <GiveBand />
-  <NewsletterBand />
 </Base>
 
 <style>
-  /* Four cards at 1440, two at tablet, one on a phone, and the change
-     happens because the cards run out of room rather than at a breakpoint
-     somebody guessed. */
+  /* Parchment 100 on the canvas, a shade under the page ground, with
+     96px of vertical padding at desktop. */
   .doors {
+    background: var(--parchment-100);
+    padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem);
+  }
+
+  .doors__headline {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 1.5rem + 3.2vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.029em;
+    color: var(--forest-900);
+  }
+
+  .doors__lead {
+    margin-block-start: 1.125rem;
+    max-width: 43.75rem;
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+
+  /* Two by two, which is what the canvas draws on both the desktop and the
+     tablet frame. auto-fit would give three across at 1440, so the two
+     columns are explicit. The single breakpoint below is transcribed from
+     the canvas rather than guessed: the mobile frame is 440 and the tablet
+     frame is 768, so the switch sits between them. */
+  .doors__grid {
+    margin-block-start: clamp(2rem, 1.5rem + 2vw, 3rem);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: clamp(1rem, 0.5rem + 1.5vw, 1.75rem);
-    margin-block-start: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+  @media (max-width: 34rem) {
+    .doors__grid { grid-template-columns: 1fr; }
   }
 </style>

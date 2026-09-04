@@ -8,15 +8,32 @@ import SocialIcon from "./SocialIcon.astro";
     <div class="site-footer__columns">
       {footerColumns.map((col) => (
         <div class="site-footer__col">
-          <h2 class="site-footer__heading">{col.heading}</h2>
+          <h2 class="site-footer__heading">
+            <a
+              class="site-footer__heading-link"
+              href={col.href}
+              {...col.href.startsWith("http")
+                ? { target: "_blank", rel: "noopener" }
+                : {}}
+            >
+              {col.heading}
+            </a>
+          </h2>
           <p class="site-footer__body">{col.body}</p>
           {"socials" in col && col.socials && (
             <ul class="site-footer__socials" role="list">
               {socials.map((s) => (
                 <li>
-                  <a href={s.href} rel="me noopener" target="_blank">
+                  <a
+                    class="site-footer__social-link"
+                    href={s.href}
+                    rel="me noopener"
+                    target="_blank"
+                  >
                     <SocialIcon name={s.icon} />
-                    <span class="visually-hidden">{s.label}</span>
+                    <span class="visually-hidden">
+                      {s.label}, opens in a new tab
+                    </span>
                   </a>
                 </li>
               ))}
@@ -30,7 +47,16 @@ import SocialIcon from "./SocialIcon.astro";
       <p class="site-footer__copyright">{copyrightLine}</p>
       <ul class="site-footer__legal-links" role="list">
         {legalLinks.map((l) => (
-          <li><a href={l.href}>{l.label}</a></li>
+          <li>
+            <a
+              href={l.href}
+              {...l.href.startsWith("http")
+                ? { target: "_blank", rel: "noopener" }
+                : {}}
+            >
+              {l.label}
+            </a>
+          </li>
         ))}
       </ul>
     </div>
@@ -65,6 +91,41 @@ import SocialIcon from "./SocialIcon.astro";
     margin-block-end: 0.5rem;
   }
 
+  /* The heading is the link, styled exactly like the legal links below:
+     no underline at any point, just a soft colour fade. The easing is
+     symmetrical, so it fades in on enter and back out on leave rather
+     than snapping off the way a transition set only on :hover does. */
+  .site-footer__heading-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .site-footer__heading-link:hover,
+  .site-footer__heading-link:focus-visible {
+    color: var(--parchment-50);
+  }
+
+  /* The mark is small, so the hit area is padded out to a comfortable
+     target rather than the 17px glyph. */
+  .site-footer__social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin-inline-start: -0.75rem;
+    color: var(--parchment-300);
+    text-decoration: none;
+    opacity: 0.78;
+    transition: opacity 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .site-footer__social-link:hover,
+  .site-footer__social-link:focus-visible {
+    opacity: 1;
+    color: var(--parchment-50);
+  }
+
   .site-footer__body {
     font-size: var(--type-small-size);
     line-height: 1.5;
@@ -80,12 +141,9 @@ import SocialIcon from "./SocialIcon.astro";
     padding: 0;
     list-style: none;
   }
-  .site-footer__socials a {
-    display: inline-flex;
-    color: var(--hewn-300);
-    transition: color 150ms ease;
-  }
-  .site-footer__socials a:hover { color: var(--hewn-200); }
+  /* The anchor's own rule lives with the other link treatments further up,
+     under .site-footer__social-link. Keeping a second .site-footer__socials a
+     rule here would win on source order and quietly undo it. */
 
   .site-footer__legal {
     display: flex;
@@ -119,8 +177,12 @@ import SocialIcon from "./SocialIcon.astro";
     text-transform: uppercase;
     color: var(--hewn-300);
     text-decoration: none;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-  .site-footer__legal-links a:hover { text-decoration: underline; }
+  .site-footer__legal-links a:hover,
+  .site-footer__legal-links a:focus-visible {
+    color: var(--parchment-50);
+  }
   .site-footer__legal-links li + li::before {
     content: "·";
     margin-inline-end: 0.9rem;
@@ -133,6 +195,15 @@ import SocialIcon from "./SocialIcon.astro";
     .site-footer__legal {
       flex-direction: column;
       align-items: flex-start;
+    }
+  }
+
+  /* Colour still changes, it just arrives at once. */
+  @media (prefers-reduced-motion: reduce) {
+    .site-footer__heading-link,
+    .site-footer__social-link,
+    .site-footer__legal-links a {
+      transition: none;
     }
   }
 </style>

@@ -7,46 +7,238 @@
  * ("THE STORY · THE LOG HOUSE"). Passing an array rather than a string
  * keeps the middle dot out of the copy, so the separator can change once.
  */
+type Crumb = { label: string; href?: string };
+
 interface Props {
-  crumbs: string[];
+  /**
+   * The trail above the headline. Give every ancestor an href; leave the
+   * LAST one without. A breadcrumb is a trail back, so the final item is
+   * the "you are here" marker rather than a destination, and a link that
+   * goes where you already are reads as broken. It carries
+   * aria-current="page" instead, which screen readers announce.
+   */
+  crumbs: readonly Crumb[];
   headline: string;
   /** Optional standfirst. Some heroes are headline only. */
   lead?: string;
+  /**
+   * Optional photograph behind the hero. Pass the stem of the responsive
+   * set, without the width or the extension, e.g. "/img/house-hero", and
+   * the four widths built for the home page are used.
+   *
+   * The band already carries light type on forest, so the image sits under
+   * a dark scrim rather than the type changing colour. Dark scrim under
+   * light type, never the reverse.
+   */
+  image?: string;
+  imageAlt?: string;
+  /**
+   * Widths present on disk for this hero. Requesting one that was never
+   * generated hands the browser a 404 to pick from and it renders nothing.
+   * Defaults to the four standard widths.
+   */
+  imageWidths?: readonly number[];
+  /**
+   * The three figures that sit at the FOOT of the hero, over the
+   * photograph. On the canvas these live inside the Page Hero frame, not
+   * in a band of their own below the torn edge.
+   */
+  stats?: readonly { figure: string; label: string }[];
 }
 
-const { crumbs, headline, lead } = Astro.props;
+const {
+  crumbs, headline, lead, image, imageAlt, stats,
+  imageWidths = [700, 1000, 1440, 2000],
+} = Astro.props;
+const srcset = (ext: string, stem: string, ws: readonly number[]) =>
+  ws.map((w) => `${stem}-${w}.${ext} ${w}w`).join(", ");
 ---
 
-<section class="page-hero">
+<section class="page-hero" class:list={[image && "page-hero--media"]}>
+  {image && (
+    <>
+      <picture class="page-hero__media">
+        <source
+          type="image/webp"
+          srcset={srcset("webp", image, imageWidths)}
+          sizes="100vw"
+        />
+        <img
+          src={`${image}-${imageWidths[Math.min(2, imageWidths.length - 1)]}.jpg`}
+          srcset={srcset("jpg", image, imageWidths)}
+          sizes="100vw"
+          alt={imageAlt ?? ""}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </picture>
+      <div class="page-hero__scrim" aria-hidden="true"></div>
+    </>
+  )}
   <div class="container page-hero__inner">
-    <p class="eyebrow page-hero__crumbs" data-aos="fade-up">
-      {crumbs.map((crumb, i) => (
-        <>
-          {i > 0 && <span class="page-hero__sep" aria-hidden="true">·</span>}
-          <span>{crumb}</span>
-        </>
-      ))}
-    </p>
+    <nav
+      class="eyebrow crumbs page-hero__crumbs"
+      aria-label="Breadcrumb"
+      data-aos="fade-up"
+    >
+      <ol role="list">
+        {crumbs.map((crumb, i) => (
+          <li>
+            {i > 0 && <span class="page-hero__sep" aria-hidden="true">·</span>}
+            {crumb.href ? (
+              <a class="page-hero__crumb-link" href={crumb.href}>{crumb.label}</a>
+            ) : (
+              <span aria-current="page">{crumb.label}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
     <h1 class="t-display" data-aos="fade-up" data-aos-delay="150">{headline}</h1>
     {lead && <p class="lead page-hero__lead" data-aos="fade-up" data-aos-delay="300">{lead}</p>}
+    {stats && stats.length > 0 && (
+      <dl class="page-hero__stats" data-aos="fade-up" data-aos-delay="450">
+        {stats.map((s) => (
+          <div class="page-hero__stat">
+            <dt class="page-hero__figure">{s.figure}</dt>
+            <dd class="page-hero__label">{s.label}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
   </div>
 </section>
 
 <style>
   .page-hero {
+    position: relative;
     background: var(--forest-950);
     color: var(--parchment-200);
     padding-block: clamp(3rem, 1.75rem + 6vw, 7rem)
       clamp(4.5rem, 3rem + 7vw, 8.5rem);
   }
 
-  .page-hero__crumbs {
+  /* The canvas draws every interior hero at 1440 x 470, so the band gets a
+     floor as well as its padding. Below that width the copy wraps and
+     pushes it taller on its own, which is what the mobile frames show. */
+  .page-hero--media {
+    min-height: clamp(20rem, 11.375rem + 20vw, 29.375rem);
+    /* The canvas sets 76 top and 64 bottom on the hero frame, tighter than
+       the flat forest hero, because the photograph is doing the work the
+       padding otherwise would. Without this the band overruns 470. */
+    padding-block: clamp(2.75rem, 1.75rem + 4vw, 4.75rem)
+      clamp(2.5rem, 1.75rem + 3vw, 4rem);
+  }
+
+  .page-hero__media,
+  .page-hero__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Transcribed from the Scrim rectangle on the canvas, which is identical
+     on all twelve interior heroes: three stops, top to bottom, heaviest at
+     the top where the crumbs and headline sit and clearing toward the foot
+     so the photograph is still a photograph.
+
+     The colour is the canvas value rather than --forest-950. They are close
+     but not the same, and the scrim is drawn over a photograph rather than
+     against the band colour, so it is kept as the canvas has it. */
+  .page-hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(8, 28, 19, 0.95) 0%,
+      rgba(8, 28, 19, 0.8) 50%,
+      rgba(8, 28, 19, 0.45) 100%
+    );
+  }
+
+  /* The copy has to sit above both. */
+  .page-hero__inner { position: relative; z-index: 1; }
+
+  /* The canvas pushes the stats to the foot of the hero with a Grow
+     spacer. Here the inner column simply fills the band and the stats are
+     the last row, which does the same job without a spacer element. */
+  .page-hero--media { display: flex; flex-direction: column; }
+  .page-hero--media .page-hero__inner {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Canvas type for the interior hero: 58 over 64 on the headline, 19 over
+     32 on the standfirst. Set here rather than in the global scale because
+     the flat forest hero has no photograph competing with it and carries
+     the larger display size. */
+  .page-hero--media h1 {
+    font-size: clamp(2.125rem, 1.4rem + 2.6vw, 3.625rem);
+    line-height: 1.104;
+    letter-spacing: -0.01em;
+    max-width: 24ch;
+  }
+  .page-hero--media .page-hero__lead {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    line-height: 1.684;
+    max-width: 37.5rem;
+  }
+  .page-hero__stats {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6rem;
-    color: var(--hewn-300);
+    gap: clamp(1.75rem, 1rem + 3vw, 4rem);
+    margin: 0;
+    margin-block-start: auto;
+    padding-block-start: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+  }
+  .page-hero__stat { display: flex; flex-direction: column; gap: 0.375rem; }
+  .page-hero__figure {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 1rem + 0.9vw, 1.625rem);
+    line-height: 1.15;
+    color: var(--parchment-50);
+    text-transform: uppercase;
+  }
+  .page-hero__label {
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sage-300);
+  }
+
+  /* Canvas values for the hero trail, which differ from the section
+     eyebrows below it: Inter Bold rather than Medium, hewn-400 rather
+     than hewn-600, and 1.5px of tracking at 12.5px. */
+  .page-hero__crumbs {
+    font-weight: 700;
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    color: var(--hewn-400);
   }
   .page-hero__sep { color: var(--sage-600); }
+
+  /* Same treatment as the footer links: no underline at any point, just a
+     soft symmetrical colour fade, so it eases back out on leave rather
+     than snapping off. */
+  .page-hero__crumb-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .page-hero__crumb-link:hover,
+  .page-hero__crumb-link:focus-visible {
+    color: var(--parchment-50);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .page-hero__crumb-link { transition: none; }
+  }
 
   .page-hero h1 {
     color: var(--parchment-50);

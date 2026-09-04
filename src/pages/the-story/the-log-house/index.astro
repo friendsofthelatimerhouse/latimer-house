@@ -1,0 +1,514 @@
+---
+/**
+ * The Log House. Built section for section to "The Log House · Desktop"
+ * on the Visual Concepts page, node 195:649.
+ *
+ * Canvas order: Header, Page Hero, Torn Edge, 01 What is under the brick,
+ * 02 The structure, 03 The alterations, 04 The older addition, Give band,
+ * Footer. No newsletter band, as on The Story.
+ *
+ * Section grounds alternate deliberately and are transcribed from the
+ * canvas rather than chosen: parchment-100, parchment-50, forest-950,
+ * parchment-100.
+ */
+import Base from "../../../layouts/Base.astro";
+import PageHero from "../../../components/PageHero.astro";
+import GiveBand from "../../../components/GiveBand.astro";
+import StorySiblings from "../../../components/StorySiblings.astro";
+
+const stats = [
+  { figure: "The 1790's", label: "When it was raised" },
+  { figure: "Three skins", label: "Put over the logs" },
+  { figure: "1830s", label: "The older addition" },
+] as const;
+
+/** Section 01. Outermost first, so the reader travels inward. */
+const layers = [
+  {
+    number: "01",
+    era: "20th c.",
+    title: "Brick veneer",
+    body: "The face the road sees, and the newest thing here. A concrete foundation was poured to carry its weight.",
+    tone: "brick",
+  },
+  {
+    number: "02",
+    era: "1940's",
+    title: "Cementitious siding",
+    body: "A thin siding in a 1940's style, nailed over the wood below it.",
+    tone: "cement",
+  },
+  {
+    number: "03",
+    era: "Before 1940",
+    title: "Wood lap siding",
+    body: "The first thing that ever hid the logs.",
+    tone: "lap",
+  },
+  {
+    number: "04",
+    era: "1790's",
+    title: "Hand hewn logs",
+    body: "Cut on this ground and raised by Charles Latimer in the 1790's. Still sound at both floors. This is the house.",
+    tone: "logs",
+  },
+] as const;
+
+/** Section 02. */
+const findings = [
+  {
+    title: "The logs",
+    body: "Sound at both floors, inside and out. There is rot on the north side, more than elsewhere, and it can be saved.",
+  },
+  {
+    title: "The beams upstairs",
+    body: "The log beams over the second floor are in excellent shape, and visible from below.",
+  },
+  {
+    title: "The fireplace",
+    body: "In excellent condition. It was repointed at some stage, and the original mortar is still there underneath the newer work.",
+  },
+  {
+    title: "The floors",
+    body: "Solid oak under the carpet downstairs. The bead board upstairs came later, probably from the end of the nineteenth century.",
+  },
+] as const;
+
+/** Section 03. */
+const losses = [
+  {
+    figure: "12 by 8 ft",
+    body: "An opening cut straight through the original log wall.",
+  },
+  {
+    figure: "4 in",
+    body: "How far the house settled once that wall was gone. Visible on both floors.",
+  },
+  {
+    figure: "2 to 4",
+    body: "Original windows upstairs, covered over at some point.",
+  },
+  {
+    figure: "1960's",
+    body: "Paneling over nearly every wall inside, and carpet on the floors.",
+  },
+] as const;
+---
+
+<Base
+  title="The Log House"
+  description="There is a log house inside that brick house. Four layers, each one newer than the last, and we are taking them off by hand."
+>
+  <PageHero
+    crumbs={[
+      { label: "The Story", href: "/the-story/" },
+      { label: "The Log House" },
+    ]}
+    headline="There is a log house inside that brick house."
+    lead="Charles Latimer's people cut the timber on this ground and raised the house in the 1790's. Everything you can see from the road was added later. We are taking it off a layer at a time, by hand, and what is underneath is in better shape than anyone dared hope."
+    image="/img/log-house-cutaway"
+    imageAlt="Hand hewn logs exposed where the brick veneer has been taken off the wall."
+    stats={stats}
+  />
+  <div class="torn-edge" aria-hidden="true"></div>
+
+  <!-- 01 ------------------------------------------------------------- -->
+  <section class="band band--layers">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">01 &middot; What is under the brick</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        Four layers, and each one newer than the last.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        In the summer of 2025 we opened the wall up to see what we were dealing
+        with. The logs were under three separate skins, each newer than the one
+        beneath it. Taking them off is like reading the house backwards.
+      </p>
+
+      <p class="cutaway__marker" data-aos="fade-up">Outside</p>
+      <ol class="cutaway" role="list">
+        {layers.map((l, i) => (
+          <li
+            class={`cutaway__row cutaway__row--${l.tone}`}
+            data-aos="fade-up"
+            data-aos-delay={i * 100}
+          >
+            {l.tone === "logs" && (
+              <>
+                <picture class="cutaway__media">
+                  <source
+                    type="image/webp"
+                    srcset="/img/log-house-logs-800.webp 800w, /img/log-house-logs-1232.webp 1232w, /img/log-house-logs-2000.webp 2000w"
+                    sizes="(min-width: 79rem) 77rem, 100vw"
+                  />
+                  <img
+                    src="/img/log-house-logs-1232.jpg"
+                    srcset="/img/log-house-logs-800.jpg 800w, /img/log-house-logs-1232.jpg 1232w, /img/log-house-logs-2000.jpg 2000w"
+                    sizes="(min-width: 79rem) 77rem, 100vw"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+                <span class="cutaway__scrim" aria-hidden="true"></span>
+              </>
+            )}
+            <span class="cutaway__number">{l.number}</span>
+            <span class="cutaway__title">
+              {l.title}
+              <span class="cutaway__era">{l.era}</span>
+            </span>
+            <span class="cutaway__body">{l.body}</span>
+          </li>
+        ))}
+      </ol>
+      <p class="cutaway__marker cutaway__marker--end" data-aos="fade-up">
+        Inside &middot; The 1790's
+      </p>
+      <p class="cutaway__note" data-aos="fade-up">
+        Findings from the deconstruction of summer 2025. A second deconstruction
+        followed in June 2026 so the architect could produce an as built.
+      </p>
+    </div>
+  </section>
+
+  <!-- 02 ------------------------------------------------------------- -->
+  <section class="band band--survived">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">02 &middot; The structure</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        What survived.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        Two hundred years under brick, and the timber is in better condition
+        than the outside of the building would lead you to expect.
+      </p>
+
+      <div class="split">
+        <picture class="split__media" data-aos="fade-up">
+          <source
+            type="image/webp"
+            srcset="/img/log-house-fireplace-600.webp 600w, /img/log-house-fireplace-900.webp 900w, /img/log-house-fireplace-1200.webp 1200w"
+            sizes="(min-width: 60rem) 48vw, 92vw"
+          />
+          <img
+            src="/img/log-house-fireplace-900.jpg"
+            srcset="/img/log-house-fireplace-600.jpg 600w, /img/log-house-fireplace-900.jpg 900w, /img/log-house-fireplace-1200.jpg 1200w"
+            sizes="(min-width: 60rem) 48vw, 92vw"
+            alt="The stone fireplace in a log wall, its mantel and chimney breast intact."
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+
+        <dl class="findings">
+          {findings.map((f, i) => (
+            <div class="findings__item" data-aos="fade-up" data-aos-delay={i * 100}>
+              <dt class="findings__title">{f.title}</dt>
+              <dd class="findings__body">{f.body}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 ------------------------------------------------------------- -->
+  <section class="band band--altered">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">03 &middot; The alterations</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        What was altered.
+      </h2>
+      <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">
+        The house was covered over, and it was also cut into. None of it is
+        beyond repair, and all of it is why this is structural work rather than
+        decoration.
+      </p>
+
+      <dl class="losses">
+        {losses.map((l, i) => (
+          <div class="losses__item" data-aos="fade-up" data-aos-delay={i * 100}>
+            <span class="losses__rule" aria-hidden="true"></span>
+            <dt class="losses__figure">{l.figure}</dt>
+            <dd class="losses__body">{l.body}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <p class="losses__note" data-aos="fade-up">
+        A section of the original back log wall was removed to make a dining
+        room. The settling that followed may also have moved the gable walls
+        upstairs.
+      </p>
+    </div>
+  </section>
+
+  <!-- 04 ------------------------------------------------------------- -->
+  <section class="band band--addition">
+    <div class="container">
+      <p class="eyebrow" data-aos="fade-up">04 &middot; The older addition</p>
+      <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">
+        There is a second old house attached to the first.
+      </h2>
+
+      <div class="split split--reverse">
+        <div class="addition__copy stack">
+          <p data-aos="fade-up">
+            The back two sections went up together somewhere between 1830 and
+            1840, which makes them old enough to have a claim of their own.
+          </p>
+          <p data-aos="fade-up" data-aos-delay="100">
+            Their floor joists are debarked logs resting on fieldstone piers,
+            laid about two feet apart, as they were built then.
+          </p>
+          <p data-aos="fade-up" data-aos-delay="200">
+            All of it stays. Nothing is coming off. The house will be kept
+            whole, all three sections of it.
+          </p>
+        </div>
+
+        <picture class="split__media" data-aos="fade-up" data-aos-delay="100">
+          <source
+            type="image/webp"
+            srcset="/img/log-house-exterior-600.webp 600w, /img/log-house-exterior-900.webp 900w, /img/log-house-exterior-1200.webp 1200w"
+            sizes="(min-width: 60rem) 48vw, 92vw"
+          />
+          <img
+            src="/img/log-house-exterior-900.jpg"
+            srcset="/img/log-house-exterior-600.jpg 600w, /img/log-house-exterior-900.jpg 900w, /img/log-house-exterior-1200.jpg 1200w"
+            sizes="(min-width: 60rem) 48vw, 92vw"
+            alt="The brick house with its red roof, seen from the yard through a bare tree."
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </div>
+    </div>
+  </section>
+
+  <StorySiblings current="/the-story/the-log-house/" />
+  <GiveBand />
+</Base>
+
+<style>
+  /* 96px of vertical padding on every section on the canvas. */
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem); }
+  .band--layers { background: var(--parchment-100); }
+  .band--survived { background: var(--parchment-50); }
+  .band--altered { background: var(--forest-950); }
+  .band--addition { background: var(--parchment-100); }
+
+  .sec__headline {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 1.5rem + 3.2vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.029em;
+    color: var(--forest-900);
+    /* No character cap, for the same reason as The Latimers: the canvas
+       lets these headings hug their content out to 1017px on section 01,
+       and a ch cap wraps them far earlier than the design does. */
+  }
+
+  .sec__lead {
+    margin-block-start: 1.125rem;
+    max-width: 51.25rem;
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+
+  /* The forest section inverts everything. */
+  .band--altered .sec__headline { color: var(--parchment-50); }
+  .band--altered .sec__lead { color: var(--parchment-200); }
+  .band--altered .eyebrow { color: var(--hewn-300); }
+
+  /* ---------- 01 THE CUTAWAY ---------- */
+
+  /* Four stacked rows, outermost at the top, so scrolling down is the same
+     motion as taking the skins off. Row colours are the canvas values. */
+  .cutaway {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .cutaway__row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 6.5rem 17.5rem 1fr;
+    gap: 2.25rem;
+    align-items: center;
+    padding: 1.625rem 2.5rem;
+    min-height: 8.125rem;
+  }
+  .cutaway__row--brick { background: var(--hewn-600); color: var(--parchment-50); }
+  .cutaway__row--cement { background: var(--parchment-300); color: var(--forest-900); }
+  .cutaway__row--lap { background: #aca08b; color: var(--forest-900); }
+  .cutaway__row--logs {
+    min-height: 15rem;
+    color: var(--parchment-50);
+  }
+
+  .cutaway__media,
+  .cutaway__media img,
+  .cutaway__scrim {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .cutaway__media img { object-fit: cover; }
+  /* Heavy, because the type has to hold over a photograph of a whole
+     building rather than a flat field. */
+  .cutaway__scrim { background: rgba(0, 25, 14, 0.62); }
+  .cutaway__row--logs > :not(.cutaway__media):not(.cutaway__scrim) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cutaway__number {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 1.875rem);
+    line-height: 1;
+  }
+  .cutaway__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+    line-height: 1.15;
+  }
+  /* The era is on the layer name in Figma rather than drawn. It earns its
+     place here: it is the fact that makes the stack legible. */
+  .cutaway__era {
+    display: block;
+    margin-block-start: 0.25rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.72;
+  }
+  .cutaway__body {
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 38.75rem;
+  }
+
+  .cutaway__marker {
+    margin-block: 2rem 0.75rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+  .cutaway__marker--end { margin-block: 0.75rem 0; }
+
+  .cutaway__note {
+    margin-block-start: 0.75rem;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--charcoal-700, var(--text-secondary));
+    max-width: 54.375rem;
+  }
+
+  /* ---------- 02 AND 04 SPLIT ROWS ---------- */
+
+  .split {
+    margin-block-start: clamp(2rem, 1.5rem + 2vw, 3rem);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: clamp(2rem, 1.25rem + 3vw, 3.5rem);
+    align-items: start;
+  }
+  .split__media {
+    display: block;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .split__media img { width: 100%; height: auto; display: block; }
+
+  /* Photograph right, copy left on the canvas for 04. Source order puts
+     the copy first so it also reads first without JavaScript. */
+  .split--reverse { direction: ltr; }
+
+  .findings { margin: 0; display: grid; gap: 1.75rem; }
+  .findings__item { margin: 0; }
+  .findings__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.4375rem);
+    line-height: 1.2;
+    color: var(--forest-900);
+  }
+  .findings__body {
+    margin: 0.4rem 0 0;
+    font-size: 15px;
+    line-height: 1.58;
+    color: var(--charcoal-700, var(--text-secondary));
+    max-width: 36.75rem;
+  }
+
+  .addition__copy {
+    --stack-gap: 1.125rem;
+    font-size: 1rem;
+    line-height: 1.62;
+    color: var(--charcoal-700, var(--text-secondary));
+    max-width: 36.75rem;
+  }
+
+  /* ---------- 03 THE LOSSES ---------- */
+
+  .losses {
+    margin: clamp(2.25rem, 1.5rem + 2.5vw, 3.25rem) 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: clamp(1.75rem, 1.25rem + 2vw, 3rem);
+  }
+  .losses__item { margin: 0; }
+  .losses__rule {
+    display: block;
+    width: 3rem;
+    height: 3px;
+    background: var(--hewn-400);
+    margin-block-end: 1.125rem;
+  }
+  .losses__figure {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+    line-height: 1.1;
+    color: var(--parchment-50);
+  }
+  .losses__body {
+    margin: 0.6rem 0 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--sage-300);
+    max-width: 17.75rem;
+  }
+  .losses__note {
+    margin-block-start: clamp(2rem, 1.5rem + 2vw, 3rem);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--parchment-200);
+    max-width: 56.25rem;
+  }
+
+  /* The cutaway grid gives up its columns before the text gets squeezed. */
+  @media (max-width: 60rem) {
+    .cutaway__row {
+      grid-template-columns: 4rem 1fr;
+      gap: 0.5rem 1.5rem;
+      padding: 1.375rem 1.5rem;
+    }
+    .cutaway__body { grid-column: 2; }
+  }
+</style>

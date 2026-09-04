@@ -1,0 +1,367 @@
+---
+/**
+ * The Browns. Built to "The Browns · Desktop", node 262:716.
+ *
+ * This is the record page. The account runs: the codicil, what happened to
+ * the money, who caught it, and how it ended. It ends with the reversal,
+ * which is the point of telling it at all.
+ *
+ * Narrative page, so blocks are centred on the page's centre line with the
+ * text left aligned inside them. Two pull quotes, the second on forest and
+ * therefore inverted.
+ */
+import Base from "../../../layouts/Base.astro";
+import PageHero from "../../../components/PageHero.astro";
+import StorySiblings from "../../../components/StorySiblings.astro";
+import GiveBand from "../../../components/GiveBand.astro";
+
+const stats = [
+  { figure: "$1.95 million", label: "What the county paid in 2015" },
+  { figure: "$500,000", label: "What he left for the park" },
+  { figure: "2026", label: "When the house changed hands" },
+] as const;
+
+/** Section 03. The chronology of the diversion and its correction. */
+const record = [
+  { figure: "2016", body: "The codicil was written, with the house named as the park's centerpiece." },
+  { figure: "2023", body: "A small group of commissioners caught the diversion." },
+  { figure: "2025", body: "The $500,000 was separated back out of the trust and returned to the county." },
+  { figure: "2026", body: "The deed was recorded on August 27, and the house changed hands." },
+] as const;
+---
+
+<Base
+  title="The Browns"
+  description="William Brown was not kin to the Latimers and owed this house nothing. He found out who had lived here, then made sure the house would outlive him."
+>
+  <PageHero
+    crumbs={[
+      { label: "The Story", href: "/the-story/" },
+      { label: "The Browns" },
+    ]}
+    headline="They were not family, and they took it on anyway."
+    lead="William Brown owned this house last. He was not kin to the Latimers and had no obligation to any of it. He spent part of his final years finding out who had lived here before him, and then he made sure the house would outlive him."
+    image="/img/browns-hero"
+    imageAlt="The Latimer House and the ground around it."
+    stats={stats}
+  />
+  <div class="torn-edge" aria-hidden="true"></div>
+
+  <!-- 01 and 02 share one band ---------------------------------------- -->
+  <section class="band band--parchment-100">
+    <div class="container">
+      <div class="prose">
+        <p class="eyebrow" data-aos="fade-up">01 &middot; The last owner</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          He wanted to know whose house it had been.
+        </h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          William I. Brown was the last private owner of this house. He was not
+          a Latimer and had no family claim on any of it. In his final years he
+          asked Tommy Latimer, a descendant of Colonel Jonathan, to trace the
+          ownership back, and Tommy put together a documented chain of deeds
+          running from 1787 into the 1920s.
+        </p>
+        <p data-aos="fade-up">
+          A man can own an old house for years and never ask that question. Mr.
+          Brown asked it, got the answer in writing, and then acted on it.
+        </p>
+      </div>
+
+      <figure class="figure" data-aos="fade-up">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/img/browns-figure-620.webp 620w, /img/browns-figure-900.webp 900w, /img/browns-figure-1000.webp 1000w"
+            sizes="(min-width: 48rem) 38.75rem, 92vw"
+          />
+          <img
+            src="/img/browns-figure-620.jpg"
+            srcset="/img/browns-figure-620.jpg 620w, /img/browns-figure-900.jpg 900w, /img/browns-figure-1000.jpg 1000w"
+            sizes="(min-width: 48rem) 38.75rem, 92vw"
+            alt="Martha and William Brown, photographed together."
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <figcaption>Martha and William Brown</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p class="eyebrow" data-aos="fade-up">02 &middot; The codicil</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">What he put in writing.</h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          In 2015 Sumner County bought the land and the house from him for
+          $1.95 million, and the Liberty Creek school campus was built on it.
+          Mr. Brown sold it. He did not give it away and he never pretended
+          otherwise.
+        </p>
+        <p data-aos="fade-up">
+          What he did give was a codicil to his will, in 2016, leaving five
+          hundred thousand dollars to the County to establish a public park on
+          the property. He did not leave the house out of it. He named the house
+          as the thing the park was to be built around.
+        </p>
+      </div>
+
+      <blockquote class="pull" data-aos="fade-up">
+        <span class="pull__rule" aria-hidden="true"></span>
+        <p class="pull__quote">
+          &ldquo;the historic home currently situated thereon being permanently
+          maintained by the County as the park's centerpiece.&rdquo;
+        </p>
+        <footer class="pull__attr">
+          Codicil No. 1 to the will of William I. Brown
+        </footer>
+      </blockquote>
+
+      <div class="prose">
+        <p data-aos="fade-up">
+          The park was to carry both their names. The William and Martha Brown
+          Park. Martha's name sits beside his on the sign and on the instrument.
+        </p>
+        <p data-aos="fade-up">
+          The money was restricted. It was to be held in a separate account and
+          spent only on the park it was given for. That restriction is the whole
+          reason the record that follows matters.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 THE RECORD ---------------------------------------------------- -->
+  <section class="band band--forest">
+    <div class="container">
+      <div class="prose prose--invert">
+        <p class="eyebrow" data-aos="fade-up">03 &middot; The record</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          What happened to the money.
+        </h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          That is not what happened to it. The five hundred thousand dollars was
+          wrongfully confiscated and put into the school system's eight million
+          dollar education technology trust, a fund it was never left to, and
+          combined with it. Money given to keep this house standing could not be
+          spent on keeping it standing, or even on maintaining it, while an
+          alternate park plan moved ahead that left the house out entirely. For
+          most of the decade after the gift the house stood empty and the work
+          did not begin.
+        </p>
+        <p data-aos="fade-up">
+          A small group of county commissioners caught it in 2023 and led the
+          charge to correct it. They got the five hundred thousand dollars
+          separated back out of that trust and returned to the county, which
+          took until 2025. In 2026 the Commission voted to convey the house and
+          its parcel to a nonprofit organized to care for it, and the deed was
+          recorded on the twenty seventh of August. The Friends of the Latimer
+          House have held it since.
+        </p>
+      </div>
+
+      <dl class="figures">
+        {record.map((r, i) => (
+          <div class="figures__item" data-aos="fade-up" data-aos-delay={i * 100}>
+            <span class="figures__rule" aria-hidden="true"></span>
+            <dt class="figures__figure">{r.figure}</dt>
+            <dd class="figures__body">{r.body}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="prose prose--invert">
+        <p data-aos="fade-up">
+          While the alternate plan was still being pushed, Mr. Brown's niece
+          wrote to the county mayor and to every county commissioner to say
+          plainly what her uncle had wanted. She had been asked what a park
+          meant. She answered that it meant the yard around the house.
+        </p>
+      </div>
+
+      <blockquote class="pull pull--invert" data-aos="fade-up">
+        <span class="pull__rule" aria-hidden="true"></span>
+        <p class="pull__quote">
+          &ldquo;It is impossible to interpret what Bill thought or wanted beyond
+          what he had stated in his will: to maintain the house and have a small
+          park.&rdquo;
+        </p>
+        <footer class="pull__attr">
+          Mr. Brown's niece, in an email to the county mayor<br />
+          and every county commissioner, July 8, 2026
+        </footer>
+      </blockquote>
+
+      <div class="prose prose--invert">
+        <p data-aos="fade-up">
+          Asked what would satisfy her uncle, she was specific. The grass mowed
+          by the county. Invasive shrubs removed. Something that looked like the
+          yard they had kept there. That is the park in the codicil, and the
+          house is the middle of it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 --------------------------------------------------------------- -->
+  <section class="band band--parchment-100">
+    <div class="container">
+      <div class="prose">
+        <p class="eyebrow" data-aos="fade-up">04 &middot; Keeping the promise</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          One sentence, and the work it makes.
+        </h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          The codicil is the reason there is a park here, and the reason the
+          house is still standing in the middle of it. Everything this
+          organization does is measured against the sentence Mr. Brown put in
+          it.
+        </p>
+        <p data-aos="fade-up">
+          He was not family and he owed this house nothing. He took it on
+          anyway, and left it to the rest of us to finish.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <StorySiblings current="/the-story/the-browns/" />
+  <GiveBand />
+</Base>
+
+<style>
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5.5vw, 7rem); }
+  .band--parchment-100 { background: var(--parchment-100); }
+  .band--forest { background: var(--forest-950); }
+
+  /* ---------- NARRATIVE COLUMN ----------
+     Centred blocks, left aligned text, matching the CENTER aligned
+     sections on the canvas. Narrative pages only; panel pages such as
+     The Log House hang everything off the left gutter instead. */
+  .prose { max-width: 42.5rem; margin-inline: auto; }
+  .prose + .prose { margin-block-start: clamp(2.5rem, 1.75rem + 3vw, 4rem); }
+  /* The adjacent sibling rule above cannot see across the chronology row,
+     so prose following it would otherwise butt straight up against the
+     figures. */
+  .figures + .prose { margin-block-start: clamp(2.5rem, 1.75rem + 3vw, 4rem); }
+
+  .prose h2 {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.875rem, 1.35rem + 2.1vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--forest-900);
+    /* No character cap. The headline runs the full reading column. */
+  }
+
+  /* :not(.eyebrow) matters. The eyebrow is a <p>, so a bare `.prose p`
+     rule out-specifies the shared .eyebrow class and restyles it. */
+  .prose p:not(.eyebrow) {
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+    line-height: 1.68;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+  .prose h2 + p { margin-block-start: 1.25rem; }
+  .prose p:not(.eyebrow) + p { margin-block-start: 1.125rem; }
+
+  .prose--invert h2 { color: var(--parchment-50); }
+  .prose--invert p:not(.eyebrow) { color: var(--parchment-200); }
+  .band--forest .eyebrow { color: var(--hewn-300); }
+
+  /* ---------- FIGURE ----------
+     620 on the canvas here, narrower than the 1000 on The Latimers,
+     because this one is a near square portrait rather than a landscape. */
+  .figure {
+    margin-block: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+    margin-inline: auto;
+    max-width: 38.75rem;
+  }
+  .figure picture { display: block; border-radius: 3px; overflow: hidden; }
+  .figure img { width: 100%; height: auto; display: block; }
+  .figure figcaption {
+    margin-block-start: 0.875rem;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--charcoal-600, #6c625f);
+  }
+
+  /* ---------- PULL QUOTES ----------
+     Centred, with a short rule above. The second one sits on forest and
+     inverts: parchment quote, hewn-400 rule and attribution. */
+  .pull {
+    margin-block: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+    margin-inline: auto;
+    max-width: 53.75rem;
+    text-align: center;
+  }
+  .pull--invert { max-width: 55rem; }
+
+  .pull__rule {
+    display: block;
+    width: 4rem;
+    height: 2px;
+    margin-inline: auto;
+    margin-block-end: 1.875rem;
+    background: var(--hewn-600);
+  }
+  .pull--invert .pull__rule { background: var(--hewn-400); }
+
+  .pull__quote {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+    line-height: 1.28;
+    letter-spacing: -0.042em;
+    color: var(--forest-900);
+  }
+  .pull--invert .pull__quote {
+    font-size: clamp(1.375rem, 1.05rem + 1.5vw, 2rem);
+    color: var(--parchment-50);
+  }
+
+  /* font-style must be reset. tokens.css sets `blockquote, .t-quote` to
+     italic Playfair, right for the quote and wrong for the attribution
+     inside the same blockquote. */
+  .pull__attr {
+    margin-block-start: 1.5rem;
+    font-family: var(--font-body);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12.5px;
+    line-height: 1.6;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+  .pull--invert .pull__attr { color: var(--hewn-400); }
+
+  /* ---------- FIGURES ROW ---------- */
+  .figures {
+    margin: clamp(2.25rem, 1.5rem + 2.5vw, 3.25rem) 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: clamp(1.75rem, 1.25rem + 2vw, 3rem);
+  }
+  .figures__item { margin: 0; }
+  .figures__rule {
+    display: block;
+    width: 3rem;
+    height: 3px;
+    background: var(--hewn-400);
+    margin-block-end: 1.125rem;
+  }
+  .figures__figure {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+    line-height: 1.1;
+    color: var(--parchment-50);
+  }
+  .figures__body {
+    margin: 0.6rem 0 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--sage-300);
+    max-width: 17.75rem;
+  }
+</style>

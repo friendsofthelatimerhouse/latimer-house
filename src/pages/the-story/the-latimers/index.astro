@@ -1,0 +1,370 @@
+---
+/**
+ * The Latimers. Built to "The Latimers · Desktop", node 246:684.
+ *
+ * Canvas order: Header, Page Hero, Torn Edge, Narrative · New London
+ * (which carries blocks ONE and TWO plus the pull quote), Narrative · The
+ * crossing on forest, Narrative · The house, Give band, Footer.
+ *
+ * This page is prose rather than panels, so the measure does the work:
+ * a 680px column on a 1232px container, which is the canvas value and
+ * lands at roughly 75 characters.
+ */
+import Base from "../../../layouts/Base.astro";
+import PageHero from "../../../components/PageHero.astro";
+import StorySiblings from "../../../components/StorySiblings.astro";
+import GiveBand from "../../../components/GiveBand.astro";
+
+const stats = [
+  { figure: "1724", label: "When Jonathan was born" },
+  { figure: "Eleven", label: "Sons and daughters" },
+  { figure: "1790", label: "When they arrived" },
+] as const;
+
+/** Section THREE. Same shape as the losses row on The Log House. */
+const pressures = [
+  {
+    figure: "Eleven",
+    body: "Nine sons and two daughters, and one estate that would not divide eleven ways.",
+  },
+  {
+    figure: "1781",
+    body: "New London burned, and much of what the family held there burned with it.",
+  },
+  {
+    figure: "Late 1780's",
+    body: "Two sons and a son in law went ahead to see the country for themselves.",
+  },
+  {
+    figure: "1790",
+    body: "The rest of the family followed by ox cart and settled in Sumner County.",
+  },
+] as const;
+---
+
+<Base
+  title="The Latimers"
+  description="Jonathan Latimer raised eleven children in New London, served through two wars, and moved the whole family to Sumner County. His son Charles built this house."
+>
+  <PageHero
+    crumbs={[
+      { label: "The Story", href: "/the-story/" },
+      { label: "The Latimers" },
+    ]}
+    headline="They came by ox cart in 1790."
+    lead="Jonathan Latimer raised eleven children in New London, Connecticut, served through two wars, and then moved the whole family to what is now Sumner County, Tennessee. He gave a piece of the land to his son Charles, and Charles built this house on it."
+    image="/img/latimers-hero"
+    imageWidths={[700, 1000, 1440]}
+    imageAlt="A family travelling west by ox cart along a wooded road."
+    stats={stats}
+  />
+  <div class="torn-edge" aria-hidden="true"></div>
+
+  <!-- ONE and TWO share one band on the canvas ------------------------ -->
+  <section class="band band--parchment-100">
+    <div class="container">
+      <div class="prose">
+        <p class="eyebrow" data-aos="fade-up">01 &middot; New London</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          A house full of children, and a teacher at the table.
+        </h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          Jonathan Latimer was born in New London, Connecticut, on the twenty
+          seventh of May, 1724. He was the fourth generation of his family in
+          the New World. His great grandfather Robert had come over aboard the
+          Hopewell in 1636, and through his mother the line ran back to the
+          Mayflower.
+        </p>
+        <p data-aos="fade-up">
+          The house filled up. Nine sons and two daughters. In 1774 a young
+          schoolmaster named Nathan Hale came to New London and boarded with the
+          family. He taught thirty two students that year, and ten of them were
+          Latimer children. He would serve as a lieutenant under Jonathan in the
+          opening years of the war, and he was hanged as a spy two years after
+          that, at twenty one.
+        </p>
+      </div>
+
+      {/*
+        Labelled "Conceptual rendering". The canvas caption was a
+        placeholder and the image is a rendering, so the caption says so
+        rather than implying the picture is a document.
+      */}
+      <figure class="figure" data-aos="fade-up">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/img/latimers-figure-800.webp 800w, /img/latimers-figure-1200.webp 1200w"
+            sizes="(min-width: 79rem) 62.5rem, 92vw"
+          />
+          <img
+            src="/img/latimers-figure-1200.jpg"
+            srcset="/img/latimers-figure-800.jpg 800w, /img/latimers-figure-1200.jpg 1200w"
+            sizes="(min-width: 79rem) 62.5rem, 92vw"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <figcaption>Conceptual rendering</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p class="eyebrow" data-aos="fade-up">02 &middot; The war</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          What he carried at Saratoga.
+        </h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          He had already served through the French and Indian War before the
+          Revolution called him back. By 1777 he was colonel of his regiment,
+          raised to it after his friend and commander Samuel Selden was taken
+          prisoner and died in a British prison.
+        </p>
+        <p data-aos="fade-up">
+          At Saratoga his Connecticut troops held the line and counterattacked.
+          Washington later called them two especially fine groups of militia.
+          Jonathan was carrying his promotion papers folded in his coat pocket.
+          A soldier remembered seeing him slap his hand to his leg in the middle
+          of the fighting. Back at quarters that evening a spent ball dropped
+          out of his boot. It had lodged in the papers.
+        </p>
+      </div>
+
+      <blockquote class="pull" data-aos="fade-up">
+        <span class="pull__rule" aria-hidden="true"></span>
+        <p class="pull__quote">
+          &ldquo;Tell my old friend I will see him at the front.&rdquo;
+        </p>
+        <footer class="pull__attr">
+          Benedict Arnold, riding toward the fighting at Saratoga,<br />
+          on being told whose column he had just passed
+        </footer>
+      </blockquote>
+
+      <div class="prose">
+        <p data-aos="fade-up">
+          Four years later Arnold came back to Connecticut in a British uniform.
+          He had grown up near New London and knew the harbour signals, so he
+          gave them and landed without opposition. He massacred the defenders at
+          Fort Griswold and set the town alight. Much of what the Latimers owned
+          burned with it.
+        </p>
+        <p data-aos="fade-up">
+          Jonathan had been given the defense of the harbour, and nobody warned
+          him. His second in command told his men he had a headache and went
+          home. By the time Jonathan reached the front he had too few men to do
+          anything but harry the British back to their ships. He was tried
+          afterwards, and acquitted with honour.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THREE ----------------------------------------------------------- -->
+  <section class="band band--forest">
+    <div class="container">
+      <div class="prose prose--invert">
+        <p class="eyebrow" data-aos="fade-up">03 &middot; The crossing</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          Why a settled family came to Sumner County.
+        </h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          Nobody wrote down the reason. What the record leaves is a set of
+          pressures, and any one of them would have been enough on its own.
+          Eleven children and one estate that would not divide eleven ways. A
+          town in ashes. And west of the mountains, more land than a family
+          could measure.
+        </p>
+        <p data-aos="fade-up">
+          Two sons and a son in law went ahead in the late 1780's to see the
+          country for themselves. The rest of the family followed by ox cart in
+          1790. Jonathan was sixty six years old. He bought land in Sumner
+          County along Station Camp Creek and lived another sixteen years on it,
+          dying in 1806 at eighty two.
+        </p>
+      </div>
+
+      <dl class="figures">
+        {pressures.map((p, i) => (
+          <div class="figures__item" data-aos="fade-up" data-aos-delay={i * 100}>
+            <span class="figures__rule" aria-hidden="true"></span>
+            <dt class="figures__figure">{p.figure}</dt>
+            <dd class="figures__body">{p.body}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- FOUR ------------------------------------------------------------ -->
+  <section class="band band--parchment-100">
+    <div class="container">
+      <div class="prose">
+        <p class="eyebrow" data-aos="fade-up">
+          04 &middot; The house Charles built
+        </p>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          The land passed to Charles.
+        </h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          Charles Latimer had served alongside his father in the Revolution, as
+          three of his brothers had. He was one of the sons the frontier was
+          meant to make room for. Jonathan gave him a piece of the Sumner County
+          land along Station Camp Creek, and Charles raised a house on it in the
+          1790's, from timber cut on the ground where it stands.
+        </p>
+        <p data-aos="fade-up">
+          The house is still standing. Everything on this page is why it is
+          worth keeping.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <StorySiblings current="/the-story/the-latimers/" />
+  <GiveBand />
+</Base>
+
+<style>
+  /* 112px of vertical padding on the narrative bands, wider than the
+     96px the panel pages use, because prose wants more air. */
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5.5vw, 7rem); }
+  .band--parchment-100 { background: var(--parchment-100); }
+  .band--forest { background: var(--forest-950); }
+
+  /* ---------- NARRATIVE COLUMN ----------
+
+     The narrative sections on the canvas are CENTER aligned, so every
+     block sits on the page's centre line: the 680px column at x=380, the
+     1000px figure at x=220, the pull quote at x=290. The text INSIDE each
+     block stays left aligned, which is what keeps it readable.
+
+     This is a narrative page treatment, not a global one. The panel pages
+     such as The Log House are MIN aligned and hang everything off the left
+     gutter instead. Do not copy this block to those. */
+  .prose { max-width: 42.5rem; margin-inline: auto; }
+  .prose + .prose { margin-block-start: clamp(2.5rem, 1.75rem + 3vw, 4rem); }
+
+  .prose h2 {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.875rem, 1.35rem + 2.1vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--forest-900);
+    /* No character cap. The headline runs the full width of the reading
+       column, the same measure as the paragraphs beneath it, which is how
+       the canvas sets it. A ch cap here breaks a line that should hold. */
+  }
+  /* :not(.eyebrow) matters. The eyebrow is a <p>, so a bare `.prose p`
+     rule out-specifies the shared .eyebrow class and silently restyles it
+     to body copy: bigger, darker, lower case tracking. Every prose rule
+     that targets p has to exclude it. */
+  .prose p:not(.eyebrow) {
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+    line-height: 1.68;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+  .prose h2 + p { margin-block-start: 1.25rem; }
+  .prose p:not(.eyebrow) + p { margin-block-start: 1.125rem; }
+
+  .prose--invert h2 { color: var(--parchment-50); }
+  .prose--invert p:not(.eyebrow) { color: var(--parchment-200); }
+  .band--forest .eyebrow { color: var(--hewn-300); }
+
+  /* ---------- FIGURE ---------- */
+
+  /* Wider than the reading column, which is what gives it its weight on
+     the canvas: the prose is 680, the figure runs to 1000. */
+  .figure {
+    margin-block: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+    margin-inline: auto;
+    max-width: 62.5rem;
+  }
+  .figure picture { display: block; border-radius: 3px; overflow: hidden; }
+  .figure img { width: 100%; height: auto; display: block; }
+  .figure figcaption {
+    margin-block-start: 0.875rem;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--charcoal-600, #6c625f);
+  }
+
+  /* ---------- PULL QUOTE ---------- */
+
+  /* Centred, with a short rule above it. The canvas draws a 64 by 2 hewn
+     rectangle centred over the quote, not a left border: the whole block
+     is CENTER aligned and both text nodes are centre set. */
+  .pull {
+    margin-block: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+    margin-inline: auto;
+    max-width: 53.75rem;
+    text-align: center;
+  }
+  .pull__rule {
+    display: block;
+    width: 4rem;
+    height: 2px;
+    margin-inline: auto;
+    margin-block-end: 1.875rem;
+    background: var(--hewn-600);
+  }
+  .pull__quote {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+    line-height: 1.28;
+    /* -1.5px at 36px on the canvas. */
+    letter-spacing: -0.042em;
+    color: var(--forest-900);
+  }
+  /* font-style must be reset. tokens.css sets `blockquote, .t-quote` to
+     italic Playfair, which is right for the quote and wrong for the
+     attribution sitting inside the same blockquote. */
+  .pull__attr {
+    margin-block-start: 1.5rem;
+    font-family: var(--font-body);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12.5px;
+    line-height: 1.6;
+    /* 8% on the canvas. */
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+
+  /* ---------- FIGURES ROW ----------
+     Same object as the losses row on The Log House. Worth lifting into a
+     shared component once a third page needs it. */
+  .figures {
+    margin: clamp(2.25rem, 1.5rem + 2.5vw, 3.25rem) 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: clamp(1.75rem, 1.25rem + 2vw, 3rem);
+  }
+  .figures__item { margin: 0; }
+  .figures__rule {
+    display: block;
+    width: 3rem;
+    height: 3px;
+    background: var(--hewn-400);
+    margin-block-end: 1.125rem;
+  }
+  .figures__figure {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+    line-height: 1.1;
+    color: var(--parchment-50);
+  }
+  .figures__body {
+    margin: 0.6rem 0 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--sage-300);
+    max-width: 17.75rem;
+  }
+</style>

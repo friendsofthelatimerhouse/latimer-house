@@ -27,3 +27,6 @@ tabbar.png
 tabvis*.png
 gone.mjs
 no-tabbar.png
+
+# Full size photograph originals. Processed into public/img and never shipped.
+photo-drop/

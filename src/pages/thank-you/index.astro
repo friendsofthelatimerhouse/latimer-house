@@ -1,0 +1,84 @@
+---
+/**
+ * Where a reader lands after clicking the confirm link in Kit's double
+ * opt-in email. Set in the Kit form settings under "After confirming
+ * redirect to", NOT under "when a visitor subscribes": that first one
+ * fires before the person has confirmed anything, so the copy here would
+ * be a lie.
+ *
+ * noindex, because a page that only makes sense when you arrive from an
+ * email should not turn up cold in a search result.
+ *
+ * Deliberately links only to pages that exist. When The Restoration, Give
+ * and About are built, this is the natural place to offer them.
+ */
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+---
+
+<Base
+  title="Thank You"
+  description="You are on the list for word from the Latimer House."
+  noindex
+>
+  <PageHero
+    crumbs={[{ label: "Thank You" }]}
+    headline="That is you on the list."
+    lead="Thank you for confirming. You will hear from us when there is something worth reporting, and not much in between."
+    image="/img/house-hero"
+    imageAlt="A two storey hand hewn log house with a stone chimney, standing in grass behind a split rail fence."
+  />
+  <div class="torn-edge" aria-hidden="true"></div>
+
+  <section class="band band--parchment">
+    <div class="container ty">
+      <div class="ty__col" data-aos="fade-up">
+        <p class="eyebrow">What to expect</p>
+        <div class="stack measure ty__body">
+          <p>
+            Not much mail. A note when the work turns up something, when we are
+            on site, and how to join in if you would like to.
+          </p>
+          <p>
+            There is a lot of work ahead, and we would welcome your help.
+          </p>
+        </div>
+      </div>
+
+      <div class="ty__col" data-aos="fade-up" data-aos-delay="150">
+        <p class="eyebrow">In the meantime</p>
+        <div class="stack measure ty__body">
+          <p>
+            The account of how this house came to us is worth reading in full.
+            A man who was not family left money to save it, the house waited a
+            long while, people went and read the records, and the county placed
+            it with an organization built to look after it.
+          </p>
+          <p class="ty__actions">
+            <a class="btn btn--secondary" href="/the-story/">
+              Read the story
+              <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Two columns that become one at narrow widths, with no guessed
+     breakpoint: the columns simply stop fitting and reflow. */
+  .ty {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    gap: clamp(2rem, 1.25rem + 3vw, 4rem);
+  }
+
+  .ty__body { margin-block-start: 1rem; }
+  .ty__body p { color: var(--text-secondary); }
+
+  /* The button carries its own hover transition, so the reveal animation
+     goes on this wrapper instead. See the rule in global.css. */
+  .ty__actions { margin-block-start: 1.75rem; }
+</style>

@@ -67,12 +67,38 @@ const isExactly = (href: string) => path === href;
     <nav class="site-header__nav" aria-label="Primary">
       <ul role="list">
         {nav.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              aria-current={isCurrent(item.href) ? "page" : undefined}
-            >{item.label}</a>
-          </li>
+          item.href === "/the-story/" ? (
+            <li class="has-sub">
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? "page" : undefined}
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                {item.label}
+                <span class="has-sub__chev" aria-hidden="true"></span>
+              </a>
+              <ul class="submenu" role="list">
+                {storyChildren.map((child) => (
+                  <li>
+                    <a
+                      href={child.href}
+                      aria-current={
+                        path.startsWith(child.href) ? "page" : undefined
+                      }
+                    >{child.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ) : (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? "page" : undefined}
+              >{item.label}</a>
+            </li>
+          )
         ))}
       </ul>
     </nav>
@@ -334,7 +360,87 @@ const isExactly = (href: string) => path === href;
   .site-header--overlay.is-stuck .site-header__logo--mark { display: block; }
 
   .site-header__nav { margin-inline-start: auto; }
-  .site-header__nav ul {
+
+  /* ---------- THE STORY SUBMENU ----------
+     Opens on hover AND on keyboard focus anywhere inside the item, via
+     :focus-within, so it is reachable by tab without any JavaScript. The
+     parent link still navigates to /the-story/ on click, which is the
+     behaviour people expect from a nav item that also has children.
+
+     The panel is kept in the layout at all times and hidden with opacity
+     and visibility rather than display:none, so it can fade. visibility
+     is what actually removes it from the tab order while hidden. */
+  .has-sub { position: relative; }
+  .has-sub > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .has-sub__chev {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-0.12em) rotate(45deg);
+    transition: transform 200ms ease;
+  }
+  .has-sub:hover .has-sub__chev,
+  .has-sub:focus-within .has-sub__chev {
+    transform: translateY(0.05em) rotate(225deg);
+  }
+
+  .submenu {
+    display: block;
+    position: absolute;
+    inset-inline-start: -1rem;
+    inset-block-start: calc(100% + 0.4rem);
+    z-index: 60;
+    min-width: 13.5rem;
+    padding: 0.5rem 0;
+    margin: 0;
+    list-style: none;
+    background: var(--forest-900);
+    border: 1px solid color-mix(in srgb, var(--parchment-300) 18%, transparent);
+    border-radius: 3px;
+    box-shadow: 0 18px 40px rgb(0 0 0 / 0.35);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.35rem);
+    transition: opacity 200ms ease, transform 200ms ease,
+      visibility 0s linear 200ms;
+  }
+  /* A hover bridge, so the pointer can cross the 0.4rem gap without the
+     panel closing under it. */
+  .submenu::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: -0.6rem;
+    height: 0.6rem;
+  }
+  .has-sub:hover .submenu,
+  .has-sub:focus-within .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+  .submenu a {
+    display: block;
+    padding: 0.55rem 1.25rem;
+    white-space: nowrap;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    font-size: 14px;
+  }
+  .submenu a:hover { background: var(--forest-950); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .submenu, .has-sub__chev { transition: none; }
+  }
+  /* Direct child only. As a descendant selector this also matched the
+     submenu and laid it out horizontally across the header. */
+  .site-header__nav > ul {
     display: flex;
     align-items: center;
     gap: clamp(1rem, 0.25rem + 1.6vw, 2.125rem);

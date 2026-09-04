@@ -1,0 +1,346 @@
+---
+/**
+ * The Park. Built to "The Park · Desktop", node 268:748.
+ *
+ * Narrative page: centred blocks, left aligned text, two pull quotes with
+ * the second inverted on forest. Same treatment as The Browns.
+ *
+ * 0.805 acres is the only acreage this site publishes. It appears three
+ * times on this page and is correct every time. Do not let another figure
+ * in here.
+ */
+import Base from "../../../layouts/Base.astro";
+import PageHero from "../../../components/PageHero.astro";
+import StorySiblings from "../../../components/StorySiblings.astro";
+import GiveBand from "../../../components/GiveBand.astro";
+
+const stats = [
+  { figure: "0.805 acres", label: "The whole of the park" },
+  { figure: "One house", label: "Named as its centerpiece" },
+  { figure: "Aug 27, 2026", label: "When the deed was recorded" },
+] as const;
+
+/** Section 03. How the park and the house are held. */
+const holding = [
+  { figure: "0.805 acres", body: "The life estate parcel, and the whole of the park." },
+  { figure: "2026", body: "The Commission voted to convey the house and its parcel." },
+  { figure: "August 27", body: "The deed was recorded, Book 6928, pages 761 through 769." },
+  { figure: "A reverter", body: "If the house is not looked after, it goes back." },
+] as const;
+---
+
+<Base
+  title="The Park"
+  description="The William and Martha Brown Park is 0.805 acres. It is the ground the house has always stood on, and the codicil names the house as its centerpiece."
+>
+  <PageHero
+    crumbs={[
+      { label: "The Story", href: "/the-story/" },
+      { label: "The Park" },
+    ]}
+    headline="The park is the yard, and the house is the middle of it."
+    lead="The William and Martha Brown Park is 0.805 acres. It is the life estate parcel, the ground the house has always stood on, and the codicil that created it names the house as its centerpiece."
+    image="/img/park-hero"
+    imageWidths={[700, 1000, 1440]}
+    imageAlt="The house and the ground around it."
+    stats={stats}
+  />
+  <div class="torn-edge" aria-hidden="true"></div>
+
+  <!-- 01 and 02 share one band ---------------------------------------- -->
+  <section class="band band--parchment-100">
+    <div class="container">
+      <div class="prose">
+        <p class="eyebrow" data-aos="fade-up">01 &middot; What the park is</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">Small on purpose.</h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          0.805 acres is the only acreage this park has ever been. It is the
+          life estate parcel that came with the house, and it is not a
+          recreation complex, a trail system or a campus amenity. It is the
+          ground around a two hundred year old log house.
+        </p>
+        <p data-aos="fade-up">
+          That has been misread more than once, and each time it has been
+          corrected by the people with the best claim to know what was meant.
+        </p>
+      </div>
+
+      {/*
+        Labelled "Conceptual rendering" rather than left blank. The canvas
+        caption was a placeholder, and the image is a rendering, so the
+        caption says so plainly. A caption is a claim about what the
+        picture shows, and this is the honest one.
+      */}
+      <figure class="figure" data-aos="fade-up">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/img/park-figure-800.webp 800w, /img/park-figure-1200.webp 1200w, /img/park-figure-1600.webp 1600w"
+            sizes="(min-width: 79rem) 62.5rem, 92vw"
+          />
+          <img
+            src="/img/park-figure-1200.jpg"
+            srcset="/img/park-figure-800.jpg 800w, /img/park-figure-1200.jpg 1200w, /img/park-figure-1600.jpg 1600w"
+            sizes="(min-width: 79rem) 62.5rem, 92vw"
+            alt="The park and the house."
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <figcaption>Conceptual rendering</figcaption>
+      </figure>
+
+      <div class="prose">
+        <p class="eyebrow" data-aos="fade-up">02 &middot; What was asked for</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">The yard they kept.</h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          When an alternate plan proposed something larger, and one that left
+          the house out, Mr. Brown's niece was asked what her uncle had actually
+          wanted a park here to be. Her answer was not complicated.
+        </p>
+        <p data-aos="fade-up">
+          It is a small standard, and it is a clear one. Keep the ground around
+          the house looking like the ground the family kept, and keep the house
+          standing in the middle of it.
+        </p>
+      </div>
+
+      <blockquote class="pull" data-aos="fade-up">
+        <span class="pull__rule" aria-hidden="true"></span>
+        <p class="pull__quote">
+          &ldquo;grass is mowed by the county. Any invasive shrubs are removed.
+          This would be something that looks like the yard they had
+          there.&rdquo;
+        </p>
+        <footer class="pull__attr">
+          Mr. Brown's niece, on what would satisfy her uncle, July 22, 2026
+        </footer>
+      </blockquote>
+
+      <div class="prose">
+        <p data-aos="fade-up">
+          The park carries both their names. The William and Martha Brown Park.
+          Martha's name sits beside his on the instrument that made it.
+        </p>
+        <p data-aos="fade-up">
+          A park that size does not need a plan so much as it needs keeping.
+          Mowed, cleared, open, and with the house cared for at the centre of
+          it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 HOW IT IS HELD ------------------------------------------------ -->
+  <section class="band band--forest">
+    <div class="container">
+      <div class="prose prose--invert">
+        <p class="eyebrow" data-aos="fade-up">03 &middot; How it is held</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          The house and the ground it stands on.
+        </h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          In 2026 the Sumner County Commission voted to convey the house and its
+          parcel to a nonprofit organized to care for it. The deed was recorded
+          on the twenty seventh of August, and the Friends of the Latimer House
+          have held the house since.
+        </p>
+        <p data-aos="fade-up">
+          The conveyance carries a preservation covenant, and the deed carries a
+          reverter. If the house is not looked after, it goes back. The
+          arrangement was built so that the outcome the codicil asked for
+          survives whoever happens to be holding the keys.
+        </p>
+      </div>
+
+      <dl class="figures">
+        {holding.map((h, i) => (
+          <div class="figures__item" data-aos="fade-up" data-aos-delay={i * 100}>
+            <span class="figures__rule" aria-hidden="true"></span>
+            <dt class="figures__figure">{h.figure}</dt>
+            <dd class="figures__body">{h.body}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="prose prose--invert">
+        <p data-aos="fade-up">
+          Everything about how the park is held comes back to one sentence, and
+          it is the sentence that names the house.
+        </p>
+      </div>
+
+      <blockquote class="pull pull--invert" data-aos="fade-up">
+        <span class="pull__rule" aria-hidden="true"></span>
+        <p class="pull__quote">
+          &ldquo;the historic home currently situated thereon being permanently
+          maintained by the County as the park's centerpiece.&rdquo;
+        </p>
+        <footer class="pull__attr">
+          Codicil No. 1 to the will of William I. Brown
+        </footer>
+      </blockquote>
+
+      <div class="prose prose--invert">
+        <p data-aos="fade-up">
+          The park was established for the house. Not beside it, and not around
+          it. The house is what the park is for.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 --------------------------------------------------------------- -->
+  <section class="band band--parchment-100">
+    <div class="container">
+      <div class="prose">
+        <p class="eyebrow" data-aos="fade-up">04 &middot; What it will be</p>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          A place you can walk into.
+        </h2>
+        <p data-aos="fade-up" data-aos-delay="200">
+          When the work is finished, this will be a house people can walk into,
+          on ground people can walk across, in a county that knows whose it was
+          and how it got here.
+        </p>
+        <p data-aos="fade-up">
+          It is not a large park. It was never meant to be. It is 0.805 acres, a
+          log house raised in the 1790's, and an open invitation to come and see
+          it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <StorySiblings current="/the-story/the-park/" />
+  <GiveBand />
+</Base>
+
+<style>
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5.5vw, 7rem); }
+  .band--parchment-100 { background: var(--parchment-100); }
+  .band--forest { background: var(--forest-950); }
+
+  /* ---------- NARRATIVE COLUMN ----------
+     Centred blocks, left aligned text, per the CENTER aligned sections on
+     the canvas. Narrative pages only. */
+  .prose { max-width: 42.5rem; margin-inline: auto; }
+  .prose + .prose { margin-block-start: clamp(2.5rem, 1.75rem + 3vw, 4rem); }
+  .figures + .prose { margin-block-start: clamp(2.5rem, 1.75rem + 3vw, 4rem); }
+
+  .prose h2 {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.875rem, 1.35rem + 2.1vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--forest-900);
+  }
+
+  /* :not(.eyebrow) matters. The eyebrow is a <p>, so a bare `.prose p`
+     rule out-specifies the shared .eyebrow class and restyles it. */
+  .prose p:not(.eyebrow) {
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+    line-height: 1.68;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+  .prose h2 + p { margin-block-start: 1.25rem; }
+  .prose p:not(.eyebrow) + p { margin-block-start: 1.125rem; }
+
+  .prose--invert h2 { color: var(--parchment-50); }
+  .prose--invert p:not(.eyebrow) { color: var(--parchment-200); }
+  .band--forest .eyebrow { color: var(--hewn-300); }
+
+  /* ---------- FIGURE ---------- */
+  .figure {
+    margin-block: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+    margin-inline: auto;
+    max-width: 62.5rem;
+  }
+  .figure picture { display: block; border-radius: 3px; overflow: hidden; }
+  .figure img { width: 100%; height: auto; display: block; }
+  .figure figcaption {
+    margin-block-start: 0.875rem;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--charcoal-600, #6c625f);
+  }
+
+  /* ---------- PULL QUOTES ---------- */
+  .pull {
+    margin-block: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+    margin-inline: auto;
+    max-width: 53.75rem;
+    text-align: center;
+  }
+  .pull--invert { max-width: 55rem; }
+
+  .pull__rule {
+    display: block;
+    width: 4rem;
+    height: 2px;
+    margin-inline: auto;
+    margin-block-end: 1.875rem;
+    background: var(--hewn-600);
+  }
+  .pull--invert .pull__rule { background: var(--hewn-400); }
+
+  .pull__quote {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+    line-height: 1.28;
+    letter-spacing: -0.042em;
+    color: var(--forest-900);
+  }
+  .pull--invert .pull__quote {
+    font-size: clamp(1.375rem, 1.05rem + 1.5vw, 2rem);
+    color: var(--parchment-50);
+  }
+
+  /* font-style must be reset. tokens.css sets `blockquote, .t-quote` to
+     italic Playfair, right for the quote and wrong for the attribution. */
+  .pull__attr {
+    margin-block-start: 1.5rem;
+    font-family: var(--font-body);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12.5px;
+    line-height: 1.6;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+  .pull--invert .pull__attr { color: var(--hewn-400); }
+
+  /* ---------- FIGURES ROW ---------- */
+  .figures {
+    margin: clamp(2.25rem, 1.5rem + 2.5vw, 3.25rem) 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: clamp(1.75rem, 1.25rem + 2vw, 3rem);
+  }
+  .figures__item { margin: 0; }
+  .figures__rule {
+    display: block;
+    width: 3rem;
+    height: 3px;
+    background: var(--hewn-400);
+    margin-block-end: 1.125rem;
+  }
+  .figures__figure {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+    line-height: 1.1;
+    color: var(--parchment-50);
+  }
+  .figures__body {
+    margin: 0.6rem 0 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--sage-300);
+    max-width: 17.75rem;
+  }
+</style>

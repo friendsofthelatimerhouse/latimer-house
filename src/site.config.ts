@@ -132,36 +132,67 @@ export const newsletter = {
   emailField: "email_address",
 } as const;
 
+/**
+ * Only accounts that actually exist. A row of five icons where three lead
+ * nowhere reads as an organization pretending to be bigger than it is.
+ * YouTube and LinkedIn marks are still in SocialIcon, ready when there is
+ * something at the other end of them.
+ */
 export const socials = [
-  { label: "Facebook", href: "https://www.facebook.com/", icon: "facebook" },
-  { label: "YouTube", href: "https://www.youtube.com/", icon: "youtube" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/", icon: "linkedin" },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/friendsofthelatimerhouse/",
+    icon: "facebook",
+  },
 ] as const;
 
-/** Footer columns. Copy Deck, Section 1.4. */
+/**
+ * Google's documented Maps URL scheme, which resolves the address on any
+ * device rather than pinning a coordinate that could drift.
+ */
+export const mapUrl =
+  "https://www.google.com/maps/search/?api=1&query=" +
+  encodeURIComponent(
+    `${org.streetAddress}, ${org.addressLocality}, ${org.addressRegion} ${org.postalCode}`,
+  );
+
+/**
+ * Footer columns. Copy Deck, Section 1.4.
+ *
+ * Every heading is a link. An href starting with http is treated as
+ * external by SiteFooter and opens in a new tab.
+ */
 export const footerColumns = [
   {
     heading: "Find Us",
+    href: mapUrl,
     body: `${org.streetAddress}, ${org.addressLocality} ${org.addressRegion}, ${org.postalCode}`,
   },
   {
     heading: "Volunteer",
+    href: "/get-involved/",
     body: "Workdays, tours and community events",
   },
   {
     heading: "Give",
+    href: give.href,
     body: "Every gift goes into the house and the ground around it",
   },
   {
     heading: "Follow Us",
+    href: socials[0].href,
     body: "Follow the work as it happens",
     socials: true,
   },
 ] as const;
 
+/**
+ * An href starting with http is treated as external by SiteFooter and
+ * opens in a new tab.
+ */
 export const legalLinks = [
   { label: "Privacy", href: "/privacy/" },
-  { label: "Site Credits", href: "/site-credits/" },
+  { label: "Site Credits", href: "https://www.brandaiddesignco.com" },
 ] as const;
 
 /**

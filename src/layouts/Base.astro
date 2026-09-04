@@ -21,6 +21,13 @@ interface Props {
   bare?: boolean;
   /** Home only: float the header over the full bleed hero photograph. */
   overlayHeader?: boolean;
+  /**
+   * Keep the page out of search results. For pages that only make sense when
+   * you arrive from somewhere specific, such as the thank you page a reader
+   * lands on after confirming a subscription. Finding it cold in a search
+   * result would be baffling.
+   */
+  noindex?: boolean;
 }
 
 const {
@@ -28,6 +35,7 @@ const {
   description = site.description,
   bare = false,
   overlayHeader = false,
+  noindex = false,
 } = Astro.props;
 const fullTitle = bare ? title : `${title} · ${site.title}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
@@ -49,6 +57,7 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.title} />

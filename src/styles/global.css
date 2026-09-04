@@ -150,7 +150,11 @@ button, input, textarea, select { font: inherit; color: inherit; }
 /* Band colour treatments, matching the alternating rhythm on the
    Give and About pages: parchment, then forest, then parchment. */
 .band--parchment {
-  background: var(--bg-surface, var(--parchment-100));
+  /* The wave is a mask on the band BELOW it, so its fill has to be that
+     band's colour or it reads as a pale stripe. --bg-canvas is the page
+     ground, which is what almost every band under a torn edge uses. A page
+     tearing into something else sets --torn-fill on the element. */
+  background: var(--torn-fill, var(--bg-canvas));
   color: var(--text-primary);
 }
 .band--forest {
@@ -163,6 +167,30 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .stack > * + * { margin-block-start: var(--stack-gap, 1rem); }
 
 .measure { max-width: var(--measure); }
+
+/* ============================================================
+   BREADCRUMB
+   Structural only. Lives here rather than in PageHero's scoped
+   block because without it the trail falls back to a numbered,
+   indented list, which is a much worse failure than losing a
+   colour. Decoration stays with the component.
+   ============================================================ */
+
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.crumbs li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.crumbs a { text-decoration: none; }
 
 /* ============================================================
    TYPE HELPERS
@@ -263,7 +291,11 @@ button, input, textarea, select { font: inherit; color: inherit; }
   position: relative;
   height: var(--torn-height);
   margin-block-start: calc(var(--torn-height) * -1);
-  background: var(--bg-surface, var(--parchment-100));
+  /* The wave is a mask on the band BELOW it, so its fill has to be that
+     band's colour or it reads as a pale stripe. --bg-canvas is the page
+     ground, which is what almost every band under a torn edge uses. A page
+     tearing into something else sets --torn-fill on the element. */
+  background: var(--torn-fill, var(--bg-canvas));
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40 V16 c50 -8 100 6 150 8 s100 -4 150 -10 s100 -8 150 -2 s100 12 150 10 s100 -12 150 -14 s100 8 150 10 s100 -6 150 -8 s100 10 150 6 V40 Z' fill='%23000'/%3E%3C/svg%3E");
   mask-size: 100% 100%;
   mask-repeat: no-repeat;

@@ -1,0 +1,144 @@
+---
+/**
+ * The other three doors, at the foot of every Story sub page.
+ *
+ * The four sub pages are peers rather than a sequence, so this shows the
+ * siblings the reader has not opened instead of a previous and next pair.
+ * Previous and next would invent an order that does not exist: The
+ * Latimers does not follow The Log House in any sense a reader feels.
+ *
+ * Reuses DoorCard, so a reader meets the same object here that they
+ * clicked on The Story, which is the whole reason it is recognisable.
+ */
+import { storyChildren } from "../site.config";
+import DoorCard from "./DoorCard.astro";
+
+interface Props {
+  /** Route of the page this sits on, so it can exclude itself. */
+  current: string;
+}
+const { current } = Astro.props;
+
+/**
+ * Card copy and photography, keyed by route. Kept here rather than in
+ * site.config because it is presentation for one component, and kept in
+ * one place rather than repeated on four pages.
+ */
+const doors = {
+  "/the-story/the-log-house/": {
+    number: "01",
+    image: "/img/door-log-house",
+    imageAlt:
+      "The log house standing among trees behind a split rail fence, its hand hewn logs and stone chimney visible.",
+    body: "Hand hewn logs, cut on this ground and raised in the 1790's. Somebody covered them in brick a hundred years later. We are taking it off by hand.",
+  },
+  "/the-story/the-latimers/": {
+    number: "02",
+    image: "/img/door-latimers",
+    imageAlt:
+      "A family travelling by ox cart along a wooded road, men walking alongside the team.",
+    body: "Charles Latimer built the house. His father Jonathan came home from Saratoga, put the family in ox carts, and brought them to Tennessee.",
+  },
+  "/the-story/the-browns/": {
+    number: "03",
+    image: "/img/door-browns",
+    imageAlt: "Martha and Bill Brown, photographed together.",
+    widths: [700, 1000],
+    body: "The last family to own it privately, and the reason it is still standing. They had no obligation to this house and they took it on anyway.",
+  },
+  "/the-story/the-park/": {
+    number: "04",
+    image: "/img/door-park",
+    imageAlt:
+      "The house and the ground around it seen from above, trees and paths across the parcel.",
+    body: "0.805 acres, with the house at the middle of it, named in the codicil as the park's centerpiece.",
+  },
+} as const;
+
+const others = storyChildren.filter((c) => c.href !== current);
+---
+
+<section class="siblings">
+  <div class="container">
+    <p class="eyebrow" data-aos="fade-up">Keep going</p>
+    <h2 class="siblings__headline" data-aos="fade-up" data-aos-delay="100">
+      The rest of the story.
+    </h2>
+
+    <div class="siblings__grid">
+      {others.map((child, i) => {
+        const d = doors[child.href as keyof typeof doors];
+        return (
+          <DoorCard
+            number={d.number}
+            title={child.label}
+            href={child.href}
+            image={d.image}
+            imageAlt={d.imageAlt}
+            widths={"widths" in d ? d.widths : undefined}
+            body={d.body}
+            delay={i * 100}
+          />
+        );
+      })}
+    </div>
+
+    <p class="siblings__back" data-aos="fade-up" data-aos-delay="300">
+      <a href="/the-story/">
+        <span class="siblings__arrow" aria-hidden="true">&lsaquo;</span>
+        Back to The Story
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .siblings {
+    background: var(--parchment-100);
+    padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem);
+  }
+
+  .siblings__headline {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 2.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--forest-900);
+  }
+
+  /* Three across on desktop, dropping to one when a card can no longer
+     hold its measure. Three is a natural row, so auto-fit is honest here
+     rather than the two column grid The Story needs. */
+  .siblings__grid {
+    margin-block-start: clamp(2rem, 1.5rem + 2vw, 3rem);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+    gap: 1.5rem;
+  }
+
+  .siblings__back {
+    margin-block-start: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+  }
+  .siblings__back a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+    text-decoration: none;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .siblings__back a:hover,
+  .siblings__back a:focus-visible { color: var(--forest-900); }
+  .siblings__arrow { font-weight: 400; font-size: 1.1em; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .siblings__back a { transition: none; }
+  }
+</style>

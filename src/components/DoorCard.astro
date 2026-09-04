@@ -1,34 +1,89 @@
 ---
 /**
- * A "door" into part of the story. Four of these sit on The Story page.
- * The whole card is the link target, with the visible GO IN affordance
- * left in place because a card that looks clickable and a card that is
- * clickable should be the same card.
+ * A "door" into part of the story. Four of these sit on The Story page,
+ * in a two by two grid on the canvas.
+ *
+ * Built to the Door components on the canvas: a 250px photograph across
+ * the top, then the copy block with the number, the title, the body and
+ * a GO IN affordance. The whole card is the link target, with the visible
+ * GO IN left in place because a card that looks clickable and a card that
+ * is clickable should be the same card.
+ *
+ * `image` is the stem of the responsive set, without width or extension,
+ * e.g. "/img/door-log-house". Omit it and the card renders a forest panel
+ * carrying the number instead, so a door with no photograph yet still
+ * holds its place in the grid rather than collapsing.
  */
 interface Props {
   number: string;
   title: string;
   body: string;
   href: string;
-  /** Link label. GO IN on The Story, READ on News. */
+  image?: string;
+  imageAlt?: string;
+  /**
+   * The widths actually present on disk for this image. Asking for a width
+   * that was never generated gives the browser a 404 to pick from, and it
+   * renders nothing rather than falling back. Narrow sources get a shorter
+   * list.
+   */
+  widths?: readonly number[];
+  /** Link label. Plain and the same on all four doors. */
   cta?: string;
   /** Milliseconds to stagger this card behind the one before it. */
   delay?: number;
 }
 
-const { number, title, body, href, cta = "Go in", delay = 0 } = Astro.props;
+const srcset = (ext: string, stem: string, ws: readonly number[]) =>
+  ws.map((w) => `${stem}-${w}.${ext} ${w}w`).join(", ");
+
+const {
+  number,
+  title,
+  body,
+  href,
+  image,
+  imageAlt,
+  widths = [700, 1100, 1400],
+  cta = "Read on",
+  delay = 0,
+} = Astro.props;
 ---
 
 <div class="door-reveal" data-aos="fade-up" data-aos-delay={delay}>
   <article class="door">
-  <p class="door__number">{number}</p>
-  <h3 class="door__title">
-    <a class="door__link" href={href}>{title}</a>
-  </h3>
-  <p class="door__body">{body}</p>
-  <p class="door__cta" aria-hidden="true">
-    {cta} <span class="door__arrow">&rarr;</span>
-  </p>
+    {image ? (
+      <picture class="door__media">
+        <source
+          type="image/webp"
+          srcset={srcset("webp", image, widths)}
+          sizes="(min-width: 60rem) 44vw, 92vw"
+        />
+        <img
+          src={`${image}-${widths[0]}.jpg`}
+          srcset={srcset("jpg", image, widths)}
+          sizes="(min-width: 60rem) 44vw, 92vw"
+          alt={imageAlt ?? ""}
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+    ) : (
+      <div class="door__media door__media--empty" aria-hidden="true">
+        <span>{number}</span>
+      </div>
+    )}
+
+    <div class="door__copy">
+      <p class="door__number">{number}</p>
+      <h3 class="door__title">
+        <a class="door__link" href={href}>{title}</a>
+      </h3>
+      <p class="door__body">{body}</p>
+      <p class="door__cta" aria-hidden="true">
+        {cta} <span class="door__arrow">&rsaquo;</span>
+      </p>
+    </div>
   </article>
 </div>
 
@@ -39,72 +94,107 @@ const { number, title, body, href, cta = "Go in", delay = 0 } = Astro.props;
 
   .door {
     display: flex;
-    flex: 1;
     flex-direction: column;
-    position: relative;
-    padding: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
-    background: var(--bg-surface, var(--parchment-50));
-    border: 1px solid var(--border-subtle);
-    border-radius: 2px;
-    transition: border-color 150ms ease, transform 150ms ease;
+    width: 100%;
+    background: var(--parchment-50);
+    border: 1px solid var(--parchment-300);
+    border-radius: 3px;
+    overflow: hidden;
+    transition: border-color 180ms ease, box-shadow 180ms ease,
+      transform 180ms ease;
   }
-  .door:hover {
-    border-color: var(--accent-secondary);
-    transform: translateY(-2px);
+
+  /* The photograph is a fixed band, 250px on the canvas, easing down on
+     narrow screens so a phone is not half photograph. */
+  .door__media {
+    display: block;
+    height: clamp(11rem, 8rem + 10vw, 15.625rem);
+    overflow: hidden;
   }
-  @media (prefers-reduced-motion: reduce) {
-    .door:hover { transform: none; }
+  .door__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Very slight lift on hover, from the card not the image itself, so
+       the photograph never detaches from its frame. */
+    transition: transform 320ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* No photograph yet. Holds the band so the grid stays even. */
+  .door__media--empty {
+    display: grid;
+    place-items: center;
+    background: var(--forest-900);
+  }
+  .door__media--empty span {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: color-mix(in srgb, var(--parchment-200) 35%, transparent);
+  }
+
+  .door__copy {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    padding: 1.875rem 2.125rem 2rem;
   }
 
   .door__number {
     font-family: var(--font-body);
     font-weight: 700;
-    font-size: var(--type-overline-size);
-    letter-spacing: var(--type-overline-track);
+    font-size: 11px;
+    letter-spacing: 0.1em;
     color: var(--hewn-600);
   }
 
   .door__title {
-    margin-block-start: 0.85rem;
-    font-size: var(--type-h3-size);
-    line-height: var(--type-h3-line);
+    margin-block-start: 0.625rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 1.875rem);
+    line-height: 1.15;
+    letter-spacing: -0.017em;
+    color: var(--forest-900);
   }
 
-  .door__link {
-    text-decoration: none;
-    color: var(--text-heading);
-  }
-  /* Stretches the anchor over the whole card so the entire block is the
-     hit area, while the accessible name stays the title alone. */
+  /* The link covers the whole card. The card is the hit area; the title
+     is what a screen reader announces. */
+  .door__link { text-decoration: none; }
   .door__link::after {
     content: "";
     position: absolute;
     inset: 0;
   }
+  .door { position: relative; }
 
   .door__body {
-    margin-block-start: 0.85rem;
-    font-size: var(--type-body-size);
-    line-height: var(--type-body-line);
-    color: var(--text-secondary);
+    margin-block-start: 0.75rem;
+    font-size: 15px;
+    line-height: 1.58;
+    color: var(--charcoal-700, var(--text-secondary));
   }
 
   .door__cta {
     margin-block-start: auto;
-    padding-block-start: 1.5rem;
+    padding-block-start: 1.25rem;
     font-family: var(--font-body);
     font-weight: 700;
-    font-size: var(--type-label-size);
-    letter-spacing: 0.08em;
+    font-size: 12px;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: var(--accent-secondary);
+    color: var(--hewn-600);
   }
-  .door__arrow {
-    display: inline-block;
-    transition: transform 150ms ease;
+  .door__arrow { font-weight: 400; }
+
+  .door:hover {
+    border-color: var(--hewn-600);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.08);
   }
-  .door:hover .door__arrow { transform: translateX(3px); }
+  .door:hover .door__media img { transform: scale(1.03); }
+
   @media (prefers-reduced-motion: reduce) {
-    .door:hover .door__arrow { transform: none; }
+    .door, .door__media img { transition: none; }
+    .door:hover .door__media img { transform: none; }
   }
 </style>
