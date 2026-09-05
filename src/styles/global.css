@@ -147,11 +147,11 @@ button, input, textarea, select { font: inherit; color: inherit; }
   padding-block: var(--band-y);
 }
 
-/* Band colour treatments, matching the alternating rhythm on the
+/* Band color treatments, matching the alternating rhythm on the
    Give and About pages: parchment, then forest, then parchment. */
 .band--parchment {
   /* The wave is a mask on the band BELOW it, so its fill has to be that
-     band's colour or it reads as a pale stripe. --bg-canvas is the page
+     band's color or it reads as a pale stripe. --bg-canvas is the page
      ground, which is what almost every band under a torn edge uses. A page
      tearing into something else sets --torn-fill on the element. */
   background: var(--torn-fill, var(--bg-canvas));
@@ -173,7 +173,7 @@ button, input, textarea, select { font: inherit; color: inherit; }
    Structural only. Lives here rather than in PageHero's scoped
    block because without it the trail falls back to a numbered,
    indented list, which is a much worse failure than losing a
-   colour. Decoration stays with the component.
+   color. Decoration stays with the component.
    ============================================================ */
 
 .crumbs ol {
@@ -311,7 +311,7 @@ button, input, textarea, select { font: inherit; color: inherit; }
   height: var(--torn-height);
   margin-block-start: calc(var(--torn-height) * -1);
   /* The wave is a mask on the band BELOW it, so its fill has to be that
-     band's colour or it reads as a pale stripe. --bg-canvas is the page
+     band's color or it reads as a pale stripe. --bg-canvas is the page
      ground, which is what almost every band under a torn edge uses. A page
      tearing into something else sets --torn-fill on the element. */
   background: var(--torn-fill, var(--bg-canvas));
@@ -341,7 +341,7 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
    The distance override tones AOS's default 100px travel down to
    something closer to a settle than a slide. This is a historic
-   organisation, not a product launch.
+   organization, not a product launch.
    ============================================================ */
 
 html:not(.has-js) [data-aos] {

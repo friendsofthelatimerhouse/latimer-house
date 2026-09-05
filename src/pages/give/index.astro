@@ -1,0 +1,312 @@
+---
+/**
+ * Give. Built section for section to "Give · Desktop" on the Visual
+ * Concepts page, node 322:940.
+ *
+ * Canvas order: Header, Page Hero, Torn Edge, then five numbered sections
+ * alternating parchment-200 and forest-950, then the Give band and Footer.
+ * Every section is counterAxisAlignItems MIN, so this is a PANEL page: the
+ * left gutter, like The Restoration and Get Involved, not the centered
+ * columns of About.
+ *
+ * The five sections are identical in construction, so they are data here
+ * rather than five hand written blocks. Only two things vary: the ground,
+ * and whether the head row carries a gift button. Section 03 does not,
+ * because it is the record rather than an ask.
+ *
+ * THE BUTTONS. give.paypalHostedButtonId is still empty. Rather than send
+ * people to a page that cannot take their money, the buttons render
+ * disabled with a line pointing at the one route that does work today,
+ * which is a check in the post. Same principle as the newsletter band:
+ * a half configured build must not silently swallow anything.
+ */
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import GiveBand from "../../components/GiveBand.astro";
+import { org, give, membership, mailing, mailingLine } from "../../site.config";
+
+const live = Boolean(give.paypalHostedButtonId);
+
+const stats = [
+  { figure: "501(c)(3)", label: "Gifts are deductible" },
+  { figure: "Unpaid", label: "Every seat on the board" },
+  { figure: "No staff", label: "And no overhead" },
+] as const;
+
+const sections = [
+  {
+    n: "01",
+    eyebrow: "Ways to give",
+    heading: "How to give.",
+    lead: "Four ways in, and all of them land in the same account. If you would rather join as a member, that lives on Get Involved.",
+    tone: "light",
+    button: true,
+    pointer: true,
+    cards: [
+      { title: "Online", body: "The quickest way, and the one most people use. A card works whether or not you hold an account with the service, and the gift is with us within a few days." },
+      { title: "On the spot", body: "At an open house or a work day there is a code to scan. Good for a gift given while you are standing in front of the house, with the logs in view." },
+      /* Post goes to Latimer Lane, NOT to the house. The canvas had the
+         house address here, which would have sent checks to a building
+         nobody collects mail at. */
+      { title: "By check", body: `Made payable to ${org.legalName}, and mailed to ${mailing.streetAddress}, ${mailing.addressLocality}, Tennessee ${mailing.postalCode}. That is our mailing address, not the house.` },
+      { title: "Month by month", body: "A standing gift of any size is the steadiest kind of help there is, because it lets us plan the work more than one season ahead. There is a box to tick for it when you give." },
+    ],
+  },
+  {
+    n: "02",
+    eyebrow: "Where it goes",
+    heading: "What your gift pays for.",
+    lead: "The house and the ground it stands on. Named as tasks, because that is how the work actually arrives.",
+    tone: "dark",
+    button: true,
+    cards: [
+      { title: "A roof and sound sills", body: "The logs came out from under the brick in better order than anyone expected. Keeping them that way means a sound roof over them and sills that carry the weight. This is the work that cannot wait." },
+      { title: "Taking the brick off", body: "The veneer comes away by hand, course by course, because a machine would take the logs with it. It is slow, and slow is the only way it can be done." },
+      { title: "Inside the house", body: "Paneling on the walls and carpet on the floors, both of them hiding what the house actually is. Taking those back and caring for what is underneath is the other half of the restoration, and it is the half people will stand in." },
+      { title: "The yard and the grounds", body: "The ground is part of the house. Grading, planting, paths and somewhere to park, and then the mowing and the upkeep that hold it year after year. A house people cannot reach is a house people will not keep." },
+    ],
+  },
+  {
+    n: "03",
+    eyebrow: "The record",
+    heading: "How the house came to us.",
+    lead: "We tell it this way every time, and we always end it in the same place, because that is the part which is easy to leave out.",
+    tone: "light",
+    button: false,
+    cards: [
+      { title: "2016", body: "William Brown left five hundred thousand dollars to keep this house standing and to make it the centerpiece of a public park. He was not related to the Latimers. He simply understood what the house was." },
+      { title: "The decade after", body: "The money was wrongfully confiscated and combined into a fund it was never left to. An alternate park plan moved ahead that left the house out entirely, and the house stood empty while the work did not begin." },
+      { title: "2023", body: "A small group of county commissioners caught it and led the charge to correct it. The money was separated back out and returned to the county in 2025, to the purpose it was left for." },
+      { title: "2026", body: "The Commission voted to convey the house and its parcel to this organization, and the deed was recorded on the twenty seventh of August. Codicil No. 1, executed March 17, 2016. Deed at Record Book 6928, pages 761 through 769." },
+    ],
+  },
+  {
+    n: "04",
+    eyebrow: "Later",
+    heading: "Leaving a gift in your will.",
+    lead: "This organization exists because one man wrote a house into his estate. If you are thinking along the same lines, here is what your attorney will need.",
+    tone: "dark",
+    button: true,
+    cards: [
+      { title: "The legal name", body: `${org.legalName}, a Tennessee nonprofit public benefit corporation. That is the full chartered name, and it is the form to use in the document.` },
+      { title: "The tax number", body: `EIN ${org.ein}. A 501(c)(3) organization classified as a public charity under section 509(a)(2), effective March 14, 2026.` },
+      { title: "What a bequest can be", body: "A fixed sum, a share of what is left once everything else is settled, or a particular asset. Any of the three works, and none of them costs anything now." },
+      { title: "Without touching the will", body: "Retirement accounts and life insurance policies can name a charity as beneficiary on a form. Talk it through with your own attorney or advisor. We are not one, and we will not pretend otherwise." },
+    ],
+  },
+  {
+    n: "05",
+    eyebrow: "The particulars",
+    heading: "Disclosures.",
+    lead: "Everything a donor is entitled to know, gathered in one place.",
+    tone: "light",
+    button: true,
+    cards: [
+      { title: "Who we are", body: `${org.legalName}, a Tennessee nonprofit public benefit corporation chartered March 14, 2026, control number 002094753. Mailing address ${mailingLine}. The house and the park stand at ${org.streetAddress}, ${org.addressLocality}, which is a visiting address only.` },
+      { title: "Tax status", body: `EIN ${org.ein}. Recognized by the Internal Revenue Service as exempt under section 501(c)(3) and classified as a public charity under section 509(a)(2). Determination letter dated August 6, 2026, effective March 14, 2026. Contributions are deductible to the extent allowed by law.` },
+      { title: "Your receipt", body: "Every gift is acknowledged in writing. Gifts of two hundred fifty dollars or more carry the written acknowledgment the Internal Revenue Service requires, stating that no goods or services were provided in exchange for the contribution." },
+      { title: "Your information", body: "Donor names and contact details are never published, sold, traded or shared without written permission. The board is unpaid, there is no staff, and the charter, bylaws, determination letter and financial filings are available on request." },
+    ],
+  },
+] as const;
+---
+
+<Base
+  title="Give"
+  description="What you give pays for the restoration, for keeping the house and the park, and for the plain costs of running the organization that does the work. Four ways to give, and everything a donor is entitled to know."
+>
+  <PageHero
+    crumbs={[{ label: "Give" }]}
+    headline="Every gift goes into the house."
+    /* The canvas ended this "and nowhere else", which was an overclaim.
+       Gifts also carry the ordinary costs of running the organization:
+       insurance, filings, mailing and the like. Saying so plainly is worth
+       more to a donor than a promise that cannot be kept, and the real
+       distinction survives it, which is that nobody here is paid. */
+    lead="William Brown left five hundred thousand dollars to keep this house standing, and that gift is the reason there is anything here to save. It does not cover what is still ahead of us. What you give pays for the restoration, for keeping the house and the park after it, and for the plain costs of running the organization that does the work. The board is unpaid and there is no staff."
+    image="/img/give-hero"
+    imageAlt="The Latimer House."
+    stats={stats}
+    scrim={[0.94, 0.86, 0.72]}
+  />
+  <div class="torn-edge" style="--torn-fill: var(--parchment-200);" aria-hidden="true"></div>
+
+  {sections.map((s) => (
+    <section class:list={["band", `band--${s.tone}`, s.tone === "dark" && "band--forest"]}>
+      <div class="container">
+        <div class="head">
+          <div class="head__copy" data-aos="fade-up">
+            <p class="eyebrow">{s.n} &middot; {s.eyebrow}</p>
+            <h2 class="sec__headline">{s.heading}</h2>
+            <p class="sec__lead">{s.lead}</p>
+          </div>
+
+          {s.button && (
+            <p class="head__action" data-aos="fade-up" data-aos-delay="200">
+              {live ? (
+                <a class="btn btn--primary" href={give.paypalUrl} target="_blank" rel="noopener">
+                  Make a gift
+                  <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+                </a>
+              ) : (
+                <>
+                  <span class="btn btn--primary is-disabled" aria-disabled="true">
+                    Make a gift
+                    <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+                  </span>
+                  <span class="head__note">Online giving opens shortly. A check reaches us today.</span>
+                </>
+              )}
+            </p>
+          )}
+        </div>
+
+        <div class="cards">
+          {s.cards.map((c, i) => (
+            <article class="card" data-aos="fade-up" data-aos-delay={(i % 2) * 100}>
+              <h3 class="card__title">{c.title}</h3>
+              <p class="card__body">{c.body}</p>
+            </article>
+          ))}
+        </div>
+
+        {s.pointer && (
+          <aside class="pointer" data-aos="fade-up">
+            <div class="pointer__copy">
+              <p class="eyebrow pointer__eyebrow">Membership is different</p>
+              <p class="pointer__line">It runs the calendar year and starts at $25.</p>
+            </div>
+            <p class="pointer__action">
+              <a class="btn btn--join" href={membership.href}>
+                {membership.label}
+                <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </p>
+          </aside>
+        )}
+      </div>
+    </section>
+  ))}
+
+  <GiveBand />
+</Base>
+
+<style>
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem); }
+  .band--light { background: var(--parchment-200); }
+  .band--dark { background: var(--forest-950); }
+
+  /* ---------- HEAD ROW ----------
+     Copy left, gift button right, dropping under the copy below desktop. */
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(1.75rem, 1rem + 2.5vw, 3.5rem);
+  }
+  .head__copy { flex: 1 1 34rem; }
+  .head__action {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .head__note {
+    max-width: 15rem;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--charcoal-600, #6c625f);
+  }
+  .band--dark .head__note { color: var(--sage-300); }
+
+  /* A button that cannot do anything yet says so, rather than pretending. */
+  .is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .sec__headline {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 3.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.029em;
+    color: var(--forest-900);
+  }
+  .sec__lead {
+    margin-block-start: 1.125rem;
+    max-width: 41.25rem;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+
+  /* The forest bands invert. Restated here because this component's own
+     selectors carry the [data-astro-cid-*] that outranks global.css. */
+  .band--dark .sec__headline { color: var(--parchment-50); }
+  .band--dark .sec__lead { color: var(--parchment-200); }
+
+  /* ---------- THE FOUR BLOCKS ----------
+     Two columns of 588 with a 56 gutter, one on a phone. Space and type,
+     no boxes, the same construction as Visit and Get Involved. */
+  .cards {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 1.5rem + 1.5vw, 2.75rem);
+    margin-block-start: clamp(2.25rem, 1.5rem + 2vw, 3.75rem);
+  }
+  @media (min-width: 48rem) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(2rem, 0.5rem + 4vw, 3.5rem);
+    }
+  }
+
+  .card__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.25rem + 0.9vw, 1.875rem);
+    line-height: 1.2;
+    letter-spacing: -0.017em;
+    color: var(--forest-900);
+  }
+  .card__body {
+    margin-block-start: 0.75rem;
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem);
+    line-height: 1.55;
+    color: var(--charcoal-700);
+  }
+  .band--dark .card__title { color: var(--parchment-50); }
+  .band--dark .card__body { color: var(--parchment-200); }
+
+  /* ---------- MEMBERSHIP POINTER ----------
+     Catches the reader at the moment they are choosing how to give. Forest
+     button, because membership is a join and not a gift. */
+  .pointer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    margin-block-start: clamp(2.25rem, 1.5rem + 2vw, 3rem);
+    padding: 1.75rem 2rem;
+    background: var(--parchment-50);
+    border-inline-start: 3px solid var(--hewn-400);
+    border-radius: 2px;
+  }
+  .pointer__eyebrow { color: var(--hewn-600); }
+  .pointer__line {
+    margin-block-start: 0.625rem;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.0625rem);
+    line-height: 1.56;
+    color: var(--charcoal-700);
+  }
+  .pointer__action { flex-shrink: 0; }
+  @media (max-width: 47.99rem) {
+    .pointer__action { width: 100%; }
+    .pointer__action .btn { justify-content: center; width: 100%; }
+  }
+</style>

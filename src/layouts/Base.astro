@@ -12,7 +12,7 @@ import "../styles/global.css";
 
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
-import { site, org } from "../site.config";
+import { site, org, mailing } from "../site.config";
 
 interface Props {
   title: string;
@@ -96,13 +96,30 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
         url: site.url,
         description: org.tagline,
         email: org.email,
+        /* The ORGANIZATION's address is the charter address on Latimer
+           Lane. Wolfpack Way is where the house stands and nothing else,
+           so it is the location rather than the address. Putting the house
+           here would tell search engines to send post to a building nobody
+           collects mail at. */
         address: {
           "@type": "PostalAddress",
-          streetAddress: org.streetAddress,
-          addressLocality: org.addressLocality,
-          addressRegion: org.addressRegion,
-          postalCode: org.postalCode,
+          streetAddress: mailing.streetAddress,
+          addressLocality: mailing.addressLocality,
+          addressRegion: mailing.addressRegion,
+          postalCode: mailing.postalCode,
           addressCountry: "US",
+        },
+        location: {
+          "@type": "Place",
+          name: "The Latimer House at the William and Martha Brown Park",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: org.streetAddress,
+            addressLocality: org.addressLocality,
+            addressRegion: org.addressRegion,
+            postalCode: org.postalCode,
+            addressCountry: "US",
+          },
         },
       })}
     />

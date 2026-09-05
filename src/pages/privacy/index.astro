@@ -1,0 +1,189 @@
+---
+/**
+ * Privacy.
+ *
+ * NOT IN FIGMA. There is no Privacy frame on the Visual Concepts page, so
+ * this is built to the family rather than to a canvas: the centered 680
+ * column and numbered eyebrows of About and the news post, on parchment.
+ * The hero deliberately carries no photograph, both because none was drawn
+ * for it and because three heroes in a row already lead with a group shot.
+ *
+ * EVERY CLAIM BELOW WAS CHECKED AGAINST THE BUILT SITE on 4 September 2026,
+ * not written from a template. At that point the site had no analytics, no
+ * tracking scripts, no cookies and no browser storage of any kind, and the
+ * only third parties reachable from it were Kit for the newsletter,
+ * youtube-nocookie after somebody presses play on a film, and plain
+ * outbound links to Google Maps, Facebook and the design credit.
+ *
+ * If any of that changes, this page changes with it. Adding an analytics
+ * script without editing section 05 turns this page into a false statement.
+ */
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import { org, give, mailingLine, mapUrl } from "../../site.config";
+
+const UPDATED = "4 September 2026";
+
+/* Built here rather than inline. Astro collapses the newlines between JSX
+   expressions, so an address assembled across several lines needs {" "} to
+   survive, and that reliably leaves a double space somewhere. */
+const houseLine = `${org.streetAddress}, ${org.addressLocality}, ${org.addressRegion} ${org.postalCode}`;
+---
+
+<Base
+  title="Privacy"
+  description="What this site collects, which is very little, and what happens to it."
+>
+  <PageHero
+    crumbs={[{ label: "Privacy" }]}
+    headline="What we collect, and what we do not."
+    lead="This site is built to be plain in every respect, including this one. It sets no cookies, it runs no analytics, and it does not track you from page to page. What follows is the whole of it."
+  />
+
+  <section class="band">
+    <div class="container">
+      <div class="column">
+        <p class="eyebrow">01 &middot; Reading this site</p>
+        <h2 class="sec__headline">Nothing is asked of you.</h2>
+        <p class="sec__body">
+          You can read every page here without giving us anything. There are no
+          cookies, no analytics, no advertising, no tracking pixels and no
+          fingerprinting. Nothing is stored in your browser.
+        </p>
+        <p class="sec__body">
+          Our host keeps ordinary web server records of requests, which include
+          the address your request came from and the browser it came from. That
+          is how any website on the internet works. We do not use those records
+          to build a picture of you, and we do not connect them to anything else.
+        </p>
+      </div>
+
+      <div class="column">
+        <p class="eyebrow">02 &middot; The newsletter</p>
+        <h2 class="sec__headline">Only if you ask for it.</h2>
+        <p class="sec__body">
+          If you put your address into the signup form, it goes to Kit, the
+          service that sends our emails, and it is used to send you news about
+          the house. That is all it is used for. Every email we send carries an
+          unsubscribe link, and using it removes you at once and for good.
+        </p>
+        <p class="sec__body">
+          We do not sell, rent, trade or share the list. If somebody asks us for
+          it, the answer is no.
+        </p>
+      </div>
+
+      <div class="column">
+        <p class="eyebrow">03 &middot; Giving</p>
+        <h2 class="sec__headline">We never see your card.</h2>
+        <p class="sec__body">
+          Gifts are handled by PayPal. Your card or account details are entered
+          on their systems and never touch ours. What comes back to us is what we
+          need to thank you and to write your receipt: a name, an email address,
+          a postal address where one is given, and the amount.
+        </p>
+        <p class="sec__body">
+          Donor names and contact details are never published, sold, traded or
+          shared without written permission. If you would rather give without
+          appearing anywhere at all, say so and that is how it will be.
+        </p>
+        <p class="sec__body">
+          The same applies to a gift by check. <a class="sec__link" href={give.href}>How
+          to give</a> sets out every route.
+        </p>
+      </div>
+
+      <div class="column">
+        <p class="eyebrow">04 &middot; Films, maps and other people's sites</p>
+        <h2 class="sec__headline">Nothing loads until you ask.</h2>
+        <p class="sec__body">
+          The films on the restoration page are hosted on YouTube, but nothing is
+          requested from YouTube while you are simply reading. The poster images
+          come from our own domain. Only when you press play does a player load,
+          and it loads from the no cookie version of their service.
+        </p>
+        <p class="sec__body">
+          Links to a map, to our Facebook page, or to the designer's site are
+          ordinary links. Following one takes you to a company with its own
+          policies, and ours stops at our edge.
+        </p>
+      </div>
+
+      <div class="column">
+        <p class="eyebrow">05 &middot; What we do not do</p>
+        <h2 class="sec__headline">The short list.</h2>
+        <p class="sec__body">
+          We do not run analytics of any kind. We do not use advertising or
+          retargeting. We do not sell or trade anything about you. We do not
+          build profiles. We do not email you unless you asked us to, and we do
+          not email you about anything other than this house.
+        </p>
+      </div>
+
+      <div class="column">
+        <p class="eyebrow">06 &middot; Asking us</p>
+        <h2 class="sec__headline">Where to write.</h2>
+        <p class="sec__body">
+          Write to <a class="sec__link" href={`mailto:${org.email}`}>{org.email}</a> and
+          ask what we hold about you, ask for it to be corrected, or ask for it
+          to be deleted. We will do it, and we will not make you explain why.
+        </p>
+        <p class="sec__body">
+          {org.legalName} is a Tennessee nonprofit corporation, EIN {org.ein}.
+          Its mailing address is {mailingLine}. The house and park stand at{" "}
+          <a class="sec__link" href={mapUrl} target="_blank" rel="noopener">{houseLine}</a>,
+          which is a visiting address only.
+        </p>
+        <p class="sec__note">Last updated {UPDATED}.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .band {
+    background: var(--parchment-200);
+    padding-block: clamp(4rem, 2.5rem + 5vw, 7rem);
+  }
+
+  .column { max-width: 42.5rem; margin-inline: auto; }
+  .column + .column { margin-block-start: clamp(2.5rem, 1.75rem + 2.5vw, 4.5rem); }
+
+  .sec__headline {
+    margin-block-start: 1.125rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.875rem, 1.4rem + 1.9vw, 2.5rem);
+    line-height: 1.32;
+    letter-spacing: -0.0375em;
+    color: var(--forest-900);
+  }
+  .sec__body {
+    margin-block-start: 1.625rem;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--charcoal-700);
+  }
+  .sec__body + .sec__body { margin-block-start: 1.375rem; }
+
+  .sec__note {
+    margin-block-start: 2rem;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--charcoal-600, #6c625f);
+  }
+
+  .sec__link {
+    color: var(--forest-800);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--hewn-400);
+    text-underline-offset: 0.2em;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .sec__link:hover, .sec__link:focus-visible { color: var(--hewn-700); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sec__link { transition: none; }
+  }
+</style>

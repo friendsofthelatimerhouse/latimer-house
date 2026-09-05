@@ -1,0 +1,379 @@
+---
+/**
+ * About. Built section for section to "About · Desktop" on the Visual
+ * Concepts page, node 298:908.
+ *
+ * Canvas order: Header, Page Hero, Torn Edge, What we do, The record and
+ * the board, Get in touch, Give band, Footer. The numbered eyebrows run 01
+ * to 04 straight through the bands rather than restarting, so section 02
+ * lives inside the "What we do" band.
+ *
+ * A NARRATIVE page: every section is counterAxisAlignItems CENTER, so the
+ * blocks are centered on the page center line with the text left aligned
+ * inside them. Measure 680, figure 1000, pull quotes 860 and 880.
+ *
+ * The section 04 anchor is what `contact.href` in site.config points at, so
+ * the id here is load bearing. Do not rename it.
+ */
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import GiveBand from "../../components/GiveBand.astro";
+import { org, mapUrl, mailingLine } from "../../site.config";
+
+const stats = [
+  { figure: "One house", label: "Is the whole mission" },
+  { figure: "0.805 acres", label: "The park around it" },
+  { figure: "2026", label: "When the house changed hands" },
+] as const;
+
+/** Officers first, then the line about the board itself, as on the canvas. */
+const board = [
+  { name: "Jim Latimer", role: "President. A direct descendant of Colonel Jonathan Latimer." },
+  { name: "Diane Stinson", role: "Vice President. A direct descendant of Colonel Jonathan Latimer." },
+  { name: "Mike McClard", role: "Secretary. A lifelong neighbor of William and Martha Brown." },
+  { name: "Cindy McClard", role: "Treasurer. A lifelong neighbor of William and Martha Brown." },
+  { name: "Unpaid", role: "Every seat on the board, and no staff." },
+] as const;
+---
+
+<Base
+  title="About"
+  description="The Friends of the Latimer House at the William and Martha Brown Park is a Tennessee nonprofit. We hold one house, on one small piece of ground, and our job is to see it restored and kept."
+>
+  <PageHero
+    crumbs={[{ label: "About" }]}
+    headline="Who we are, and what we are for."
+    lead="The Friends of the Latimer House at the William and Martha Brown Park is a Tennessee nonprofit. We hold one house, on one small piece of ground, and our job is to see it restored and kept."
+    image="/img/about-hero"
+    imageAlt="The Latimer House."
+    stats={stats}
+    scrim={[0.94, 0.86, 0.72]}
+  />
+  <div class="torn-edge" style="--torn-fill: var(--parchment-200);" aria-hidden="true"></div>
+
+  <!-- 01 and 02 ------------------------------------------------------- -->
+  <section class="band band--what">
+    <div class="container">
+      <div class="column" data-aos="fade-up">
+        <p class="eyebrow">01 &middot; What we do</p>
+        <h2 class="sec__headline">One house, and no mission creep.</h2>
+        <p class="sec__body">
+          We restore the Latimer House, we keep the ground around it, and we
+          open both to the public. That is the whole of it. We are not a county
+          department, we are not a general heritage society, and we do not hold
+          anything else.
+        </p>
+        <p class="sec__body">
+          The narrowness is deliberate. A house this old needs somebody whose
+          attention does not get divided, and the deed that conveyed it to us
+          says as much in law.
+        </p>
+      </div>
+
+      <figure class="figure" data-aos="fade-up">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/img/about-figure-800.webp 800w, /img/about-figure-1200.webp 1200w, /img/about-figure-1600.webp 1600w"
+            sizes="(min-width: 68rem) 1000px, 92vw"
+          />
+          <img
+            src="/img/about-figure-1200.jpg"
+            srcset="/img/about-figure-800.jpg 800w, /img/about-figure-1200.jpg 1200w, /img/about-figure-1600.jpg 1600w"
+            sizes="(min-width: 68rem) 1000px, 92vw"
+            alt="The Latimer House under its brick veneer."
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <figcaption>The house as it stood when it came into our care.</figcaption>
+      </figure>
+
+      <div class="column" data-aos="fade-up">
+        <p class="eyebrow">02 &middot; How we are held to it</p>
+        <h2 class="sec__headline">We do not own this outright.</h2>
+        <p class="sec__body">
+          The house came to us in August 2026 by a deed carrying a preservation
+          covenant and a reverter. If we fail to look after it, it returns to
+          Sumner County. That is not a formality. It is the mechanism that makes
+          our promises enforceable by somebody other than us.
+        </p>
+        <p class="sec__body">
+          Everything we do is measured against one sentence in William Brown's
+          codicil, which named the house as the centerpiece of the park his gift
+          created. That sentence is the standard, and it is a public document
+          anyone can read.
+        </p>
+      </div>
+
+      <blockquote class="pull" data-aos="fade-up">
+        <span class="pull__rule" aria-hidden="true"></span>
+        <p class="pull__quote">
+          &ldquo;the historic home currently situated thereon being permanently
+          maintained by the County as the park's centerpiece.&rdquo;
+        </p>
+        <footer class="pull__attr">
+          Codicil No. 1 to the will of William I. Brown, the standard we are held to
+        </footer>
+      </blockquote>
+
+      <div class="column" data-aos="fade-up">
+        <p class="sec__body">
+          We use the short name, the Latimer House, in ordinary writing. The full
+          chartered name is the Friends of the Latimer House at the William and
+          Martha Brown Park, and that is the name on anything legal.
+        </p>
+        <p class="sec__body">
+          We are a Tennessee nonprofit corporation. Our books, our minutes and
+          the instruments that gave us this house are all open to anyone who
+          asks.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 -------------------------------------------------------------- -->
+  <section class="band band--record band--forest">
+    <div class="container">
+      <div class="column" data-aos="fade-up">
+        <p class="eyebrow">03 &middot; The record</p>
+        <h2 class="sec__headline">How the house came to us.</h2>
+        <p class="sec__body">
+          In 2016 William Brown left five hundred thousand dollars to establish a
+          public park here, with this house as its centerpiece. The money was
+          wrongfully confiscated and combined into the school system's education
+          technology trust, a fund it was never left to. An alternate park plan
+          moved ahead that left the house out entirely, and for most of the
+          decade after the gift the house stood empty and the work did not begin.
+        </p>
+        <p class="sec__body">
+          A small group of county commissioners caught it in 2023 and led the
+          charge to correct it. The money was separated back out and returned to
+          the county in 2025. In 2026 the Commission voted to convey the house
+          and its parcel to this organization, and the deed was recorded on the
+          twenty seventh of August. We tell it this way every time, and we always
+          end it here, because this is the part that is easy to leave out.
+        </p>
+      </div>
+
+      <ul class="board" role="list">
+        {board.map((m, i) => (
+          <li class="board__seat" data-aos="fade-up" data-aos-delay={(i % 5) * 60}>
+            <span class="board__rule" aria-hidden="true"></span>
+            <p class="board__name">{m.name}</p>
+            <p class="board__role">{m.role}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="column" data-aos="fade-up">
+        <p class="sec__body">
+          The board is small and unpaid. There is no staff, and there is no
+          overhead worth the name. What comes in goes into the house and the
+          ground around it.
+        </p>
+      </div>
+
+      <blockquote class="pull pull--invert pull--wide" data-aos="fade-up">
+        <span class="pull__rule" aria-hidden="true"></span>
+        <p class="pull__quote">
+          &ldquo;There is a log house inside that brick house, and we are
+          uncovering it.&rdquo;
+        </p>
+        <footer class="pull__attr">The whole of the work, in one sentence</footer>
+      </blockquote>
+
+      <div class="column" data-aos="fade-up">
+        <p class="sec__body">
+          Everything else on this site is detail hanging off that sentence.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 -------------------------------------------------------------- -->
+  <section id="get-in-touch" class="band band--touch">
+    <div class="container">
+      <div class="column" data-aos="fade-up">
+        <p class="eyebrow">04 &middot; Get in touch</p>
+        <h2 class="sec__headline">Where to find us.</h2>
+        <p class="sec__body">
+          The Latimer House stands at <a class="sec__link" href={mapUrl} target="_blank" rel="noopener">300
+          Wolfpack Way, Gallatin, Tennessee</a>. Correspondence, questions about
+          the record, offers of photographs, and anything to do with volunteering
+          all reach us the same way, at <a class="sec__link" href={`mailto:${org.email}`}>{org.email}</a>.
+          Anything in an envelope goes to {mailingLine}, which is our mailing
+          address rather than the house.
+        </p>
+        <p class="sec__body">
+          If your family has a connection to this house, we would particularly
+          like to hear from you. The written record is thinner than it should be,
+          and the people who can fill it in are getting harder to find.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <GiveBand />
+</Base>
+
+<style>
+  .band { padding-block: clamp(4rem, 2.5rem + 5vw, 7rem); }
+  .band--what, .band--touch { background: var(--parchment-200); }
+  .band--record { background: var(--forest-950); }
+
+  /* Centered blocks, text left aligned inside them. */
+  .column { max-width: 42.5rem; margin-inline: auto; }
+  .column + .column,
+  .figure + .column,
+  .pull + .column {
+    margin-block-start: clamp(2.5rem, 1.75rem + 2.5vw, 5rem);
+  }
+
+  .sec__headline {
+    margin-block-start: 1.125rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.875rem, 1.4rem + 1.9vw, 2.5rem);
+    line-height: 1.32;
+    letter-spacing: -0.0375em;
+    color: var(--forest-900);
+  }
+  .sec__body {
+    margin-block-start: 1.625rem;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--charcoal-700);
+  }
+  .sec__body + .sec__body { margin-block-start: 1.375rem; }
+
+  /* The forest band inverts. Restated here rather than left to global.css,
+     because these are this page's own selectors and outrank it. */
+  .band--record .sec__headline { color: var(--parchment-50); }
+  .band--record .sec__body { color: var(--parchment-200); }
+
+  .sec__link {
+    color: var(--forest-800);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--hewn-400);
+    text-underline-offset: 0.2em;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .sec__link:hover, .sec__link:focus-visible { color: var(--hewn-700); }
+
+  /* ---------- FIGURE ---------- */
+  /* The canvas slot is a 1000 by 520 band, but this photograph is close to
+     square and Jeremy wants the whole frame. So the figure shrinks to fit
+     its picture rather than the picture stretching to fill the slot, and
+     the height is capped so a tall image cannot dominate a page whose text
+     column is 680. The caption then sits on the image's own left edge. */
+  .figure {
+    width: fit-content;
+    max-width: 62.5rem;
+    margin: clamp(2.5rem, 1.75rem + 2.5vw, 5rem) auto 0;
+  }
+  .figure picture { display: block; }
+  .figure img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 38.75rem;
+    margin-inline: auto;
+    border-radius: 2px;
+  }
+  .figure figcaption {
+    margin-block-start: 0.875rem;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--charcoal-600, #6c625f);
+  }
+
+  /* ---------- PULL QUOTES ---------- */
+  .pull {
+    max-width: 53.75rem;
+    margin: clamp(2.5rem, 1.75rem + 2.5vw, 5rem) auto 0;
+    padding: 0;
+    border: 0;
+    text-align: center;
+  }
+  .pull--wide { max-width: 55rem; }
+  .pull__rule {
+    display: block;
+    width: 4rem;
+    height: 2px;
+    margin-inline: auto;
+    margin-block-end: 1.875rem;
+    background: var(--hewn-600);
+  }
+  .pull--invert .pull__rule { background: var(--hewn-400); }
+  .pull__quote {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+    line-height: 1.32;
+    letter-spacing: -0.042em;
+    color: var(--forest-900);
+  }
+  .pull--invert .pull__quote {
+    font-size: clamp(1.375rem, 1.05rem + 1.3vw, 2rem);
+    color: var(--parchment-50);
+  }
+  .pull__attr {
+    margin-block-start: 1.5rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    /* tokens.css italicises blockquote, and this is not part of the quote. */
+    font-style: normal;
+    font-size: 12.5px;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+  .pull--invert .pull__attr { color: var(--hewn-400); }
+
+  /* ---------- THE BOARD ----------
+     Five across at 221 on the canvas, wrapping at tablet and stacking on a
+     phone. The fifth seat is not a person: it is the line about the board
+     itself, which is why it reads UNPAID. */
+  .board {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    margin: clamp(2.5rem, 1.75rem + 2vw, 4.5rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 34rem) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 68rem) { .board { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2rem; } }
+
+  .board__rule {
+    display: block;
+    width: 3rem;
+    height: 3px;
+    background: var(--hewn-400);
+  }
+  .board__name {
+    margin-block-start: 0.75rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.375rem, 1.2rem + 0.7vw, 1.625rem);
+    line-height: 1.32;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+    color: var(--parchment-50);
+  }
+  .board__role {
+    margin-block-start: 0.75rem;
+    font-size: 0.90625rem;
+    line-height: 1.58;
+    color: var(--sage-300);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sec__link { transition: none; }
+  }
+</style>

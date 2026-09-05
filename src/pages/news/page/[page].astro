@@ -1,0 +1,39 @@
+---
+/** Pages two and up. Page one is /news/ itself. */
+import { getCollection } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import PageHero from "../../../components/PageHero.astro";
+import NewsListing from "../../../components/NewsListing.astro";
+import GiveBand from "../../../components/GiveBand.astro";
+import { PER_PAGE, newest, yearsOf } from "../../../lib/news";
+
+export async function getStaticPaths() {
+  const posts = newest(await getCollection("news", (p) => !p.data.draft));
+  const totalPages = Math.max(1, Math.ceil(posts.length / PER_PAGE));
+  const pages = [];
+  for (let n = 2; n <= totalPages; n++) {
+    pages.push({
+      params: { page: String(n) },
+      props: { slice: posts.slice((n - 1) * PER_PAGE, n * PER_PAGE), n, totalPages, years: yearsOf(posts) },
+    });
+  }
+  return pages;
+}
+
+const { slice, n, totalPages, years } = Astro.props;
+---
+
+<Base title={`News, page ${n}`} description="Older posts from the Latimer House.">
+  <PageHero
+    crumbs={[{ label: "News", href: "/news/" }, { label: `Page ${n}` }]}
+    headline="What is happening at the house."
+    image="/img/news-hero"
+    imageAlt="The Latimer House."
+    scrim={[0.94, 0.86, 0.72]}
+  />
+  <div class="torn-edge" style="--torn-fill: var(--parchment-200);" aria-hidden="true"></div>
+
+  <NewsListing posts={slice} page={n} totalPages={totalPages} years={years} lead="Older first." />
+
+  <GiveBand />
+</Base>

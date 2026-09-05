@@ -1,0 +1,164 @@
+---
+/**
+ * Where a donor lands after completing a gift. This is the URL to enter as
+ * the return address on the PayPal gift button:
+ *
+ *   https://friendsofthelatimerhouse.org/thank-you/gift/
+ *
+ * In PayPal this is "Take customers to this URL when they finish checkout"
+ * on the button itself, and Auto Return has to be switched on in the
+ * account profile as well or PayPal keeps them on its own page. Auto
+ * Return only fires once the payment actually completes, so nobody reaches
+ * this page having abandoned the form partway.
+ *
+ * noindex, for the same reason as the newsletter thank you: a page that
+ * only makes sense when you arrive from somewhere else should not turn up
+ * cold in a search result.
+ *
+ * NO GIVE BAND. Every other page closes with an ask. Asking someone for
+ * money in the same breath as thanking them for money is the one place it
+ * would be wrong, so this page closes on the work instead: one band, a
+ * footnote, and then the newsletter signup where every other page carries
+ * the give band. Connection rather than another ask.
+ *
+ * The receipt language here has to keep matching Give section 05. If the
+ * disclosures change, change this too.
+ */
+import Base from "../../../layouts/Base.astro";
+import PageHero from "../../../components/PageHero.astro";
+import NewsletterBand from "../../../components/NewsletterBand.astro";
+import { org, mailingLine } from "../../../site.config";
+---
+
+<Base
+  title="Thank You"
+  description="Thank you for giving to the Latimer House."
+  noindex
+>
+  <PageHero
+    crumbs={[{ label: "Thank You" }]}
+    headline="Thank you. That goes into the house."
+    lead="Your gift is in, and it does not sit in a fund waiting on a plan. It pays for a roof over the logs, for the brick coming off by hand, and for keeping the house and the ground around it once the work is done."
+    image="/img/give-hero"
+    imageAlt="The Latimer House."
+    scrim={[0.94, 0.86, 0.72]}
+  />
+  <div class="torn-edge" aria-hidden="true"></div>
+
+  <section class="band band--parchment">
+    <div class="container">
+      <div class="ty">
+        <div class="ty__col" data-aos="fade-up">
+          <p class="eyebrow">Your receipt</p>
+          <div class="stack measure ty__body">
+            <p>
+              PayPal has emailed you a record of the transaction already. Ours
+              follows separately, because that is the one your accountant will
+              want.
+            </p>
+            <p>
+              Every gift is acknowledged in writing. A gift of two hundred fifty
+              dollars or more carries the written acknowledgment the Internal
+              Revenue Service requires, stating that no goods or services were
+              provided in exchange for the contribution.
+            </p>
+            <p>
+              {org.legalName}. EIN {org.ein}, a 501(c)(3) public charity.
+              Contributions are deductible to the extent allowed by law.
+            </p>
+          </div>
+        </div>
+
+        <div class="ty__col" data-aos="fade-up" data-aos-delay="150">
+          <p class="eyebrow">What happens next</p>
+          <div class="stack measure ty__body">
+            <p>
+              The work carries on and we report it as it happens. If you would
+              like to hear what came off the walls this month, there is a box at
+              the foot of this page and it takes a moment.
+            </p>
+            <p>
+              There is more to this house than the restoration. A man who was
+              not family left money to save it, the house waited a long while,
+              people went and read the records, and it was put right.
+            </p>
+            <p class="ty__actions">
+              <a class="btn btn--primary" href="/the-story/">
+                Read the story
+                <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Housekeeping, and it should read as housekeeping. It was a forest
+          band of its own at first, which put one dark green directly above
+          the footer's dark green and read as a smudge rather than a step. */}
+      <p class="foot" data-aos="fade-up">
+        If something looks wrong, write to
+        <a href={`mailto:${org.email}`}>{org.email}</a> and a board member will
+        answer. Our mailing address is {mailingLine}. The board is unpaid and
+        there is no staff, so the person who replies is the person doing the
+        work.
+      </p>
+    </div>
+  </section>
+
+  <NewsletterBand
+    eyebrow="One more thing"
+    heading="Come along for the rest of it."
+    body="You have paid for work you will not get to watch unless we tell you about it. So we will. A note when we uncover something, when we are on site, and how to join in."
+    cta="Sign me up"
+  />
+</Base>
+
+<style>
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem); }
+
+  /* Two columns that become one at narrow widths, with no guessed
+     breakpoint: the columns simply stop fitting and reflow. Same
+     construction as the newsletter thank you, deliberately. */
+  .ty {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    gap: clamp(2rem, 1.25rem + 3vw, 4rem);
+  }
+
+  .ty__body { margin-block-start: 1rem; }
+  .ty__body p { color: var(--text-secondary); }
+  /* :not(.btn) matters. Without it this rule underlines the Read the story
+     button too, because the button is an anchor inside a paragraph. */
+  .ty__body p a:not(.btn) {
+    color: var(--forest-900);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+  .ty__body p a:not(.btn):hover { color: var(--hewn-600); }
+
+  /* The button carries its own hover transition, so the reveal animation
+     goes on this wrapper instead. See the rule in global.css. */
+  .ty__actions { margin-block-start: 1.75rem; }
+
+
+  /* ---------- THE FOOTNOTE ----------
+     A hairline and small type, ranged left under both columns. Not a band:
+     it is the smallest thing on the page and should look it. */
+  .foot {
+    max-width: 46rem;
+    margin-block-start: clamp(2.5rem, 1.75rem + 3vw, 3.5rem);
+    padding-block-start: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+    border-block-start: 1px solid var(--border-subtle);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--text-muted, var(--charcoal-600));
+  }
+  .foot a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+  .foot a:hover { color: var(--hewn-600); }
+</style>

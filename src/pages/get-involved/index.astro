@@ -9,7 +9,7 @@
  * MIXED alignment, which is unusual and is transcribed rather than chosen.
  * "How to help" is counterAxisAlignItems MIN, so it sits on the left gutter
  * like the rest of the panel pages. "Membership" is CENTER, so its blocks
- * are centred on the page centre line while the text inside them stays left
+ * are centered on the page center line while the text inside them stays left
  * aligned, the same construction the narrative pages use. Do not make the
  * two sections agree.
  */
@@ -66,7 +66,7 @@ const tiers = [
         <article class="help__block" data-aos="fade-up">
           <h3 class="help__title">Come to a workday</h3>
           <p class="help__body">
-            Workdays are where most of the labour happens. Clearing, hauling,
+            Workdays are where most of the labor happens. Clearing, hauling,
             stripping back, cleaning up behind the trades, and the hundred small
             jobs that keep a restoration moving. Bring gloves and boots and we
             will show you the rest.
@@ -89,7 +89,7 @@ const tiers = [
           </h3>
           <p class="help__body">
             Every gift goes into the house and the ground around it. Materials,
-            labour, and the professional work the restoration needs. There is no
+            labor, and the professional work the restoration needs. There is no
             paid staff and very little overhead.
           </p>
         </article>
@@ -137,7 +137,7 @@ const tiers = [
         </p>
         {/* Now on the canvas too. Forest rather than hewn, because this is
             a membership and not a gift, and the site keeps those two things
-            in different colours. It points at Give for the moment, since
+            in different colors. It points at Give for the moment, since
             that is where the PayPal buttons will live, but membership needs
             its own tiered button there rather than the plain donate one. */}
         <p class="mem__actions">
@@ -231,8 +231,8 @@ const tiers = [
   }
 
   /* ---------- MEMBERSHIP ----------
-     Centred blocks with left aligned text inside them, which is what the
-     canvas does. The colours are restated here rather than left to the
+     Centered blocks with left aligned text inside them, which is what the
+     canvas does. The colors are restated here rather than left to the
      .band--forest rules in global.css, because these are this component's
      own selectors and carry the [data-astro-cid-*] that outranks them. */
   .mem__column {
@@ -258,7 +258,7 @@ const tiers = [
     color: var(--parchment-200);
   }
   .mem__column--foot .mem__body { margin-block-start: 0; }
-  /* Centred inside the 680 column, under the left aligned sentence. */
+  /* Centered inside the 680 column, under the left aligned sentence. */
   .mem__actions {
     margin-block-start: 1.75rem;
     text-align: center;
@@ -268,9 +268,9 @@ const tiers = [
     .mem__actions .btn { display: flex; justify-content: center; width: 100%; }
   }
 
-  /* Centred from tablet up, left aligned on a phone. The canvas centres
+  /* Centered from tablet up, left aligned on a phone. The canvas centers
      the tiers and the closing line on desktop and tablet and leaves them
-     ranged left on mobile, where a centred column of four short labels
+     ranged left on mobile, where a centered column of four short labels
      reads as a poem rather than a price list. */
   @media (min-width: 48rem) {
     .tier { text-align: center; }
@@ -294,9 +294,9 @@ const tiers = [
     .tiers { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
   }
 
-  /* The canvas left aligns the tiers. Jeremy centred the button and asked
+  /* The canvas left aligns the tiers. Jeremy centered the button and asked
      for these and the closing sentence to follow, so the whole foot of the
-     section reads as one centred block. The rule has to be centred by hand
+     section reads as one centered block. The rule has to be centered by hand
      because text-align does nothing to a block element. */
   .tier__rule {
     display: block;

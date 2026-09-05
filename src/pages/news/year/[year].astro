@@ -1,0 +1,43 @@
+---
+/** Everything from one year. A real route, so it works without scripting
+ *  and search engines can find it, unlike the category chips. */
+import { getCollection } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import PageHero from "../../../components/PageHero.astro";
+import NewsListing from "../../../components/NewsListing.astro";
+import GiveBand from "../../../components/GiveBand.astro";
+import { newest, yearsOf } from "../../../lib/news";
+
+export async function getStaticPaths() {
+  const posts = newest(await getCollection("news", (p) => !p.data.draft));
+  const years = yearsOf(posts);
+  return years.map((y) => ({
+    params: { year: String(y) },
+    props: { year: y, slice: posts.filter((p) => p.data.date.getUTCFullYear() === y), years },
+  }));
+}
+
+const { year, slice, years } = Astro.props;
+---
+
+<Base title={`News from ${year}`} description={`Posts from the Latimer House in ${year}.`}>
+  <PageHero
+    crumbs={[{ label: "News", href: "/news/" }, { label: String(year) }]}
+    headline="What is happening at the house."
+    image="/img/news-hero"
+    imageAlt="The Latimer House."
+    scrim={[0.94, 0.86, 0.72]}
+  />
+  <div class="torn-edge" style="--torn-fill: var(--parchment-200);" aria-hidden="true"></div>
+
+  <NewsListing
+    posts={slice}
+    years={years}
+    activeYear={year}
+    eyebrow="Archive"
+    heading={`From the house in ${year}.`}
+    lead={`${slice.length} ${slice.length === 1 ? "post" : "posts"}, newest first.`}
+  />
+
+  <GiveBand />
+</Base>

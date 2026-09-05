@@ -1,0 +1,47 @@
+---
+/**
+ * The news lander, page one. Built to "News · Desktop", node 284:844.
+ * Pagination lives at /news/page/2/ and the year archive at /news/year/2026/
+ * so that neither collides with /news/<slug>/.
+ */
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import NewsListing from "../../components/NewsListing.astro";
+import GiveBand from "../../components/GiveBand.astro";
+import { PER_PAGE, newest, yearsOf } from "../../lib/news";
+
+const posts = newest(await getCollection("news", (p) => !p.data.draft));
+const years = yearsOf(posts);
+const totalPages = Math.max(1, Math.ceil(posts.length / PER_PAGE));
+
+const stats = [
+  { figure: "Updates", label: "As the work moves" },
+  { figure: "Photographs", label: "From every stage" },
+  { figure: "Sign up", label: "And hear it first" },
+] as const;
+---
+
+<Base
+  title="News"
+  description="Progress on the restoration, decisions as they are made, and the record as it fills in. Posted as it happens, not tidied up afterwards."
+>
+  <PageHero
+    crumbs={[{ label: "News" }]}
+    headline="What is happening at the house."
+    lead="Progress on the restoration, decisions as they are made, and the record as it fills in. Posted as it happens, not tidied up afterwards."
+    image="/img/news-hero"
+    imageAlt="The Latimer House."
+    stats={stats}
+    /* This photograph puts its subject, a group of people, exactly where the
+       stat row sits, so the foot of the scrim has to go further than any
+       other hero on the site. See the note to Jeremy: a group portrait is
+       fighting its job here. */
+    scrim={[0.95, 0.88, 0.8]}
+  />
+  <div class="torn-edge" style="--torn-fill: var(--parchment-200);" aria-hidden="true"></div>
+
+  <NewsListing posts={posts.slice(0, PER_PAGE)} page={1} totalPages={totalPages} years={years} />
+
+  <GiveBand />
+</Base>

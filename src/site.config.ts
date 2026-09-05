@@ -17,8 +17,15 @@ export const org = {
     "The nonprofit that looks after the Latimer House, a 1790's log house in Sumner County, Tennessee.",
   ein: "41-4875485",
   /**
-   * SETTLED. The physical location of the house, and the address this
-   * site publishes. Does not get relitigated.
+   * SETTLED. The physical location of the HOUSE AND PARK, and nothing else.
+   *
+   * This address is for in person visits only. It is not the charter
+   * address, not the board's address, not the mailing address, and nothing
+   * should ever be sent or delivered here. Anything in an envelope goes to
+   * `mailing` below, which is the address on the charter.
+   *
+   * Use this one for Find Us, the map link, the Visit page, and the Place
+   * in the structured data. Nowhere else.
    */
   streetAddress: "300 Wolfpack Way",
   addressLocality: "Gallatin",
@@ -27,6 +34,26 @@ export const org = {
   email: "latimerhouse@protonmail.com",
   founded: "the 1790's",
 } as const;
+
+/**
+ * THE ORGANIZATION'S ADDRESS. This is the one on the charter, and it is the
+ * board's address, the nonprofit's address of record and the mailing
+ * address. Checks, correspondence, deliveries and anything legal go here.
+ *
+ * The org block above is the HOUSE, and it is a visiting address only.
+ *
+ * Keep the two apart. Collapsing them loses somebody's donation.
+ */
+export const mailing = {
+  streetAddress: "1578 Latimer Lane",
+  addressLocality: "Hendersonville",
+  addressRegion: "TN",
+  postalCode: "37075",
+} as const;
+
+/** One line, for prose. */
+export const mailingLine =
+  `${mailing.streetAddress}, ${mailing.addressLocality} ${mailing.addressRegion} ${mailing.postalCode}`;
 
 export const site = {
   url: "https://friendsofthelatimerhouse.org",
@@ -106,7 +133,7 @@ export const give = {
   label: "Give",
   /**
    * PayPal hosted button. Created at paypal.com/donate/buttons under the
-   * ORGANISATION's PayPal account. Plain link, no JavaScript, cannot break.
+   * ORGANIZATION's PayPal account. Plain link, no JavaScript, cannot break.
    * Fill in once the button exists; the confirmed-charity rate applies
    * automatically on approval with no change here.
    */
@@ -123,12 +150,12 @@ export const give = {
  * sends, which this organization will not approach for years.
  *
  * `action` is the form POST endpoint Kit gives you when the form is
- * created under the ORGANISATION's Kit account. Until it is filled in the
+ * created under the ORGANIZATION's Kit account. Until it is filled in the
  * signup band renders disabled rather than posting into a void.
  */
 export const newsletter = {
   /**
-   * Kit form 9881603, "Website Signup", created under the organisation's Kit
+   * Kit form 9881603, "Website Signup", created under the organization's Kit
    * account. This is the HTML embed endpoint, not the JavaScript one: the
    * forms post straight to it with no script, so they cannot break if Kit's
    * CDN is slow or blocked.

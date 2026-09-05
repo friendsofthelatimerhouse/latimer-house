@@ -2,12 +2,39 @@
 /**
  * The signup band. Copy Deck, Section 1.3.
  *
+ * The home page carries its own three part composition inline, so this is
+ * the shared one, used where the signup has to stand on its own. On the
+ * gift thank you page it takes the give band's slot at the foot of the
+ * page, which is why it is built with a band's weight rather than a
+ * strip's: a real headline, a lighter ground than the canvas above it, and
+ * a field big enough to look like it wants an address.
+ *
  * The form posts straight to Kit. Until the form ID is filled in on
  * site.config the field and button render disabled rather than pointing
  * at nothing, so a half configured build cannot silently swallow an
  * address. No JavaScript: a plain HTML POST cannot break.
+ *
+ * Every string is a prop so a page can ask in its own words. The defaults
+ * are the general purpose wording.
  */
 import { newsletter } from "../site.config";
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  body?: string;
+  /** The line under the form. Set it to "" to drop it. */
+  fine?: string;
+  cta?: string;
+}
+
+const {
+  eyebrow = "Stay connected",
+  heading = "Hear it as it happens.",
+  body = "What we uncover, when we are working, and how to join in.",
+  fine = "Watch for a confirmation email, because you are not on the list until you click it. Not much mail after that, and one click to leave.",
+  cta = "Sign up",
+} = Astro.props;
 
 const ready = Boolean(newsletter.action);
 ---
@@ -15,80 +42,149 @@ const ready = Boolean(newsletter.action);
 <section class="signup">
   <div class="container signup__inner">
     <div class="signup__text" data-aos="fade-up">
-      <p class="eyebrow signup__eyebrow">Stay connected</p>
-      <p class="signup__body">
-        What we uncover, when we are working, and how to join in.
+      <p class="signup__kicker">
+        <span class="signup__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 18" width="20" height="15" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="1" y="1" width="22" height="16" rx="2" />
+            <path d="M1.6 2.2 12 10 22.4 2.2" />
+          </svg>
+        </span>
+        <span class="eyebrow signup__eyebrow">{eyebrow}</span>
       </p>
+      <h2 class="signup__heading">{heading}</h2>
+      <p class="signup__body">{body}</p>
     </div>
 
-    <form
-      class="signup__form"
-      data-aos="fade-up"
-      data-aos-delay="200"
-      action={newsletter.action || undefined}
-      method="post"
-    >
-      <label class="visually-hidden" for="signup-email">Email address</label>
-      <input
-        class="signup__field"
-        id="signup-email"
-        type="email"
-        name={newsletter.emailField}
-        placeholder="Email address"
-        autocomplete="email"
-        required
-        disabled={!ready}
-      />
-      <button class="btn btn--primary" type="submit" disabled={!ready}>
-        Sign up
-      </button>
-    </form>
+    <div class="signup__side" data-aos="fade-up" data-aos-delay="200">
+      <form
+        class="signup__form"
+        action={newsletter.action || undefined}
+        method="post"
+      >
+        <label class="visually-hidden" for="signup-email">Email address</label>
+        <input
+          class="signup__field"
+          id="signup-email"
+          type="email"
+          name={newsletter.emailField}
+          placeholder="Email address"
+          autocomplete="email"
+          required
+          disabled={!ready}
+        />
+        <button class="btn btn--join signup__submit" type="submit" disabled={!ready}>
+          {cta}
+        </button>
+      </form>
+      {fine && <p class="signup__fine">{fine}</p>}
+    </div>
   </div>
 </section>
 
 <style>
+  /* Lighter than the canvas above it rather than darker. A band that steps
+     up reads as a panel; the darker strip this replaced read as the page
+     running out. Padding matches a real band, not a strip. */
   .signup {
-    background: var(--bg-sunken, var(--parchment-200));
-    padding-block: clamp(2.5rem, 1.75rem + 3vw, 4rem);
+    background: var(--parchment-50);
+    border-block-start: 1px solid var(--parchment-300);
+    padding-block: clamp(3.25rem, 2.25rem + 4vw, 5rem);
   }
 
+  /* Grid rather than wrapping flex. Flex wrapped the form onto its own row
+     while max-width still held it to 30rem, which left the right half of a
+     tablet empty. A grid knows which case it is in: one column below the
+     breakpoint, where the form is full width, and two above it. */
   .signup__inner {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
     align-items: center;
-    justify-content: space-between;
-    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+    gap: clamp(2rem, 1.25rem + 3vw, 3.5rem);
+  }
+  @media (min-width: 60rem) {
+    .signup__inner { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
   }
 
-  .signup__text { flex: 1 1 20rem; }
+  .signup__kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--hewn-600);
+  }
+  .signup__mark { display: inline-flex; }
   .signup__eyebrow { color: var(--hewn-600); }
+
+  .signup__heading {
+    margin-block-start: 0.875rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.375rem);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--forest-900);
+    max-width: 24ch;
+  }
+
   .signup__body {
-    margin-block-start: 0.6rem;
+    margin-block-start: 0.875rem;
     font-size: var(--type-lead-size);
     line-height: var(--type-lead-line);
     color: var(--text-secondary);
-    max-width: 34ch;
+    max-width: 38ch;
   }
+
+  /* The form and its fine print travel together. No max-width: in two
+     column mode the grid track already sets the width, and in one column
+     mode a cap here is what left a tablet with an empty right edge. The
+     measure is held on the fine print instead, which is the only part long
+     enough to need it. */
+  .signup__side { min-width: 0; }
 
   .signup__form {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    flex: 1 1 22rem;
-    max-width: 30rem;
   }
 
   .signup__field {
     flex: 1 1 12rem;
     min-width: 0;
-    padding: 0.9rem 1rem;
+    padding: 1.05rem 1.125rem;
+    font-family: var(--font-body);
     font-size: var(--type-body-size);
-    background: var(--bg-raised, #fff);
-    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface, #fff);
+    border: 1px solid var(--parchment-300);
     border-radius: 2px;
     color: var(--text-primary);
   }
   .signup__field::placeholder { color: var(--text-muted); }
-  .signup__field:disabled { opacity: 0.6; cursor: not-allowed; }
-  .signup__form button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .signup__field:focus-visible {
+    outline: 2px solid var(--forest-900);
+    outline-offset: 1px;
+    border-color: var(--forest-900);
+  }
+
+  /* Green, and the same green membership uses, because this is a join
+     rather than a gift. Height matches the field so the pair reads as one
+     control. */
+  .signup__submit {
+    cursor: pointer;
+    padding-block: 1.05rem;
+  }
+
+  .signup__fine {
+    max-width: 52ch;
+    margin-block-start: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--text-muted, var(--parchment-600));
+  }
+
+  .signup__field:disabled,
+  .signup__submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* On a phone the button goes full width under the field rather than
+     squeezing beside it. */
+  @media (max-width: 29.99rem) {
+    .signup__submit { width: 100%; justify-content: center; }
+  }
 </style>

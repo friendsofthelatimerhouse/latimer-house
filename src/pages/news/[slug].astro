@@ -1,0 +1,402 @@
+---
+/**
+ * A news post. Built section for section to "News Post · Desktop" on the
+ * Visual Concepts page, node 288:876.
+ *
+ * Canvas order: Header, Page Hero, Article body, Tags and post navigation,
+ * Give band, Footer. All three content sections sit on parchment-200, so
+ * the page reads as one continuous ground rather than alternating bands.
+ *
+ * A NARRATIVE page: every section is counterAxisAlignItems CENTER, so the
+ * blocks are centered on the page center line with the text left aligned
+ * inside them. The measure is 680, the figure breaks out to 1000 and the
+ * pull quote to 860.
+ *
+ * The article itself is markdown, so the three conventions documented in
+ * content.config.ts are what the styles below have to carry: an h3 above an
+ * h2 is an eyebrow, a blockquote is a pull quote with its second paragraph
+ * as the attribution, and an image followed by an italic line is a
+ * captioned figure.
+ */
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import GiveBand from "../../components/GiveBand.astro";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("news", (p) => !p.data.draft)).sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime()
+  );
+  /* Filenames carry the date so the folder sorts usefully, but a URL should
+     not. 2026-08-27-the-deed-is-recorded becomes the-deed-is-recorded. */
+  const slugOf = (id: string) => id.replace(/^\d{4}-\d{2}(-\d{2})?-/, "");
+  return posts.map((post, i) => ({
+    params: { slug: slugOf(post.id) },
+    props: {
+      post,
+      /* Newest first, so the older post is the next one down the list. */
+      older: posts[i + 1] ? { title: posts[i + 1].data.title, slug: slugOf(posts[i + 1].id) } : null,
+      newer: posts[i - 1] ? { title: posts[i - 1].data.title, slug: slugOf(posts[i - 1].id) } : null,
+    },
+  }));
+}
+
+const { post, older, newer } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const stamp = d.datePrecision === "month"
+  ? `${MONTHS[d.date.getUTCMonth()]} ${d.date.getUTCFullYear()}`
+  : `${MONTHS[d.date.getUTCMonth()]} ${d.date.getUTCDate()}, ${d.date.getUTCFullYear()}`;
+const year = d.date.getUTCFullYear();
+---
+
+<Base title={d.title} description={d.excerpt}>
+  <article>
+    <header class="post-hero">
+      <div class="container">
+        <div class="column">
+          <p class="eyebrow post-hero__meta">
+            <a class="post-hero__crumb" href="/news/">News</a>
+            <span aria-hidden="true">&middot;</span>
+            <a class="post-hero__crumb" href={`/news/?category=${encodeURIComponent(d.category)}`}>{d.category}</a>
+            <span aria-hidden="true">&middot;</span>
+            <span>{stamp}</span>
+          </p>
+          <h1 class="post-hero__headline">{d.title}</h1>
+          {d.standfirst && <p class="post-hero__standfirst">{d.standfirst}</p>}
+        </div>
+      </div>
+    </header>
+
+    <div class="post-body">
+      <div class="container">
+        <div class="article">
+          <Content />
+        </div>
+      </div>
+    </div>
+
+    <footer class="post-foot">
+      <div class="container">
+        <div class="column">
+          <p class="eyebrow">Filed under</p>
+          <ul class="chips" role="list">
+            <li>
+              <a class="chip" href={`/news/?category=${encodeURIComponent(d.category)}`}>{d.category}</a>
+            </li>
+            {d.tags.map((t) => <li><span class="chip chip--plain">{t}</span></li>)}
+            <li><a class="chip" href={`/news/year/${year}/`}>{year}</a></li>
+          </ul>
+
+          <hr class="post-foot__rule" />
+
+          <nav class="post-nav" aria-label="More posts">
+            {older && (
+              <a class="post-nav__link" href={`/news/${older.slug}/`}>
+                <span class="eyebrow post-nav__dir">&lsaquo;&nbsp; Previous post</span>
+                <span class="post-nav__title">{older.title}</span>
+              </a>
+            )}
+            {newer && (
+              <a class="post-nav__link post-nav__link--next" href={`/news/${newer.slug}/`}>
+                <span class="eyebrow post-nav__dir">Next post &nbsp;&rsaquo;</span>
+                <span class="post-nav__title">{newer.title}</span>
+              </a>
+            )}
+          </nav>
+
+          {/* The trail at the top of the post gets you back to News, but not
+              after you have read to the bottom, which is where somebody
+              actually finishes. Same treatment as "Back to The Story" on the
+              Story sub pages, so the gesture is one gesture across the site.
+              It also fills the gap on the newest and oldest posts, where one
+              half of the pair above is absent. */}
+          <p class="post-all">
+            <a href="/news/">
+              <span class="post-all__arrow" aria-hidden="true">&lsaquo;</span>
+              All posts
+            </a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </article>
+
+  <GiveBand />
+</Base>
+
+<style>
+  /* One ground for the whole article, per the canvas. */
+  .post-hero, .post-body, .post-foot { background: var(--parchment-200); }
+
+  .post-hero { padding-block: clamp(3.5rem, 2.25rem + 4vw, 6.3125rem) 0.5rem; }
+  .post-body { padding-block: 2.5rem clamp(4rem, 2.5rem + 4vw, 7rem); }
+  .post-foot { padding-block: clamp(3rem, 2rem + 3vw, 5.5rem); }
+
+  /* Centered block, text left aligned inside it. Same construction as the
+     narrative pages in The Story. */
+  .column {
+    max-width: 42.5rem;
+    margin-inline: auto;
+  }
+
+  .post-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    color: var(--hewn-600);
+  }
+  .post-hero__crumb {
+    color: inherit;
+    text-decoration: none;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .post-hero__crumb:hover, .post-hero__crumb:focus-visible { color: var(--hewn-700); }
+
+  .post-hero__headline {
+    margin-block-start: 1.25rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 1.5rem + 4vw, 3.625rem);
+    line-height: 1.1;
+    letter-spacing: -0.017em;
+    color: var(--forest-900);
+  }
+  .post-hero__standfirst {
+    margin-block-start: 1.375rem;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    line-height: 1.68;
+    color: var(--charcoal-700);
+  }
+
+  /* ---------- THE ARTICLE ----------
+     A single column grid whose children are centered and capped at the
+     measure. Anything that has to break wider than the measure, a figure or
+     a pull quote, simply asks for a bigger cap. No negative margins. */
+  .article {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+  .article > :global(*) { width: min(100%, 42.5rem); }
+
+  /* h3 directly above an h2 is the eyebrow over a section heading. */
+  .article :global(h3:has(+ h2)) {
+    margin-block-start: clamp(2.5rem, 1.75rem + 2.5vw, 4.5rem);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 12.5px;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+  .article > :global(*:first-child) { margin-block-start: 0; }
+
+  .article :global(h2) {
+    margin-block-start: 1.125rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.875rem, 1.4rem + 1.9vw, 2.5rem);
+    line-height: 1.32;
+    letter-spacing: -0.0375em;
+    color: var(--forest-900);
+  }
+  /* An h2 with no eyebrow above it still needs air. */
+  .article :global(h2:not(h3 + h2)) {
+    margin-block-start: clamp(2.5rem, 1.75rem + 2.5vw, 4.5rem);
+  }
+
+  .article :global(p) {
+    margin-block-start: 1.625rem;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--charcoal-700);
+  }
+  .article :global(h2 + p) { margin-block-start: 1.625rem; }
+  .article :global(p + p) { margin-block-start: 1.375rem; }
+
+  .article :global(a) {
+    color: var(--forest-800);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--hewn-400);
+    text-underline-offset: 0.2em;
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .article :global(a:hover), .article :global(a:focus-visible) { color: var(--hewn-700); }
+
+  /* A blockquote is the pull quote. 860 on the canvas, centered, with a
+     64 by 2 hewn rule above it. A second paragraph is the attribution. */
+  .article > :global(blockquote) {
+    width: min(100%, 53.75rem);
+    margin-block-start: clamp(2.5rem, 1.75rem + 2.5vw, 5rem);
+    padding: 0;
+    border: 0;
+    text-align: center;
+  }
+  .article :global(blockquote::before) {
+    content: "";
+    display: block;
+    width: 4rem;
+    height: 2px;
+    margin-inline: auto;
+    margin-block-end: 1.875rem;
+    background: var(--hewn-600);
+  }
+  .article :global(blockquote p) {
+    margin-block-start: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+    line-height: 1.32;
+    letter-spacing: -0.042em;
+    color: var(--forest-900);
+  }
+  /* The second paragraph is the attribution, not more quote. */
+  .article :global(blockquote p + p) {
+    margin-block-start: 1.5rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-style: normal;
+    font-size: 12.5px;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+
+  /* An image on its own line breaks out to 1000. The italic line after it
+     is its caption. */
+  .article > :global(p:has(> img:only-child)) {
+    width: min(100%, 62.5rem);
+    margin-block-start: clamp(2.5rem, 1.75rem + 2.5vw, 5rem);
+  }
+  .article :global(p > img:only-child) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+  }
+  .article > :global(p:has(> img:only-child) + p:has(> em:only-child)) {
+    width: min(100%, 62.5rem);
+    margin-block-start: 0.875rem;
+    font-size: 13px;
+    line-height: 1.5;
+    font-style: normal;
+    color: var(--charcoal-600, #6c625f);
+  }
+  .article :global(p:has(> img:only-child) + p > em:only-child) { font-style: normal; }
+
+  /* ---------- TAGS AND POST NAVIGATION ---------- */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--parchment-300);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11.5px;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--hewn-600);
+    transition:
+      background-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      border-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  a.chip:hover, a.chip:focus-visible {
+    background: var(--parchment-50);
+    border-color: var(--hewn-400);
+  }
+  /* A tag with nowhere to go does not pretend to be a link. */
+  .chip--plain { color: var(--charcoal-600, #6c625f); }
+
+  .post-foot__rule {
+    margin-block: clamp(1.75rem, 1.25rem + 1.5vw, 2.75rem) 0;
+    border: 0;
+    border-block-start: 1px solid var(--parchment-300);
+  }
+
+  .post-nav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+    margin-block-start: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+  }
+  @media (min-width: 40rem) {
+    .post-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+  }
+  .post-nav__link {
+    display: block;
+    text-decoration: none;
+  }
+  /* When a post has no newer sibling the next slot is absent, so the
+     previous one must not stretch across both columns. */
+  .post-nav__link--next { grid-column: 2; }
+  @media (max-width: 39.99rem) { .post-nav__link--next { grid-column: 1; } }
+
+  .post-nav__dir { display: block; color: var(--hewn-600); }
+  .post-nav__title {
+    display: block;
+    margin-block-start: 0.625rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.375rem;
+    line-height: 1.32;
+    letter-spacing: -0.017em;
+    color: var(--forest-900);
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .post-nav__link:hover .post-nav__title,
+  .post-nav__link:focus-visible .post-nav__title { color: var(--hewn-700); }
+
+  .post-all {
+    margin-block-start: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+    padding-block-start: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+    border-block-start: 1px solid var(--parchment-300);
+    /* Ranged left, on the same axis as everything else in this column:
+       Filed under, the chips, and the previous and next titles. It was
+       centered to fill the gap left when a post has no next, which was
+       fixing the wrong thing. */
+  }
+  .post-all a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--hewn-600);
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .post-all a:hover, .post-all a:focus-visible { color: var(--forest-900); }
+  .post-all__arrow {
+    font-weight: 400;
+    font-size: 1.1em;
+    transition: transform 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .post-all a:hover .post-all__arrow,
+  .post-all a:focus-visible .post-all__arrow { transform: translateX(-0.25rem); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .post-hero__crumb, .chip, .post-nav__title,
+    .post-all a, .post-all__arrow { transition: none; }
+    .post-all a:hover .post-all__arrow { transform: none; }
+  }
+</style>

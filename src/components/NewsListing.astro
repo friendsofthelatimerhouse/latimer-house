@@ -1,0 +1,429 @@
+---
+/**
+ * The Latest section on the news lander. Toolbar, grid, pagination and the
+ * browse by year row, built to "News · Desktop" node 284:876.
+ *
+ * WHAT WORKS WITHOUT JAVASCRIPT, and what does not, on purpose:
+ *   pagination and the year archive are real URLs Astro builds, so they
+ *   work with scripting off and are findable in search.
+ *   search and the category chips filter in the browser. With scripting off
+ *   the chips are still links that land on a real page and the reader sees
+ *   every post, which is the right failure.
+ */
+import type { CollectionEntry } from "astro:content";
+import { newsCategories } from "../content.config";
+
+interface Props {
+  posts: CollectionEntry<"news">[];
+  /** 1 based. Omit on the year pages, which do not paginate. */
+  page?: number;
+  totalPages?: number;
+  /** Years that actually have posts, newest first. */
+  years: number[];
+  /** Set on a year page so the chip shows as current. */
+  activeYear?: number;
+  /** Where pagination points. */
+  pageHref?: (n: number) => string;
+  /** The band heading. Defaults are the canvas copy. */
+  eyebrow?: string;
+  heading?: string;
+  lead?: string;
+}
+
+const {
+  posts, page = 1, totalPages = 1, years, activeYear,
+  pageHref = (n: number) => (n === 1 ? "/news/" : `/news/page/${n}/`),
+  eyebrow = "Latest",
+  heading = "From the house.",
+  lead = "Newest first.",
+} = Astro.props;
+
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const stampOf = (d: Date, precision: "day" | "month") =>
+  precision === "month"
+    ? `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`
+    : `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
+const slugOf = (id: string) => id.replace(/^\d{4}-\d{2}(-\d{2})?-/, "");
+---
+
+<section class="band band--latest">
+  <div class="container">
+    <p class="eyebrow" data-aos="fade-up">{eyebrow}</p>
+    <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">{heading}</h2>
+    <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">{lead}</p>
+
+    <div class="listing">
+  <div class="toolbar">
+    <label class="search">
+      <span class="visually-hidden">Search the posts</span>
+      <span class="search__mark" aria-hidden="true">&#8981;</span>
+      <input
+        class="search__field"
+        type="search"
+        id="news-search"
+        placeholder="Search the posts"
+        autocomplete="off"
+      />
+    </label>
+
+    <ul class="chips" role="list">
+      <li>
+        <a class="chip is-current" href="/news/" data-filter="">All</a>
+      </li>
+      {newsCategories.map((c) => (
+        <li>
+          <a class="chip" href={`/news/?category=${encodeURIComponent(c)}`} data-filter={c}>{c}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <ul class="posts" role="list">
+    {posts.map((p) => (
+      <li
+        class="post"
+        data-category={p.data.category}
+        data-year={p.data.date.getUTCFullYear()}
+        data-search={`${p.data.title} ${p.data.excerpt} ${p.data.tags.join(" ")}`.toLowerCase()}
+      >
+        <a class="post__card" href={`/news/${slugOf(p.id)}/`}>
+          <p class="post__meta">
+            {stampOf(p.data.date, p.data.datePrecision)}
+            <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+            {p.data.category}
+          </p>
+          <h3 class="post__title">{p.data.title}</h3>
+          <p class="post__excerpt">{p.data.excerpt}</p>
+          <span class="post__read">Read <span class="post__chevron" aria-hidden="true">&rsaquo;</span></span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <p class="empty" hidden>Nothing matches that. Try a shorter word, or clear the filter.</p>
+
+  {totalPages > 1 && (
+    <nav class="pagination" aria-label="Pagination">
+      {page > 1 && <a class="page" href={pageHref(page - 1)}>&lsaquo; Newer</a>}
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+        n === page
+          ? <span class="page is-current" aria-current="page">{n}</span>
+          : <a class="page" href={pageHref(n)}>{n}</a>
+      ))}
+      {page < totalPages && <a class="page" href={pageHref(page + 1)}>Older &rsaquo;</a>}
+    </nav>
+  )}
+
+  <nav class="archive" aria-label="Browse by year">
+    <span class="eyebrow archive__label">Browse by year</span>
+    {/* Picking a year takes you to a page whose only way back was the browser
+        button, which is a trap. All comes first and clears the year, the same
+        way the ALL chip clears a category. */}
+    <a
+      class="archive__year"
+      href="/news/"
+      aria-current={activeYear === undefined ? "page" : undefined}
+    >All</a>
+    {years.map((y) => (
+      <a
+        class="archive__year"
+        href={`/news/year/${y}/`}
+        aria-current={y === activeYear ? "page" : undefined}
+      >{y}</a>
+    ))}
+  </nav>
+</div>
+  </div>
+</section>
+
+<style>
+  .band--latest {
+    background: var(--parchment-200);
+    padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem);
+  }
+  .sec__headline {
+    margin-block-start: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 3.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.029em;
+    color: var(--forest-900);
+  }
+  .sec__lead {
+    margin-block-start: 1.125rem;
+    max-width: 43.75rem;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.56;
+    color: var(--charcoal-700, var(--text-secondary));
+  }
+
+  .listing { margin-block-start: clamp(2rem, 1.5rem + 1.5vw, 3rem); }
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1 1 20rem;
+    max-width: 23.75rem;
+    padding: 1rem 1.25rem;
+    background: var(--parchment-50);
+    border: 1px solid var(--parchment-300);
+    border-radius: 2px;
+  }
+  .search__mark { font-size: 1.25rem; line-height: 1; color: var(--charcoal-700); }
+  .search__field {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 0;
+    background: none;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--charcoal-800);
+  }
+  .search__field::placeholder { color: var(--charcoal-600, #6c625f); }
+  .search__field:focus { outline: none; }
+  .search:focus-within { border-color: var(--hewn-400); }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6875rem 1.125rem;
+    border: 1px solid var(--parchment-300);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11.5px;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--hewn-600);
+    cursor: pointer;
+    transition:
+      background-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      border-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .chip:hover, .chip:focus-visible { border-color: var(--hewn-400); background: var(--parchment-50); }
+  .chip.is-current {
+    background: var(--hewn-600);
+    border-color: var(--hewn-600);
+    color: var(--parchment-50);
+  }
+
+  /* ---------- THE GRID ----------
+     Three across on the canvas at 395 each. Cards stretch to the tallest in
+     the row, which is what the equal card heights on the canvas are. */
+  .posts {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+    margin: clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 34rem) { .posts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .posts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .post { display: flex; }
+
+  .post__card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+    background: var(--parchment-50);
+    border: 1px solid var(--parchment-300);
+    border-radius: 3px;
+    text-decoration: none;
+    transition:
+      border-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .post__card:hover, .post__card:focus-visible {
+    border-color: var(--hewn-400);
+    transform: translateY(-2px);
+  }
+
+  .post__meta {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+  .post__title {
+    margin-block-start: 0.875rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+    line-height: 1.2;
+    letter-spacing: -0.017em;
+    color: var(--forest-900);
+  }
+  .post__excerpt {
+    margin-block-start: 0.875rem;
+    font-size: 0.9375rem;
+    line-height: 1.58;
+    color: var(--charcoal-700);
+  }
+  .post__read {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* Pins the affordance to the foot of the card whatever the excerpt
+       length, so a row of cards reads as a row. */
+    margin-block-start: auto;
+    padding-block-start: 1.5rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--hewn-600);
+  }
+  .post__chevron {
+    transition: transform 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .post__card:hover .post__chevron,
+  .post__card:focus-visible .post__chevron { transform: translateX(0.25rem); }
+
+  .empty {
+    margin-block-start: 2rem;
+    font-size: 1.0625rem;
+    line-height: 1.56;
+    color: var(--charcoal-700);
+  }
+
+  /* ---------- PAGINATION ---------- */
+  .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin-block-start: clamp(2rem, 1.5rem + 1.5vw, 3.5rem);
+  }
+  .page {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.125rem;
+    border: 1px solid var(--parchment-300);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--hewn-600);
+    transition: border-color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  a.page:hover, a.page:focus-visible { border-color: var(--hewn-400); }
+  .page.is-current {
+    background: var(--hewn-600);
+    border-color: var(--hewn-600);
+    color: var(--parchment-50);
+  }
+
+  /* ---------- BROWSE BY YEAR ---------- */
+  .archive {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.125rem;
+    margin-block-start: clamp(2.5rem, 1.75rem + 2vw, 4rem);
+    padding-block-start: 2.125rem;
+    border-block-start: 1px solid var(--parchment-300);
+  }
+  .archive__label { color: var(--hewn-600); }
+  .archive__year {
+    font-size: 1rem;
+    line-height: 1.56;
+    text-decoration: none;
+    color: var(--charcoal-700);
+    transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .archive__year:hover, .archive__year:focus-visible { color: var(--hewn-700); }
+  .archive__year[aria-current="page"] {
+    color: var(--forest-900);
+    font-weight: 700;
+    /* A rule under the current year, so which one is on reads at a glance
+       rather than only from the weight. */
+    box-shadow: inset 0 -2px 0 0 var(--hewn-400);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chip, .post__card, .post__chevron, .page, .archive__year { transition: none; }
+    .post__card:hover { transform: none; }
+    .post__card:hover .post__chevron { transform: none; }
+  }
+</style>
+
+<script>
+  const listing = document.querySelector<HTMLElement>(".listing");
+
+  if (listing) {
+    const field = listing.querySelector<HTMLInputElement>("#news-search");
+    const chips = [...listing.querySelectorAll<HTMLAnchorElement>(".chip")];
+    const posts = [...listing.querySelectorAll<HTMLElement>(".post")];
+    const empty = listing.querySelector<HTMLElement>(".empty")!;
+    const pagination = listing.querySelector<HTMLElement>(".pagination");
+
+    let category = new URL(location.href).searchParams.get("category") || "";
+    if (category && !chips.some((c) => c.dataset.filter === category)) category = "";
+
+    const apply = () => {
+      const q = (field?.value || "").trim().toLowerCase();
+      let shown = 0;
+
+      for (const post of posts) {
+        const okCat = !category || post.dataset.category === category;
+        const okText = !q || (post.dataset.search || "").includes(q);
+        const show = okCat && okText;
+        post.hidden = !show;
+        if (show) shown++;
+      }
+
+      empty.hidden = shown > 0;
+      /* Paging through a filtered set would be lying: the pages were built
+         from the unfiltered list. Hide it while a filter is on. */
+      if (pagination) pagination.hidden = Boolean(category || q);
+
+      for (const chip of chips) {
+        chip.classList.toggle("is-current", (chip.dataset.filter || "") === category);
+      }
+    };
+
+    for (const chip of chips) {
+      chip.addEventListener("click", (event) => {
+        event.preventDefault();
+        category = chip.dataset.filter || "";
+        const url = new URL(location.href);
+        if (category) url.searchParams.set("category", category);
+        else url.searchParams.delete("category");
+        history.replaceState(null, "", url);
+        apply();
+      });
+    }
+
+    field?.addEventListener("input", apply);
+    apply();
+  }
+</script>

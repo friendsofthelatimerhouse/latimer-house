@@ -9,8 +9,8 @@
  *
  * This is a PANEL page, not a narrative one: every section on the canvas is
  * counterAxisAlignItems MIN, so headings, copy and media all sit on the
- * left gutter. Do not centre these blocks the way The Latimers and The Park
- * are centred.
+ * left gutter. Do not center these blocks the way The Latimers and The Park
+ * are centered.
  *
  * Section grounds are transcribed from the canvas, not chosen:
  * parchment-50, parchment-200, forest-950, parchment-50, charcoal-900.
@@ -534,7 +534,7 @@ const full = (stem: string, ws: readonly number[]) =>
   /* The reveal is the loudest heading on the page: 52px on the canvas
      where the others are 44px.
 
-     The colours have to be restated here. global.css inverts headings
+     The colors have to be restated here. global.css inverts headings
      inside .band--forest, but this component's own .sec__headline rule
      carries an [data-astro-cid-*] attribute that raises its specificity
      above the global one, so without these two lines the heading and the
@@ -774,8 +774,8 @@ const full = (stem: string, ws: readonly number[]) =>
   /* The picture has to be taken OUT of the grid, not just filled. As an
      in flow grid item it was a zero height first row that stretched to
      share the box with the play mark, which pushed the play mark 28px
-     below centre. Absolutely positioning it leaves the play mark as the
-     only item in the grid, so place-items actually centres it. */
+     below center. Absolutely positioning it leaves the play mark as the
+     only item in the grid, so place-items actually centers it. */
   .film__poster picture {
     position: absolute;
     inset: 0;
@@ -811,7 +811,7 @@ const full = (stem: string, ws: readonly number[]) =>
     justify-content: center;
     width: 3.25rem;
     height: 3.25rem;
-    /* The triangle's optical centre is left of its bounding box. */
+    /* The triangle's optical center is left of its bounding box. */
     padding-inline-start: 3px;
     border-radius: 50%;
     background: var(--parchment-200);
