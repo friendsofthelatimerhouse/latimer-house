@@ -21,6 +21,7 @@
 import { getCollection, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import GiveBand from "../../components/GiveBand.astro";
+import NewsletterBand from "../../components/NewsletterBand.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("news", (p) => !p.data.draft)).sort(
@@ -124,6 +125,7 @@ const year = d.date.getUTCFullYear();
   </article>
 
   <GiveBand />
+  <NewsletterBand />
 </Base>
 
 <style>
