@@ -12,7 +12,7 @@ import "../styles/global.css";
 
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
-import { site, org, mailing } from "../site.config";
+import { site, org, mailing, prelaunch } from "../site.config";
 
 interface Props {
   title: string;
@@ -38,6 +38,21 @@ const {
   noindex = false,
 } = Astro.props;
 const fullTitle = bare ? title : `${title} · ${site.title}`;
+
+/**
+ * Two different reasons a page stays out of search, and they are not the same
+ * thing. `noindex` is permanent and belongs to the page. `prelaunch` is
+ * temporary and belongs to the whole site. See site.config.
+ *
+ * nofollow rides along with prelaunch so a crawler does not wander the draft
+ * from one page to the next. A permanently hidden page still passes `follow`,
+ * because the pages it links to are public and ought to be crawled.
+ */
+const robots = prelaunch
+  ? "noindex, nofollow"
+  : noindex
+    ? "noindex, follow"
+    : null;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 ---
 
@@ -57,7 +72,7 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {robots && <meta name="robots" content={robots} />}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.title} />

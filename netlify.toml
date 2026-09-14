@@ -1,0 +1,15 @@
+# Netlify build settings, kept in the repository rather than typed into a
+# dashboard nobody can see. Anything set here wins over the site settings
+# in Netlify's UI, so this file is the single place the build is defined.
+#
+# NODE_VERSION is pinned because Netlify's default has been older than
+# Astro requires more than once, and the failure it produces on a first
+# deploy looks like a broken site rather than a wrong Node. .nvmrc carries
+# the same number for anyone building locally.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

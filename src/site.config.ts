@@ -55,6 +55,26 @@ export const mailing = {
 export const mailingLine =
   `${mailing.streetAddress}, ${mailing.addressLocality} ${mailing.addressRegion} ${mailing.postalCode}`;
 
+/**
+ * THE PRE LAUNCH SWITCH. One line, and it is the only line to change on
+ * launch day.
+ *
+ * While this is true, every page on the site carries a noindex tag, so the
+ * site can be live at its real address, handed to the board, and opened on a
+ * phone, without turning up in anybody's search results.
+ *
+ * Set it to false when the board has signed off and the organization is ready
+ * to be found. Nothing else needs touching: robots.txt and the sitemap both
+ * read this.
+ *
+ * A note on why robots.txt does NOT block crawlers while this is true, which
+ * looks wrong and is not. A crawler that is refused the page never reads the
+ * noindex tag inside it, and a bare URL somebody links to can still end up
+ * listed. Letting crawlers in so they can be told "do not index" is what
+ * actually keeps the site out of the index.
+ */
+export const prelaunch = false;
+
 export const site = {
   url: "https://friendsofthelatimerhouse.org",
   title: "Friends of the Latimer House",
