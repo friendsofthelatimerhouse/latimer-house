@@ -357,6 +357,33 @@ const signupReady = Boolean(newsletter.action);
   .band-signup__field:disabled,
   .band-signup__submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
+  /* The no wrapping rule above is a rule about a wide row. On a phone there
+     is no row: two fields and a button do not fit across 340 pixels, and
+     held flush they read as one undifferentiated block. Each takes its own
+     line with air between. The :not() is carried down from the rule above
+     because :not() counts toward specificity and a bare class would lose
+     to it. */
+  @media (max-width: 34rem) {
+    .band-signup__form {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      max-width: none;
+    }
+    .band-signup__field,
+    .band-signup__field--name {
+      flex: 1 1 100%;
+      padding-inline: 1.125rem;
+      border-inline-end: 1px solid var(--parchment-300);
+    }
+    .band-signup__field:not(.band-signup__field--name),
+    .band-signup__field--name { border-radius: 3px; }
+    .band-signup__submit {
+      width: 100%;
+      padding-block: 1rem;
+      border-radius: 3px;
+    }
+  }
+
   .band-signup__mission { flex: 1 1 13rem; }
   .band-signup__descriptor {
     font-size: 0.875rem;

@@ -218,16 +218,20 @@ const ready = Boolean(newsletter.action);
   .signup__field:disabled,
   .signup__submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-  /* On a phone the button goes full width under the field rather than
-     squeezing beside it. */
-  @media (max-width: 29.99rem) {
+  /* On a phone all three go full width, one per row, rather than three
+     controls fighting over 340 pixels. */
+  @media (max-width: 34rem) {
+    /* The flush treatment is a horizontal idea. Stacked, three things
+       touching top to bottom do not read as one control, they read as a
+       control with no margins, which is what this looked like. */
+    .signup__form { gap: 0.625rem; }
     .signup__submit { width: 100%; justify-content: center; }
     /* Stacked, so the dropped border would leave the name field open on one
        side. Put it back and let all three sit as separate rows. */
     .signup__field--name {
-      flex: 1 1 auto;
+      flex: 1 1 100%;
       border-inline-end: 1px solid var(--parchment-300);
     }
-    .signup__field { flex: 1 1 auto; }
+    .signup__field { flex: 1 1 100%; }
   }
 </style>
