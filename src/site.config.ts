@@ -290,10 +290,16 @@ export const footerColumns = [
 /**
  * An href starting with http is treated as external by SiteFooter and
  * opens in a new tab.
+ *
+ * The site credit is http rather than https on purpose. jeremymansfield.com
+ * serves a certificate that Chrome rejects on the www host with
+ * ERR_CERT_COMMON_NAME_INVALID, and an interstitial warning reached from
+ * this organization's footer is worse than a plain http link. Move it to
+ * https the day that certificate is fixed.
  */
 export const legalLinks = [
   { label: "Privacy", href: "/privacy/" },
-  { label: "Site Credits", href: "https://www.brandaiddesignco.com" },
+  { label: "Site Credits", href: "http://www.jeremymansfield.com/" },
 ] as const;
 
 /**
