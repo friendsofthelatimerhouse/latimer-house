@@ -88,7 +88,7 @@ const ready = Boolean(newsletter.action);
      up reads as a panel; the darker strip this replaced read as the page
      running out. Padding matches a real band, not a strip. */
   .signup {
-    background: var(--parchment-50);
+    background: var(--parchment-100);
     border-block-start: 1px solid var(--parchment-300);
     padding-block: clamp(3.25rem, 2.25rem + 4vw, 5rem);
   }
@@ -148,10 +148,13 @@ const ready = Boolean(newsletter.action);
      enough to need it. */
   .signup__side { min-width: 0; }
 
+  /* Field and button sit flush, as one control, matching the home page
+     band. A gap between them reads as two separate things that happen to
+     be adjacent. */
   .signup__form {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0;
   }
 
   .signup__field {
@@ -160,7 +163,12 @@ const ready = Boolean(newsletter.action);
     padding: 1.05rem 1.125rem;
     font-family: var(--font-body);
     font-size: var(--type-body-size);
-    background: var(--bg-surface, #fff);
+    /* One step lighter than the band, never the same value. --bg-surface
+       resolves to parchment-50, which is exactly what the band itself was,
+       so the field was invisible apart from its hairline border. A field
+       has to read as something you can type into. Same relationship the
+       home page band uses: parchment-50 field on a parchment-100 ground. */
+    background: var(--parchment-50);
     border: 1px solid var(--parchment-300);
     border-radius: 2px;
     color: var(--text-primary);
