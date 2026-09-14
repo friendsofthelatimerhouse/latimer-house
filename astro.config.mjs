@@ -7,10 +7,11 @@ import sitemap from "@astrojs/sitemap";
  * sitemap: a sitemap is a list of pages you are ASKING to be indexed, so
  * listing a noindex page sends two contradictory instructions.
  *
- * This list has to match the pages passing `noindex` to Base.astro. There
- * are three of them, and if a fourth appears it belongs here too.
+ * This list has to match the pages passing `noindex` to Base.astro. If a new
+ * noindex page appears and is not added here, it lands in the sitemap and the
+ * site asks Google to index a page it has just told Google not to index.
  */
-const NOINDEX = ["/visit/", "/thank-you/", "/thank-you/gift/"];
+const NOINDEX = ["/visit/", "/thank-you/", "/thank-you/gift/", "/check-your-inbox/"];
 
 export default defineConfig({
   site: "https://friendsofthelatimerhouse.org",
