@@ -8,6 +8,13 @@
  * The hero deliberately carries no photograph, both because none was drawn
  * for it and because three heroes in a row already lead with a group shot.
  *
+ * REVISED 14 September 2026, when the signup forms began asking for a first
+ * name and the thank you page gained an optional block for a phone number
+ * and a mailing address. Section 02 describes exactly those fields. It said
+ * "that is all it is used for" of the email address, which stopped being
+ * true the moment the second form went up, and a page of this kind being
+ * wrong about its own conduct is worse than the page not existing.
+ *
  * EVERY CLAIM BELOW WAS CHECKED AGAINST THE BUILT SITE on 4 September 2026,
  * not written from a template. At that point the site had no analytics, no
  * tracking scripts, no cookies and no browser storage of any kind, and the
@@ -22,7 +29,7 @@ import Base from "../../layouts/Base.astro";
 import PageHero from "../../components/PageHero.astro";
 import { org, give, mailingLine, mapUrl } from "../../site.config";
 
-const UPDATED = "4 September 2026";
+const UPDATED = "14 September 2026";
 
 /* Built here rather than inline. Astro collapses the newlines between JSX
    expressions, so an address assembled across several lines needs {" "} to
@@ -60,12 +67,27 @@ const houseLine = `${org.streetAddress}, ${org.addressLocality}, ${org.addressRe
 
       <div class="column">
         <p class="eyebrow">02 &middot; The newsletter</p>
-        <h2 class="sec__headline">Only if you ask for it.</h2>
+        <h2 class="sec__headline">Only what you hand us.</h2>
         <p class="sec__body">
-          If you put your address into the signup form, it goes to Kit, the
+          If you put your address into a signup form, it goes to Kit, the
           service that sends our emails, and it is used to send you news about
-          the house. That is all it is used for. Every email we send carries an
-          unsubscribe link, and using it removes you at once and for good.
+          the house. The first name beside it is optional, and it is used to
+          put your name at the top of the email rather than the word friend.
+        </p>
+        <p class="sec__body">
+          After you confirm, the page you land on offers a second form for a
+          phone number and a mailing address. Both are optional and both are
+          plainly labelled as such. A phone number is used to call you about
+          this house, an address is used to post you something about this
+          house, and neither is used for anything else. Anything you leave
+          blank stays blank. We do not look anything up about you, and we do
+          not buy, append or infer a single field.
+        </p>
+        <p class="sec__body">
+          Every email we send carries an unsubscribe link, and using it stops
+          the mail at once. That stops the mail rather than erasing the record,
+          so if you want what we hold deleted outright, write and say so and it
+          will be, in full, without our asking why.
         </p>
         <p class="sec__body">
           We do not sell, rent, trade or share the list. If somebody asks us for
@@ -115,8 +137,10 @@ const houseLine = `${org.streetAddress}, ${org.addressLocality}, ${org.addressRe
         <p class="sec__body">
           We do not run analytics of any kind. We do not use advertising or
           retargeting. We do not sell or trade anything about you. We do not
-          build profiles. We do not email you unless you asked us to, and we do
-          not email you about anything other than this house.
+          build a picture of you from what you read or click, and nothing goes
+          on your record that you did not type in yourself. We do not email you
+          unless you asked us to, and we do not email you about anything other
+          than this house.
         </p>
       </div>
 

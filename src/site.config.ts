@@ -205,6 +205,35 @@ export const newsletter = {
 } as const;
 
 /**
+ * Kit form 9918609, "Supporter Details". The block at the foot of the thank
+ * you page, where somebody who has just confirmed can leave a phone number
+ * and a mailing address.
+ *
+ * It has to be a separate form. The redirect after submitting is a per form
+ * setting in Kit, so posting this to the signup form above would send the
+ * person to /check-your-inbox/ and tell somebody who confirmed a minute
+ * earlier to go and check their inbox again.
+ *
+ * Kit matches a submission to an existing subscriber by email address,
+ * which is the only reason this block asks for an address it already has.
+ * A typo does not fail loudly: it creates a second, unconfirmed subscriber
+ * carrying a phone number and no history. The field says so on the page.
+ *
+ * The confirmation email is left ON at Kit's end and cannot reach the
+ * people this block is for, because Kit sends it only to new subscribers.
+ * It fires for the two cases that should get it: a typed address that
+ * belongs to nobody, and somebody who arrived here from a gift without ever
+ * having joined the list.
+ */
+export const supporterDetails = {
+  action: "https://app.kit.com/forms/9918609/subscriptions",
+  formId: "9918609",
+  emailField: "email_address",
+  phoneField: "fields[phone]",
+  addressField: "fields[address]",
+} as const;
+
+/**
  * Only accounts that actually exist. A row of five icons where three lead
  * nowhere reads as an organization pretending to be bigger than it is.
  * YouTube and LinkedIn marks are still in SocialIcon, ready when there is

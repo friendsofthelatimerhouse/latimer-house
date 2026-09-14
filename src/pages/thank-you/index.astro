@@ -14,6 +14,12 @@
  */
 import Base from "../../layouts/Base.astro";
 import PageHero from "../../components/PageHero.astro";
+import { supporterDetails } from "../../site.config";
+
+/* Same guard the signup bands use. An action of "" posts the page to
+   itself, which looks like a working form and is not one, so the whole
+   block stands down rather than lying. */
+const ready = Boolean(supporterDetails.action);
 ---
 
 <Base
@@ -64,6 +70,91 @@ import PageHero from "../../components/PageHero.astro";
       </div>
     </div>
   </section>
+
+  {ready && (
+    <section class="details">
+      <div class="container details__inner">
+        <div class="details__intro" data-aos="fade-up">
+          <p class="eyebrow">Entirely optional</p>
+          <h2 class="details__headline">If you would rather we could reach you.</h2>
+          <p class="details__body">
+            Email carries the news, and it is enough on its own. A phone number
+            and an address cover the two things email cannot: a call when
+            something is happening at the house on short notice, and a posted
+            invitation to a work day for people who would rather have paper.
+          </p>
+          {/* This sentence has to match the privacy page exactly, and the
+              first draft did not. Unsubscribing stops the mail; it does not
+              erase the record, and a page that says otherwise is the kind of
+              small untruth this organization cannot afford anywhere. */}
+          <p class="details__body">
+            Neither is required. Neither is published, sold or shared.
+            Unsubscribing stops the mail at once, and if you would rather we
+            held none of it, write and say so and it is gone.
+            <a class="details__link" href="/privacy/">What we collect, and what
+            we do not</a>.
+          </p>
+        </div>
+
+        <form
+          class="details__form"
+          action={supporterDetails.action}
+          method="post"
+          data-aos="fade-up"
+          data-aos-delay="150"
+        >
+          <div class="details__field">
+            <label class="details__label" for="details-email">Email address</label>
+            <input
+              class="details__input"
+              id="details-email"
+              type="email"
+              name={supporterDetails.emailField}
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
+            {/* Kit matches on the address and nothing else. A typo here does
+                not fail, it quietly starts a second record, so the reason for
+                asking again is stated rather than left to be guessed. */}
+            <p class="details__hint">
+              The same one you just confirmed, so this lands on your record
+              rather than starting a new one.
+            </p>
+          </div>
+
+          <div class="details__field">
+            <label class="details__label" for="details-phone">Phone number</label>
+            <input
+              class="details__input"
+              id="details-phone"
+              type="tel"
+              name={supporterDetails.phoneField}
+              autocomplete="tel"
+              placeholder="615 555 0142"
+            />
+            <p class="details__hint">So we can call you if we need to.</p>
+          </div>
+
+          <div class="details__field">
+            <label class="details__label" for="details-address">Mailing address</label>
+            <textarea
+              class="details__input details__input--area"
+              id="details-address"
+              name={supporterDetails.addressField}
+              autocomplete="street-address"
+              rows="2"
+              placeholder="Street, city, state and ZIP"
+            ></textarea>
+          </div>
+
+          <button class="btn btn--primary details__submit" type="submit">
+            Save these details
+          </button>
+        </form>
+      </div>
+    </section>
+  )}
 </Base>
 
 <style>
@@ -81,4 +172,102 @@ import PageHero from "../../components/PageHero.astro";
   /* The button carries its own hover transition, so the reveal animation
      goes on this wrapper instead. See the rule in global.css. */
   .ty__actions { margin-block-start: 1.75rem; }
+
+  /* ---------- OPTIONAL DETAILS ---------- */
+
+  /* One step lighter than the band above, the same relationship the signup
+     bands use, so this reads as a further panel rather than as the page
+     starting again. */
+  .details {
+    background: var(--parchment-100);
+    border-block-start: 1px solid var(--parchment-300);
+    padding-block: clamp(3.25rem, 2.25rem + 4vw, 5rem);
+  }
+
+  .details__inner {
+    display: grid;
+    align-items: start;
+    gap: clamp(2rem, 1.25rem + 3vw, 3.5rem);
+  }
+  @media (min-width: 60rem) {
+    .details__inner { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+  }
+
+  .details__headline {
+    margin-block-start: 0.875rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    /* Held under the h2 scale for the same reason the signup band is: this
+       is the smallest ask on the site and should not out shout the page it
+       sits at the foot of. */
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 1.9375rem);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--forest-900);
+    max-width: 24ch;
+  }
+
+  .details__body {
+    margin-block-start: 1rem;
+    max-width: 46ch;
+    font-size: var(--type-body-size);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .details__link {
+    color: var(--forest-800);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--hewn-400);
+    text-underline-offset: 0.2em;
+  }
+  .details__link:hover, .details__link:focus-visible { color: var(--hewn-700); }
+
+  /* Stacked with real labels, not a flush strip. Three fields, one of them
+     two lines tall, is a form and should look like one. */
+  .details__form { display: grid; gap: 1.25rem; max-width: 30rem; }
+
+  .details__label {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--forest-900);
+  }
+
+  .details__input {
+    display: block;
+    width: 100%;
+    margin-block-start: 0.5rem;
+    padding: 0.875rem 1rem;
+    font-family: var(--font-body);
+    font-size: var(--type-body-size);
+    /* One step lighter than the band, never the same value. */
+    background: var(--parchment-50);
+    border: 1px solid var(--parchment-300);
+    border-radius: 2px;
+    color: var(--text-primary);
+  }
+  .details__input--area { resize: vertical; line-height: 1.5; }
+  .details__input::placeholder { color: var(--text-muted); }
+  .details__input:focus-visible {
+    outline: 2px solid var(--forest-900);
+    outline-offset: 1px;
+    border-color: var(--forest-900);
+  }
+
+  .details__hint {
+    margin-block-start: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-muted, var(--parchment-600));
+  }
+
+  .details__submit { justify-self: start; cursor: pointer; }
+  @media (max-width: 34rem) {
+    .details__submit { justify-self: stretch; justify-content: center; }
+  }
 </style>
