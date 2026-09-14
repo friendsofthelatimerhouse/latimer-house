@@ -192,6 +192,16 @@ export const newsletter = {
   action: "https://app.kit.com/forms/9881603/subscriptions",
   formId: "9881603",
   emailField: "email_address",
+  /**
+   * Kit's built in first name field. Raw posts address custom and built in
+   * fields as fields[name], which is why this is not a bare "first_name".
+   *
+   * Deliberately NOT required on the forms. Somebody who wants the news and
+   * does not want to give a name should still get in; a required field here
+   * buys a greeting at the cost of subscribers. Emails handle the gap with
+   * Kit's fallback: {{ subscriber.first_name | default: "friend" }}.
+   */
+  firstNameField: "fields[first_name]",
 } as const;
 
 /**

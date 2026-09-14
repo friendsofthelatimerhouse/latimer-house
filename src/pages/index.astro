@@ -94,13 +94,23 @@ const signupReady = Boolean(newsletter.action);
         action={newsletter.action || undefined}
         method="post"
       >
+        <label class="visually-hidden" for="home-name">First name</label>
+        <input
+          class="band-signup__field band-signup__field--name"
+          id="home-name"
+          type="text"
+          name={newsletter.firstNameField}
+          placeholder="First name"
+          autocomplete="given-name"
+          disabled={!signupReady}
+        />
         <label class="visually-hidden" for="home-email">Your email address</label>
         <input
           class="band-signup__field"
           id="home-email"
           type="email"
           name={newsletter.emailField}
-          placeholder="Your email address"
+          placeholder="Email address"
           autocomplete="email"
           required
           disabled={!signupReady}
@@ -296,10 +306,13 @@ const signupReady = Boolean(newsletter.action);
     color: var(--charcoal-700);
   }
 
+  /* No wrapping. This band has four things competing for one row, so the
+     form has to stay a single control: two fields and a button, or the
+     button drops to its own line and the whole composition breaks. */
   .band-signup__form {
     display: flex;
-    flex: 1 1 18rem;
-    max-width: 23rem;
+    flex: 1 1 21rem;
+    max-width: 25rem;
   }
   .band-signup__field {
     flex: 1 1 auto;
@@ -312,6 +325,18 @@ const signupReady = Boolean(newsletter.action);
     border-inline-end: 0;
     border-radius: 3px 0 0 3px;
   }
+  /* The name takes less room than the address, and drops its right border so
+     the two fields read as one control rather than two boxes meeting. */
+  /* Tighter padding than its neighbour. This band is the most crowded row
+     on the site and the placeholder was touching the border at the default
+     1.125rem. */
+  .band-signup__field--name {
+    flex: 0 1 7.75rem;
+    padding-inline: 0.875rem;
+    border-radius: 3px 0 0 3px;
+  }
+  .band-signup__field:not(.band-signup__field--name) { border-radius: 0; }
+
   .band-signup__field::placeholder { color: var(--charcoal-500); }
   .band-signup__submit {
     flex-shrink: 0;
