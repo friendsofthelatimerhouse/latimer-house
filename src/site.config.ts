@@ -260,8 +260,15 @@ export const mapUrl =
 /**
  * Footer columns. Copy Deck, Section 1.4.
  *
- * Every heading is a link. An href starting with http is treated as
- * external by SiteFooter and opens in a new tab.
+ * A column with an href gets a linked heading carrying an arrow. An href
+ * starting with http is treated as external by SiteFooter and opens in a
+ * new tab.
+ *
+ * A column without an href gets a plain heading. Follow Us is the only one,
+ * because it has no single destination: the row of marks beneath it is the
+ * link, and there will be more than one of them. Pointing the heading at
+ * whichever account happens to sit first in the socials list was arbitrary
+ * and would have quietly changed meaning the day a second account was added.
  */
 export const footerColumns = [
   {
@@ -281,7 +288,6 @@ export const footerColumns = [
   },
   {
     heading: "Follow Us",
-    href: socials[0].href,
     body: "Follow the work as it happens",
     socials: true,
   },

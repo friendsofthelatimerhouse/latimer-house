@@ -9,15 +9,25 @@ import SocialIcon from "./SocialIcon.astro";
       {footerColumns.map((col) => (
         <div class="site-footer__col">
           <h2 class="site-footer__heading">
-            <a
-              class="site-footer__heading-link"
-              href={col.href}
-              {...col.href.startsWith("http")
-                ? { target: "_blank", rel: "noopener" }
-                : {}}
-            >
-              {col.heading}
-            </a>
+            {"href" in col && col.href ? (
+              <a
+                class="site-footer__heading-link"
+                href={col.href}
+                {...col.href.startsWith("http")
+                  ? { target: "_blank", rel: "noopener" }
+                  : {}}
+              >
+                {col.heading}
+                {/* Inside the anchor rather than beside it. Two adjacent
+                    links to one destination is two tab stops and two
+                    announcements for a screen reader, for no gain: this way
+                    the arrow is part of the same link, so clicking either
+                    the words or the mark goes to the same place. */}
+                <span class="site-footer__arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            ) : (
+              col.heading
+            )}
           </h2>
           <p class="site-footer__body">{col.body}</p>
           {"socials" in col && col.socials && (
@@ -103,6 +113,28 @@ import SocialIcon from "./SocialIcon.astro";
   .site-footer__heading-link:hover,
   .site-footer__heading-link:focus-visible {
     color: var(--parchment-50);
+  }
+
+  /* inline-flex so the arrow sits on the heading's own baseline rather than
+     riding the cap height of uppercase text. The gap is on top of the
+     heading's 0.12em tracking, which already pushes the mark clear of the
+     last letter. */
+  .site-footer__heading-link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+  }
+
+  /* Same glyph, same distance, same curve as the button arrow in
+     global.css. A second easing for the same gesture would read as a
+     different site. */
+  .site-footer__arrow {
+    font-weight: 400;
+    transition: transform 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .site-footer__heading-link:hover .site-footer__arrow,
+  .site-footer__heading-link:focus-visible .site-footer__arrow {
+    transform: translateX(0.25rem);
   }
 
   /* The mark is small, so the hit area is padded out to a comfortable
@@ -201,9 +233,11 @@ import SocialIcon from "./SocialIcon.astro";
   /* Color still changes, it just arrives at once. */
   @media (prefers-reduced-motion: reduce) {
     .site-footer__heading-link,
+    .site-footer__arrow,
     .site-footer__social-link,
     .site-footer__legal-links a {
       transition: none;
     }
+    .site-footer__heading-link:hover .site-footer__arrow { transform: none; }
   }
 </style>
