@@ -158,13 +158,20 @@ const ready = Boolean(newsletter.action);
      enough to need it. */
   .signup__side { min-width: 0; }
 
-  /* Field and button sit flush, as one control, matching the home page
-     band. A gap between them reads as two separate things that happen to
-     be adjacent. */
+  /* Spaced, not flush. Flush is a one field pattern: a single input welded
+     to a button reads as one operation, which is what a search bar is. Two
+     fields and a button is a small form and should look like one.
+     
+     The deciding argument is not taste, it is the error state. The focus
+     ring here is a 2px outline at a 1px offset, and on the middle segment
+     of a flush row it is drawn straight over its neighbours' borders. A red
+     border on the middle third of a welded control reads as the control
+     being broken rather than the input being wrong, and there is nowhere to
+     put the message without shoving the button down the page. */
   .signup__form {
     display: flex;
     flex-wrap: wrap;
-    gap: 0;
+    gap: 0.5rem;
   }
 
   .signup__field {
@@ -185,11 +192,9 @@ const ready = Boolean(newsletter.action);
   }
   /* Narrower than the email field: a first name needs less room than an
      address, and the email is the one that has to be readable while typing.
-     The shared border is dropped on the right so the pair reads as one
-     control rather than two boxes with a 2px seam between them. */
+     It keeps all four of its borders, because it is its own field. */
   .signup__field--name {
     flex: 0 1 9rem;
-    border-inline-end: 0;
   }
 
   .signup__field::placeholder { color: var(--text-muted); }
@@ -219,19 +224,12 @@ const ready = Boolean(newsletter.action);
   .signup__submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
   /* On a phone all three go full width, one per row, rather than three
-     controls fighting over 340 pixels. */
+     controls fighting over 340 pixels. A shade more air than the row above,
+     because a stacked list needs the separation more than a row does. */
   @media (max-width: 34rem) {
-    /* The flush treatment is a horizontal idea. Stacked, three things
-       touching top to bottom do not read as one control, they read as a
-       control with no margins, which is what this looked like. */
     .signup__form { gap: 0.625rem; }
     .signup__submit { width: 100%; justify-content: center; }
-    /* Stacked, so the dropped border would leave the name field open on one
-       side. Put it back and let all three sit as separate rows. */
-    .signup__field--name {
-      flex: 1 1 100%;
-      border-inline-end: 1px solid var(--parchment-300);
-    }
+    .signup__field--name { flex: 1 1 100%; }
     .signup__field { flex: 1 1 100%; }
   }
 </style>

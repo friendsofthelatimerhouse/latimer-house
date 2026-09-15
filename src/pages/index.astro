@@ -307,10 +307,15 @@ const signupReady = Boolean(newsletter.action);
   }
 
   /* No wrapping. This band has four things competing for one row, so the
-     form has to stay a single control: two fields and a button, or the
-     button drops to its own line and the whole composition breaks. */
+     form has to stay on one line: two fields and a button, or the button
+     drops to its own line and the whole composition breaks.
+     
+     Spaced rather than welded. See the long note in NewsletterBand: the
+     focus ring and the error border both need an edge of their own, and a
+     flush middle segment gives them neither. */
   .band-signup__form {
     display: flex;
+    gap: 0.5rem;
     flex: 1 1 21rem;
     max-width: 25rem;
   }
@@ -322,20 +327,15 @@ const signupReady = Boolean(newsletter.action);
     color: var(--charcoal-800);
     background: var(--parchment-50);
     border: 1px solid var(--parchment-300);
-    border-inline-end: 0;
-    border-radius: 3px 0 0 3px;
+    border-radius: 3px;
   }
-  /* The name takes less room than the address, and drops its right border so
-     the two fields read as one control rather than two boxes meeting. */
   /* Tighter padding than its neighbour. This band is the most crowded row
      on the site and the placeholder was touching the border at the default
      1.125rem. */
   .band-signup__field--name {
     flex: 0 1 7.75rem;
     padding-inline: 0.875rem;
-    border-radius: 3px 0 0 3px;
   }
-  .band-signup__field:not(.band-signup__field--name) { border-radius: 0; }
 
   .band-signup__field::placeholder { color: var(--charcoal-500); }
   .band-signup__submit {
@@ -349,7 +349,7 @@ const signupReady = Boolean(newsletter.action);
     color: var(--parchment-50);
     background: var(--forest-900);
     border: 0;
-    border-radius: 0 3px 3px 0;
+    border-radius: 3px;
     cursor: pointer;
     transition: background-color 150ms ease;
   }
@@ -358,29 +358,22 @@ const signupReady = Boolean(newsletter.action);
   .band-signup__submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
   /* The no wrapping rule above is a rule about a wide row. On a phone there
-     is no row: two fields and a button do not fit across 340 pixels, and
-     held flush they read as one undifferentiated block. Each takes its own
-     line with air between. The :not() is carried down from the rule above
-     because :not() counts toward specificity and a bare class would lose
-     to it. */
+     is no row: two fields and a button do not fit across 340 pixels, so
+     each takes its own full width line. */
   @media (max-width: 34rem) {
     .band-signup__form {
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.625rem;
       max-width: none;
     }
     .band-signup__field,
     .band-signup__field--name {
       flex: 1 1 100%;
       padding-inline: 1.125rem;
-      border-inline-end: 1px solid var(--parchment-300);
     }
-    .band-signup__field:not(.band-signup__field--name),
-    .band-signup__field--name { border-radius: 3px; }
     .band-signup__submit {
       width: 100%;
       padding-block: 1rem;
-      border-radius: 3px;
     }
   }
 
