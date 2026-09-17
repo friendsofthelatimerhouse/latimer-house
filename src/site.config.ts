@@ -170,11 +170,25 @@ export const membership = {
   href: "/get-involved/#membership",
   label: "Join the Friends",
   /**
-   * PayPal hosted button with the four tiers, yearly. Not yet made. The
-   * amounts have to match the ones published on Get Involved exactly:
-   * $25 Family, $100 Sponsor, $250 Patron, $500 Benefactor.
+   * PayPal hosted button, created 17 September 2026 and named there
+   * "Website * Membership". A duplicate of the gift button, so it carries
+   * the same logo, message and address collection.
+   *
+   *   Amounts        $25 / $100 / $250 presets, plus any amount
+   *   Recurring      Yearly only. NOT monthly: a membership renews once a
+   *                  year or it is not a membership
+   *   Complete URL   /thank-you/membership/
+   *   Cancel URL     /give/cancelled/, shared with the gift button
+   *
+   * FOUR TIERS ON THE SITE, THREE BUTTONS AT PAYPAL. PayPal caps presets
+   * at three, so Benefactor at $500 is typed into the Other box. The
+   * friction went on the top tier deliberately: somebody giving $500 has
+   * already decided and will type it, while a $25 joiner is often an
+   * impulse that a button is what catches. Get Involved carries a line
+   * saying so, and if a fourth preset ever becomes possible that line
+   * comes out.
    */
-  paypalHostedButtonId: "",
+  paypalHostedButtonId: "KXJG5X8L5MBS8",
   get paypalUrl() {
     return this.paypalHostedButtonId
       ? `https://www.paypal.com/donate/?hosted_button_id=${this.paypalHostedButtonId}`

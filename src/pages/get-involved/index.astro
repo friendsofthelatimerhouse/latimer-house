@@ -140,6 +140,13 @@ const tiers = [
         <p class="mem__body">
           Members hear first about workdays, open houses and talks.
         </p>
+        {/* PayPal shows three amounts and an Other box, not four. Without
+            this line a Benefactor arrives expecting a $500 button, does not
+            find one, and has no way to know whether the tier is real. */}
+        <p class="mem__body mem__body--fine">
+          The first three are buttons at checkout. Benefactor is entered as a
+          custom amount.
+        </p>
         {/* Forest rather than hewn, because this is a membership and not a
             gift, and the site keeps those two things in different colors.
 
@@ -185,6 +192,11 @@ const tiers = [
   .is-disabled {
     opacity: 0.45;
     cursor: not-allowed;
+  }
+
+  .mem__body--fine {
+    font-size: 0.9375rem;
+    color: color-mix(in srgb, var(--parchment-300) 88%, transparent);
   }
 
   /* Parchment on forest, and small. It is housekeeping, not an ask. */
