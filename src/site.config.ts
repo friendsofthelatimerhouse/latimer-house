@@ -31,7 +31,23 @@ export const org = {
   addressLocality: "Gallatin",
   addressRegion: "TN",
   postalCode: "37066",
-  email: "latimerhouse@protonmail.com",
+  /**
+   * The public address, on our own domain. It reaches the same Proton inbox
+   * the old latimerhouse@protonmail.com one did, through the ImprovMX
+   * catch-all, so nothing about where the mail lands has changed. What
+   * changed is what a reader sees: an organization that owns a domain and
+   * asks people to write to a free webmail account looks like an
+   * organization that does not quite exist yet.
+   *
+   * Tested by sending to it and watching it arrive, on 17 September 2026,
+   * rather than by reading the catch-all row in the ImprovMX dashboard.
+   *
+   * This is the address on eight pages including Privacy and both gift
+   * pages, so it is a load bearing string. If receiving ever moves to
+   * Google Workspace, create info@ there as a real mailbox before the MX
+   * records change, not after.
+   */
+  email: "info@friendsofthelatimerhouse.org",
   founded: "the 1790's",
 } as const;
 
