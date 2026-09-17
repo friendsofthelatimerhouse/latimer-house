@@ -18,18 +18,20 @@ import NewsletterBand from "../../../components/NewsletterBand.astro";
 import StorySiblings from "../../../components/StorySiblings.astro";
 
 /**
- * PROVENANCE, recorded 4 September 2026. The addition went up in the early
- * 1800's. The narrower 1830 to 1840 range is an estimate by David Klein and
- * Kris Coker, not a documented date. Both are defensible and Jeremy is
- * content with either. Anyone tightening this copy should know which half
- * is the record and which half is the estimate before they do it, and the
- * Restoration page dates the same addition as "the early 1800's" in the
- * section 03 captions.
+ * PROVENANCE, settled 17 September 2026. The addition went up in the early
+ * 1800's, and that is what the site publishes.
+ *
+ * It used to say 1830 to 1840 here and "the early 1800's" on the
+ * Restoration page, which meant two pages gave two different precisions for
+ * one thing, and the more precise of the two was the weaker claim: the 1830
+ * to 1840 range is an estimate by David Klein and Kris Coker rather than a
+ * documented date. The board chose the early 1800's. Do not tighten this
+ * back to a decade without a document.
  */
 const stats = [
   { figure: "The 1790's", label: "When it was raised" },
   { figure: "Three skins", label: "Put over the logs" },
-  { figure: "1830s", label: "The older addition" },
+  { figure: "Early 1800's", label: "The older addition" },
 ] as const;
 
 /**
@@ -275,8 +277,8 @@ const losses = [
       <div class="split split--reverse">
         <div class="addition__copy stack">
           <p data-aos="fade-up">
-            The back two sections went up together somewhere between 1830 and
-            1840, which makes them old enough to have a claim of their own.
+            The back two sections went up together in the early 1800's, which
+            makes them old enough to have a claim of their own.
           </p>
           <p data-aos="fade-up" data-aos-delay="100">
             Their floor joists are debarked logs resting on fieldstone piers,
