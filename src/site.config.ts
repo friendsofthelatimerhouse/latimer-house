@@ -99,6 +99,22 @@ export const site = {
 } as const;
 
 /**
+ * VISIT IS HIDDEN UNTIL THE HOUSE IS RESTORED. One line, and it is the only
+ * line to change when the house is ready for visitors.
+ *
+ * The page itself is untouched and still builds at /visit/. It is only
+ * unlinked, so anybody holding the URL still gets the page rather than a
+ * 404, and nothing has to be rebuilt to bring it back. It is already
+ * noindex and already excluded from the sitemap, so nothing new is being
+ * hidden from search; this closes the one remaining door, the navigation.
+ *
+ * Set it to true and Visit returns to its place between The Restoration and
+ * Get Involved, in the header and in the off canvas rail together, because
+ * both read this list.
+ */
+export const showVisit = false;
+
+/**
  * Primary navigation. Give is deliberately NOT in this list: it is the
  * persistent button in the header, which is why the Give page shows no
  * active nav item. See the Copy Deck, Section 1.5.
@@ -106,7 +122,9 @@ export const site = {
 export const nav = [
   { label: "The Story", href: "/the-story/", icon: "story" },
   { label: "The Restoration", href: "/the-restoration/", icon: "restoration" },
-  { label: "Visit", href: "/visit/", icon: "visit" },
+  ...(showVisit
+    ? [{ label: "Visit", href: "/visit/", icon: "visit" } as const]
+    : []),
   { label: "Get Involved", href: "/get-involved/", icon: "get-involved" },
   { label: "News", href: "/news/", icon: "news" },
   { label: "About", href: "/about/", icon: "about" },
