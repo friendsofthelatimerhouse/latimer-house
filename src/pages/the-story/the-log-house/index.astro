@@ -32,11 +32,20 @@ const stats = [
   { figure: "1830s", label: "The older addition" },
 ] as const;
 
-/** Section 01. Outermost first, so the reader travels inward. */
+/**
+ * Section 01. Outermost first, so the reader travels inward.
+ *
+ * The era column is dated in decades all the way down, on purpose. It read
+ * "20th c." for the brick, which put a hundred year bucket on top of three
+ * tight ones and broke the sequence at the point where the sequence is the
+ * whole idea. Read the column now and it descends cleanly: mid 1900's,
+ * 1940's, before 1940, 1790's. That also confirms the stack, since the
+ * brick sits on top of siding from the 1940's.
+ */
 const layers = [
   {
     number: "01",
-    era: "20th c.",
+    era: "Mid 1900's",
     title: "Brick veneer",
     body: "The face the road sees, and the newest thing here. A concrete foundation was poured to carry its weight.",
     tone: "brick",
