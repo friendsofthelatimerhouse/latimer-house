@@ -122,7 +122,8 @@ const tiers = [
         <p class="mem__body">
           Membership runs the calendar year, January through December. It is the
           steadiest money the house gets, and it is what lets us plan further
-          ahead than one season at a time.
+          ahead than one season at a time. Members hear first about workdays,
+          open houses and talks.
         </p>
       </div>
 
@@ -137,12 +138,14 @@ const tiers = [
       </ul>
 
       <div class="mem__column mem__column--foot" data-aos="fade-up">
-        <p class="mem__body">
-          Members hear first about workdays, open houses and talks.
-        </p>
         {/* PayPal shows three amounts and an Other box, not four. Without
             this line a Benefactor arrives expecting a $500 button, does not
-            find one, and has no way to know whether the tier is real. */}
+            find one, and has no way to know whether the tier is real.
+
+            It sits alone directly above the button because that is the only
+            place it is useful. Said any earlier it is a technicality about a
+            checkout screen the reader has not seen yet; said here it is an
+            instruction they are about to need. */}
         <p class="mem__body mem__body--fine">
           The first three are buttons at checkout. Benefactor is entered as a
           custom amount.
