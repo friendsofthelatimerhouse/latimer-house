@@ -1,0 +1,215 @@
+---
+/**
+ * The block that asks for the things email alone cannot give us: a name to
+ * use, a number to call, and somewhere to post to.
+ *
+ * Posts to the Supporter Details form in Kit, NOT the newsletter form. Two
+ * forms exist because Kit's redirect is a per form setting, and this one
+ * lands on /thank-you/details/. See site.config for the full reasoning.
+ *
+ * WHY IT ASKS FOR THE EMAIL AGAIN, on a page somebody reached by giving us
+ * their email at PayPal. Kit matches a submission to an existing subscriber
+ * by email address and nothing else. Without it the phone number has no
+ * record to attach to. A typo makes a second, unconfirmed subscriber rather
+ * than failing loudly, so the field says why it is there.
+ *
+ * It also means this block doubles as the newsletter signup: an address Kit
+ * has not seen becomes a new subscriber and gets the confirmation email.
+ * That is why these pages carry this instead of the signup band. Two forms
+ * on one page, one asking for less than the other, is a way of getting less.
+ *
+ * Nothing is required except the email. Somebody who wants to give a phone
+ * number and not an address should be able to, and a required field here
+ * buys tidier records at the cost of the records themselves.
+ */
+import { supporterDetails, newsletter } from "../site.config";
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  body?: string;
+  cta?: string;
+}
+
+const {
+  eyebrow = "Stay in touch",
+  heading = "So we can reach you.",
+  body = "Email carries the news. A phone number and an address cover the two things email cannot: a call when something is happening at the house on short notice, and a posted invitation for people who would rather have paper.",
+  cta = "Send these along",
+} = Astro.props;
+
+const ready = Boolean(supporterDetails.action);
+---
+
+{ready && (
+  <section class="details">
+    <div class="container details__inner">
+      <div class="details__intro" data-aos="fade-up">
+        <p class="eyebrow">{eyebrow}</p>
+        <h2 class="details__headline">{heading}</h2>
+        <p class="details__body">{body}</p>
+        <p class="details__body">
+          Nothing here is published, sold or shared. Unsubscribing stops the
+          mail at once, and if you would rather we held none of it, write and
+          say so and it is gone.
+          <a class="details__link" href="/privacy/">What we collect, and what
+          we do not</a>.
+        </p>
+      </div>
+
+      <form
+        class="details__form"
+        action={supporterDetails.action}
+        method="post"
+        data-aos="fade-up"
+        data-aos-delay="150"
+      >
+        <div class="details__field">
+          <label class="details__label" for="sd-name">First name</label>
+          <input
+            class="details__input"
+            id="sd-name"
+            type="text"
+            name={newsletter.firstNameField}
+            autocomplete="given-name"
+            placeholder="So we know what to call you"
+          />
+        </div>
+
+        <div class="details__field">
+          <label class="details__label" for="sd-email">Email address</label>
+          <input
+            class="details__input"
+            id="sd-email"
+            type="email"
+            name={supporterDetails.emailField}
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+          />
+          <p class="details__hint">
+            Required, because it is how everything else finds your record.
+          </p>
+        </div>
+
+        <div class="details__field">
+          <label class="details__label" for="sd-phone">Phone number</label>
+          <input
+            class="details__input"
+            id="sd-phone"
+            type="tel"
+            name={supporterDetails.phoneField}
+            autocomplete="tel"
+            placeholder="615 555 0142"
+          />
+          <p class="details__hint">So we can call you if we need to.</p>
+        </div>
+
+        <div class="details__field">
+          <label class="details__label" for="sd-address">Mailing address</label>
+          <textarea
+            class="details__input details__input--area"
+            id="sd-address"
+            name={supporterDetails.addressField}
+            autocomplete="street-address"
+            rows="2"
+            placeholder="Street, city, state and ZIP"
+          ></textarea>
+        </div>
+
+        <button class="btn btn--primary details__submit" type="submit">
+          {cta}
+        </button>
+      </form>
+    </div>
+  </section>
+)}
+
+<style>
+  .details {
+    background: var(--parchment-100);
+    border-block-start: 1px solid var(--parchment-300);
+    padding-block: clamp(3.25rem, 2.25rem + 4vw, 5rem);
+  }
+
+  .details__inner {
+    display: grid;
+    align-items: start;
+    gap: clamp(2rem, 1.25rem + 3vw, 3.5rem);
+  }
+  @media (min-width: 60rem) {
+    .details__inner { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+  }
+
+  .details__headline {
+    margin-block-start: 0.875rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 1.9375rem);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--forest-900);
+    max-width: 24ch;
+  }
+
+  .details__body {
+    margin-block-start: 1rem;
+    max-width: 46ch;
+    font-size: var(--type-body-size);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .details__link {
+    color: var(--forest-800);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--hewn-400);
+    text-underline-offset: 0.2em;
+  }
+  .details__link:hover, .details__link:focus-visible { color: var(--hewn-700); }
+
+  .details__form { display: grid; gap: 1.25rem; max-width: 30rem; }
+
+  .details__label {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--forest-900);
+  }
+
+  .details__input {
+    display: block;
+    width: 100%;
+    margin-block-start: 0.5rem;
+    padding: 0.875rem 1rem;
+    font-family: var(--font-body);
+    font-size: var(--type-body-size);
+    background: var(--parchment-50);
+    border: 1px solid var(--parchment-300);
+    border-radius: 2px;
+    color: var(--text-primary);
+  }
+  .details__input--area { resize: vertical; line-height: 1.5; }
+  .details__input::placeholder { color: var(--text-muted); }
+  .details__input:focus-visible {
+    outline: 2px solid var(--forest-900);
+    outline-offset: 1px;
+    border-color: var(--forest-900);
+  }
+
+  .details__hint {
+    margin-block-start: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-muted, var(--parchment-600));
+  }
+
+  .details__submit { justify-self: start; cursor: pointer; }
+  @media (max-width: 34rem) {
+    .details__submit { justify-self: stretch; justify-content: center; }
+  }
+</style>

@@ -26,7 +26,7 @@
  */
 import Base from "../../../layouts/Base.astro";
 import PageHero from "../../../components/PageHero.astro";
-import NewsletterBand from "../../../components/NewsletterBand.astro";
+import SupporterDetails from "../../../components/SupporterDetails.astro";
 import { org, mailingLine } from "../../../site.config";
 ---
 
@@ -37,8 +37,8 @@ import { org, mailingLine } from "../../../site.config";
 >
   <PageHero
     crumbs={[{ label: "Thank You" }]}
-    headline="Thank you. That goes into the house."
-    lead="Your gift is in, and it does not sit in a fund waiting on a plan. It pays for a roof over the logs, for the brick coming off by hand, and for keeping the house and the ground around it once the work is done."
+    headline="Thank you. Here is where it goes."
+    lead="Your gift does not sit in a fund waiting on a plan. It pays for the restoration itself, for keeping the house and the park around it standing once the work is done, and for the plain costs of running the organization that does it: the accounting, the utilities, the mowing. The board is unpaid and nobody draws a salary, so none of it becomes somebody's wage."
     image="/img/give-hero"
     imageAlt="The Latimer House."
     scrim={[0.94, 0.86, 0.72]}
@@ -105,11 +105,16 @@ import { org, mailingLine } from "../../../site.config";
     </div>
   </section>
 
-  <NewsletterBand
+  {/* The details block rather than the signup band. PayPal has given us a
+      name and an email already, but not permission to write to you and not
+      a number to call. This asks for both, and for the address in the one
+      place somebody has just demonstrated they care. Two forms on one page,
+      one asking for less than the other, is a way of getting less. */}
+  <SupporterDetails
     eyebrow="One more thing"
     heading="Come along for the rest of it."
-    body="You have paid for work you will not get to watch unless we tell you about it. So we will. A note when we uncover something, when we are on site, and how to join in."
-    cta="Sign me up"
+    body="You have paid for work you will not get to watch unless somebody tells you about it, so we will. A note when we uncover something and when we are on site, a call if something is happening at short notice, and a posted invitation to a work day if you would rather have paper."
+    cta="Keep me posted"
   />
 </Base>
 

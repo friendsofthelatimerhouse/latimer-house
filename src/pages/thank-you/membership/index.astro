@@ -43,7 +43,7 @@
  */
 import Base from "../../../layouts/Base.astro";
 import PageHero from "../../../components/PageHero.astro";
-import NewsletterBand from "../../../components/NewsletterBand.astro";
+import SupporterDetails from "../../../components/SupporterDetails.astro";
 import { org, mailingLine } from "../../../site.config";
 ---
 
@@ -112,11 +112,13 @@ import { org, mailingLine } from "../../../site.config";
     </div>
   </section>
 
-  <NewsletterBand
+  {/* Members were promised they would hear first. This is the machinery
+      that makes that promise keepable, so it is the block, not the band. */}
+  <SupporterDetails
     eyebrow="How we reach you"
     heading="This is where first comes from."
-    body="Workdays, open houses and talks go out here before they go anywhere else. Not much other mail, and one click to leave."
-    cta="Sign me up"
+    body="Workdays, open houses and talks go out to this list before they go anywhere else. A number lets us call you when something comes up at short notice, and an address lets us post you an invitation. Leave whichever ones you want us to use."
+    cta="Keep me posted"
   />
 </Base>
 

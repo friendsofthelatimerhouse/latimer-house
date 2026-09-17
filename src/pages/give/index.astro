@@ -31,7 +31,11 @@ const live = Boolean(give.paypalHostedButtonId);
 const stats = [
   { figure: "501(c)(3)", label: "Gifts are deductible" },
   { figure: "Unpaid", label: "Every seat on the board" },
-  { figure: "No staff", label: "And no overhead" },
+  /* Was "And no overhead", which stopped being true the moment we wrote
+     down what a gift actually covers: accounting, utilities, mowing. Those
+     are overhead. What is true is that nobody is paid, and that is the
+     stronger claim anyway. */
+  { figure: "No staff", label: "Nobody draws a salary" },
 ] as const;
 
 const sections = [
