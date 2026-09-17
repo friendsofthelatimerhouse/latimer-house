@@ -138,18 +138,6 @@ const tiers = [
       </ul>
 
       <div class="mem__column mem__column--foot" data-aos="fade-up">
-        {/* PayPal shows three amounts and an Other box, not four. Without
-            this line a Benefactor arrives expecting a $500 button, does not
-            find one, and has no way to know whether the tier is real.
-
-            It sits alone directly above the button because that is the only
-            place it is useful. Said any earlier it is a technicality about a
-            checkout screen the reader has not seen yet; said here it is an
-            instruction they are about to need. */}
-        <p class="mem__body mem__body--fine">
-          The first three are buttons at checkout. Benefactor is entered as a
-          custom amount.
-        </p>
         {/* Forest rather than hewn, because this is a membership and not a
             gift, and the site keeps those two things in different colors.
 
@@ -181,6 +169,19 @@ const tiers = [
             </>
           )}
         </p>
+        {/* PayPal shows three amounts and an Other box, not four. Without
+            this line a Benefactor arrives expecting a $500 button, does not
+            find one, and has no way to know whether the tier is real.
+
+            Under the button rather than over it. It is a footnote about the
+            screen you are going to, not a condition on whether to press the
+            thing, and above it made the reader clear a technicality before
+            they were allowed to act. Italic for the same reason: an aside,
+            not part of the offer. */}
+        <p class="mem__fine">
+          The first three membership amounts are buttons at checkout.
+          Benefactor is entered as a custom amount.
+        </p>
       </div>
     </div>
   </section>
@@ -197,9 +198,13 @@ const tiers = [
     cursor: not-allowed;
   }
 
-  .mem__body--fine {
+  .mem__fine {
+    margin-block-start: 1rem;
+    text-align: center;
+    font-style: italic;
     font-size: 0.9375rem;
-    color: color-mix(in srgb, var(--parchment-300) 88%, transparent);
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--parchment-300) 82%, transparent);
   }
 
   /* Parchment on forest, and small. It is housekeeping, not an ask. */
