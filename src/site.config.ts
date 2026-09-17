@@ -210,10 +210,15 @@ export const give = {
    * is visible from the code:
    *
    *   Amounts        $50 / $250 / $1,000, plus any amount
-   *   Recurring      Monthly only. NOT yearly, on purpose: membership is
-   *                  the annual product, $25 a year from the day you join,
-   *                  and two annual commitments under different names would
-   *                  be one decision wearing two hats
+   *   Recurring      Monthly and yearly, both offered, one time by default.
+   *                  It was monthly only at first, to keep the yearly
+   *                  cadence for membership. The board chose both, so a
+   *                  yearly standing gift and a yearly membership now exist
+   *                  side by side. They are different things: a gift buys
+   *                  work, a membership joins the organization and carries
+   *                  advance notice of what it is doing. If people start
+   *                  confusing them, the Give card and the membership
+   *                  section are where to say the difference out loud.
    *   Fee offset     Offered, unchecked by default
    *   Addresses      Collected, because /give/ promises written
    *                  acknowledgment and the IRS letter above $250
