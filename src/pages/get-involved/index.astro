@@ -17,7 +17,11 @@ import Base from "../../layouts/Base.astro";
 import PageHero from "../../components/PageHero.astro";
 import GiveBand from "../../components/GiveBand.astro";
 import NewsletterBand from "../../components/NewsletterBand.astro";
-import { org, give } from "../../site.config";
+import { org, give, membership } from "../../site.config";
+
+/* Same guard the Give page uses. Until the tiered button exists, the join
+   button does not pretend to work. */
+const memberLive = Boolean(membership.paypalHostedButtonId);
 
 const stats = [
   { figure: "Workdays", label: "On the house itself" },
@@ -136,13 +140,36 @@ const tiers = [
         <p class="mem__body">
           Members hear first about workdays, open houses and talks.
         </p>
-        {/* Now on the canvas too. Forest rather than hewn, because this is
-            a membership and not a gift, and the site keeps those two things
-            in different colors. It points at Give for the moment, since
-            that is where the PayPal buttons will live, but membership needs
-            its own tiered button there rather than the plain donate one. */}
+        {/* Forest rather than hewn, because this is a membership and not a
+            gift, and the site keeps those two things in different colors.
+
+            It used to point at the Give page, which made a loop: Give sent
+            you here to read the tiers, and this sent you back to Give. A
+            reader who wanted to join went round twice and arrived nowhere.
+            It now waits for its own tiered button and says so, the same way
+            the gift buttons waited for theirs. */}
         <p class="mem__actions">
-          <a class="btn btn--join" href={give.href}>Join the Friends</a>
+          {memberLive ? (
+            <a
+              class="btn btn--join"
+              href={membership.paypalUrl}
+              target="_blank"
+              rel="noopener"
+            >
+              {membership.label}
+            </a>
+          ) : (
+            <>
+              <span class="btn btn--join is-disabled" aria-disabled="true">
+                {membership.label}
+              </span>
+              <span class="mem__note">
+                Joining online opens shortly. A check with membership in the
+                memo reaches us today, at {" "}
+                <a href={give.href}>the address on the Give page</a>.
+              </span>
+            </>
+          )}
         </p>
       </div>
     </div>
@@ -155,6 +182,28 @@ const tiers = [
 <style>
   .band { padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem); }
   .band--help { background: var(--parchment-200); }
+  .is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* Parchment on forest, and small. It is housekeeping, not an ask. */
+  .mem__note {
+    display: block;
+    max-width: 24rem;
+    margin-block-start: 0.875rem;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--parchment-300) 88%, transparent);
+  }
+  .mem__note a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+  .mem__note a:hover { color: var(--parchment-50); }
+
   .band--membership {
     background: var(--forest-950);
     padding-block: clamp(4rem, 2.5rem + 5vw, 7rem);

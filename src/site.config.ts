@@ -153,15 +153,33 @@ export const tabBar = [
  * Membership. A different thing from a gift and a different PayPal object,
  * so it gets its own destination rather than sharing the Give page's.
  *
- * `href` points at the membership section of Get Involved for now. Once the
- * tiered PayPal button exists, the button in that section posts straight to
- * PayPal and this stays as the route people arrive by.
+ * `href` is where somebody arrives to read what membership is: the tiers
+ * and the calendar year live on Get Involved, and nobody should be asked
+ * to pay before seeing them. The Give page's membership button points
+ * here, not at PayPal, on purpose.
+ *
+ * `paypalUrl` is where the button in THAT section goes once the tiered
+ * button exists. It falls back to an empty string rather than to the Give
+ * page. Falling back to Give is what produced the loop this replaced:
+ * Give sent you to Get Involved, and Get Involved sent you back to Give,
+ * so the one thing a reader wanted to do was the one thing they could not.
+ * A fallback that quietly points somewhere plausible is worse than no
+ * fallback, because it looks like it works.
  */
 export const membership = {
   href: "/get-involved/#membership",
   label: "Join the Friends",
-  /** PayPal hosted button with the four tiers on a dropdown. Not yet made. */
+  /**
+   * PayPal hosted button with the four tiers, yearly. Not yet made. The
+   * amounts have to match the ones published on Get Involved exactly:
+   * $25 Family, $100 Sponsor, $250 Patron, $500 Benefactor.
+   */
   paypalHostedButtonId: "",
+  get paypalUrl() {
+    return this.paypalHostedButtonId
+      ? `https://www.paypal.com/donate/?hosted_button_id=${this.paypalHostedButtonId}`
+      : "";
+  },
 } as const;
 
 export const give = {
