@@ -11,7 +11,7 @@ import sitemap from "@astrojs/sitemap";
  * noindex page appears and is not added here, it lands in the sitemap and the
  * site asks Google to index a page it has just told Google not to index.
  */
-const NOINDEX = ["/visit/", "/thank-you/", "/thank-you/gift/", "/thank-you/details/", "/check-your-inbox/", "/give/cancelled/"];
+const NOINDEX = ["/visit/", "/thank-you/", "/thank-you/gift/", "/thank-you/details/", "/check-your-inbox/", "/give/cancelled/", "/thank-you/membership/"];
 
 export default defineConfig({
   site: "https://friendsofthelatimerhouse.org",

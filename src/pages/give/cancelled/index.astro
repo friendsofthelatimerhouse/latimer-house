@@ -84,6 +84,13 @@ import { org, give, mailingLine } from "../../../site.config";
               somebody first, write to
               <a href={`mailto:${org.email}`}>{org.email}</a>.
             </p>
+            {/* This page is the cancel address on the membership button as
+                well as the gift one, and somebody who backed out of joining
+                should not be handed the gift page and left to work it out. */}
+            <p>
+              If you were joining as a member rather than making a gift, the
+              tiers are on <a href="/get-involved/#membership">Get Involved</a>.
+            </p>
           </div>
         </div>
       </div>
