@@ -1,0 +1,149 @@
+---
+/**
+ * Where a donor lands if they back out of a gift partway. This is the URL
+ * to enter as the cancel address on the PayPal gift button:
+ *
+ *   https://friendsofthelatimerhouse.org/give/cancelled/
+ *
+ * In PayPal it is the Cancel URL, beside the Complete URL that points at
+ * /thank-you/gift/.
+ *
+ * It exists because of one question. Somebody who abandons a payment form
+ * is not wondering about our mission, they are wondering whether they were
+ * just charged. PayPal's own cancel page does not say. This one says it
+ * first, in the headline, before anything else.
+ *
+ * The tone is the whole design here. This page must not guilt anybody. No
+ * "wait", no "are you sure", no second attempt at the ask dressed up as
+ * concern. Somebody who changed their mind is allowed to have changed
+ * their mind, and telling them so plainly is the thing most likely to
+ * bring them back later.
+ *
+ * NO GIVE BAND, for a different reason than the gift thank you page. That
+ * page omits it because asking for money while thanking someone for money
+ * is wrong. This one omits it because the reader just declined the ask and
+ * repeating it immediately, louder, is how a charity teaches people to
+ * stop opening its pages. The quiet link back to Give inside the column is
+ * the right size. The newsletter band closes it, as the lesser ask.
+ *
+ * noindex. It means nothing to anybody who did not arrive here from a
+ * payment form.
+ */
+import Base from "../../../layouts/Base.astro";
+import PageHero from "../../../components/PageHero.astro";
+import NewsletterBand from "../../../components/NewsletterBand.astro";
+import { org, give, mailingLine } from "../../../site.config";
+---
+
+<Base
+  title="Nothing Was Charged"
+  description="Your gift was not completed and no money left your account."
+  noindex
+>
+  <PageHero
+    crumbs={[{ label: "Give", href: give.href }, { label: "Cancelled" }]}
+    headline="Nothing was charged."
+    lead="The gift was not completed, no money left your account, and there is nothing for you to undo. If you changed your mind, that is entirely fine and nobody here will think anything of it."
+    image="/img/give-hero"
+    imageAlt="The Latimer House."
+    scrim={[0.94, 0.86, 0.72]}
+  />
+  <div class="torn-edge" aria-hidden="true"></div>
+
+  <section class="band band--parchment">
+    <div class="container">
+      <div class="ty">
+        <div class="ty__col" data-aos="fade-up">
+          <p class="eyebrow">If it was not on purpose</p>
+          <div class="stack measure ty__body">
+            <p>
+              Cards get declined, forms time out, and sometimes the amount is
+              not the one you meant to type. Any of those can be fixed by
+              starting again, and nothing from the last attempt is hanging over
+              you.
+            </p>
+            <p class="ty__actions">
+              <a class="btn btn--primary" href={give.href}>
+                Back to giving
+                <span class="btn__arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="ty__col" data-aos="fade-up" data-aos-delay="150">
+          <p class="eyebrow">Or by post</p>
+          <div class="stack measure ty__body">
+            <p>
+              A check reaches us just as well and costs the organization less,
+              because nothing is taken out in fees. Make it out to the Friends
+              of the Latimer House and send it to {mailingLine}.
+            </p>
+            <p>
+              If you would rather give in some other way, or you want to talk to
+              somebody first, write to
+              <a href={`mailto:${org.email}`}>{org.email}</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p class="foot" data-aos="fade-up">
+        If you believe you were charged and should not have been, write to
+        <a href={`mailto:${org.email}`}>{org.email}</a> and a board member will
+        look at it the same day. The board is unpaid and there is no staff, so
+        the person who replies is the person doing the work.
+      </p>
+    </div>
+  </section>
+
+  <NewsletterBand
+    eyebrow="No money involved"
+    heading="You can follow the work without giving a cent."
+    body="A note when we uncover something, when we are on site, and how to join in if you would like to. Plenty of people on this list have never given us anything, and they are welcome."
+    cta="Sign me up"
+  />
+</Base>
+
+<style>
+  .band { padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem); }
+
+  /* Same two column construction as the gift thank you page, deliberately.
+     These two pages are the pair of outcomes from one button. */
+  .ty {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    gap: clamp(2rem, 1.25rem + 3vw, 4rem);
+  }
+
+  .ty__body { margin-block-start: 1rem; }
+  .ty__body p { color: var(--text-secondary); }
+  /* :not(.btn) matters. Without it this rule underlines the button too,
+     because the button is an anchor inside a paragraph. */
+  .ty__body p a:not(.btn) {
+    color: var(--forest-900);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+  .ty__body p a:not(.btn):hover { color: var(--hewn-600); }
+
+  .ty__actions { margin-block-start: 1.75rem; }
+
+  .foot {
+    max-width: 46rem;
+    margin-block-start: clamp(2.5rem, 1.75rem + 3vw, 3.5rem);
+    padding-block-start: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+    border-block-start: 1px solid var(--border-subtle);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--text-muted, var(--charcoal-600));
+  }
+  .foot a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+  .foot a:hover { color: var(--hewn-600); }
+</style>
