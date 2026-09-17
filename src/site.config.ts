@@ -168,12 +168,30 @@ export const give = {
   href: "/give/",
   label: "Give",
   /**
-   * PayPal hosted button. Created at paypal.com/donate/buttons under the
-   * ORGANIZATION's PayPal account. Plain link, no JavaScript, cannot break.
-   * Fill in once the button exists; the confirmed-charity rate applies
-   * automatically on approval with no change here.
+   * PayPal hosted button, created 17 September 2026 under the
+   * ORGANIZATION's PayPal account and named there "Website · General gift".
+   * A plain link, no JavaScript, so it cannot break if PayPal's script is
+   * slow or blocked. Filling this in is what takes the buttons on /give/
+   * out of their disabled state; nothing else on that page changes.
+   *
+   * How it is configured at PayPal's end, recorded here because none of it
+   * is visible from the code:
+   *
+   *   Amounts        $50 / $250 / $1,000, plus any amount
+   *   Recurring      Monthly only. NOT yearly, on purpose: membership is
+   *                  the annual product, $25 on the calendar year, and two
+   *                  annual commitments under different names would be one
+   *                  decision wearing two hats
+   *   Fee offset     Offered, unchecked by default
+   *   Addresses      Collected, because /give/ promises written
+   *                  acknowledgment and the IRS letter above $250
+   *   Complete URL   /thank-you/gift/
+   *   Cancel URL     /give/cancelled/
+   *
+   * The confirmed charity rate of 1.99% + $0.49 on domestic transactions
+   * applies automatically and needs nothing here.
    */
-  paypalHostedButtonId: "",
+  paypalHostedButtonId: "8E9UMX6TXW7A4",
   get paypalUrl() {
     return this.paypalHostedButtonId
       ? `https://www.paypal.com/donate/?hosted_button_id=${this.paypalHostedButtonId}`
