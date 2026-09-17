@@ -28,10 +28,16 @@
  * received, and both this page and Give section 05 have to change. If the
  * board adds a member benefit, this comment is the thing to come back to.
  *
- * THE MEMBERSHIP YEAR. The copy below says the calendar year because that
- * is what Get Involved says. If the button is ever set to renew on the
- * anniversary of joining instead, both pages change together or the site
- * contradicts itself.
+ * THE MEMBERSHIP YEAR. A year from the day you join, on every page that
+ * mentions it. It used to say the calendar year, January through December,
+ * which was written before the button existed and stopped being true the
+ * moment it did: a PayPal yearly subscription renews on the anniversary of
+ * the payment, so somebody joining in November renews in November. The
+ * site was promising one thing and the payment was doing another, and the
+ * first member to join outside January would have found out first.
+ *
+ * Three places say it now, and they have to keep agreeing: here, the
+ * membership section of Get Involved, and the pointer on Give.
  *
  * noindex.
  */
@@ -63,9 +69,9 @@ import { org, mailingLine } from "../../../site.config";
           <p class="eyebrow">Your membership</p>
           <div class="stack measure ty__body">
             <p>
-              Membership runs the calendar year, January through December. Your
-              acknowledgment follows separately in writing, and PayPal has
-              already emailed you a record of the transaction.
+              Your membership runs a year from today. The acknowledgment
+              follows separately in writing, and PayPal has already emailed you
+              a record of the transaction.
             </p>
             <p>
               {org.legalName}. EIN {org.ein}, a 501(c)(3) public charity.

@@ -154,7 +154,7 @@ export const tabBar = [
  * so it gets its own destination rather than sharing the Give page's.
  *
  * `href` is where somebody arrives to read what membership is: the tiers
- * and the calendar year live on Get Involved, and nobody should be asked
+ * and the membership year live on Get Involved, and nobody should be asked
  * to pay before seeing them. The Give page's membership button points
  * here, not at PayPal, on purpose.
  *
@@ -211,9 +211,9 @@ export const give = {
    *
    *   Amounts        $50 / $250 / $1,000, plus any amount
    *   Recurring      Monthly only. NOT yearly, on purpose: membership is
-   *                  the annual product, $25 on the calendar year, and two
-   *                  annual commitments under different names would be one
-   *                  decision wearing two hats
+   *                  the annual product, $25 a year from the day you join,
+   *                  and two annual commitments under different names would
+   *                  be one decision wearing two hats
    *   Fee offset     Offered, unchecked by default
    *   Addresses      Collected, because /give/ promises written
    *                  acknowledgment and the IRS letter above $250
