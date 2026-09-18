@@ -12,6 +12,7 @@
  */
 import type { CollectionEntry } from "astro:content";
 import { newsCategories } from "../content.config";
+import { categorySlug } from "../lib/news";
 
 interface Props {
   posts: CollectionEntry<"news">[];
@@ -22,6 +23,8 @@ interface Props {
   years: number[];
   /** Set on a year page so the chip shows as current. */
   activeYear?: number;
+  /** Set on a category page so that chip shows as current. */
+  activeCategory?: string;
   /** Where pagination points. */
   pageHref?: (n: number) => string;
   /** The band heading. Defaults are the canvas copy. */
@@ -31,7 +34,7 @@ interface Props {
 }
 
 const {
-  posts, page = 1, totalPages = 1, years, activeYear,
+  posts, page = 1, totalPages = 1, years, activeYear, activeCategory,
   pageHref = (n: number) => (n === 1 ? "/news/" : `/news/page/${n}/`),
   eyebrow = "Latest",
   heading = "From the house.",
@@ -52,7 +55,11 @@ const slugOf = (id: string) => id.replace(/^\d{4}-\d{2}(-\d{2})?-/, "");
     <h2 class="sec__headline" data-aos="fade-up" data-aos-delay="100">{heading}</h2>
     <p class="sec__lead" data-aos="fade-up" data-aos-delay="200">{lead}</p>
 
-    <div class="listing">
+    <div
+      class="listing"
+      data-complete={totalPages <= 1 ? "true" : "false"}
+      data-active-category={activeCategory ?? ""}
+    >
   <div class="toolbar">
     <label class="search">
       <span class="visually-hidden">Search the posts</span>
@@ -68,11 +75,19 @@ const slugOf = (id: string) => id.replace(/^\d{4}-\d{2}(-\d{2})?-/, "");
 
     <ul class="chips" role="list">
       <li>
-        <a class="chip is-current" href="/news/" data-filter="">All</a>
+        <a
+          class:list={["chip", { "is-current": !activeCategory }]}
+          href="/news/"
+          data-filter=""
+        >All</a>
       </li>
       {newsCategories.map((c) => (
         <li>
-          <a class="chip" href={`/news/?category=${encodeURIComponent(c)}`} data-filter={c}>{c}</a>
+          <a
+            class:list={["chip", { "is-current": c === activeCategory }]}
+            href={`/news/category/${categorySlug(c)}/`}
+            data-filter={c}
+          >{c}</a>
         </li>
       ))}
     </ul>
@@ -100,7 +115,7 @@ const slugOf = (id: string) => id.replace(/^\d{4}-\d{2}(-\d{2})?-/, "");
     ))}
   </ul>
 
-  <p class="empty" hidden>Nothing matches that. Try a shorter word, or clear the filter.</p>
+  <p class="empty" hidden={posts.length > 0}>Nothing here yet. Try another filter, or a shorter word.</p>
 
   {totalPages > 1 && (
     <nav class="pagination" aria-label="Pagination">
@@ -242,6 +257,12 @@ const slugOf = (id: string) => id.replace(/^\d{4}-\d{2}(-\d{2})?-/, "");
   @media (min-width: 34rem) { .posts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 64rem) { .posts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   .post { display: flex; }
+  /* A component stylesheet that sets display on an element beats the user
+     agent's [hidden] { display: none }, which is how hiding a filtered card
+     silently did nothing. Scoped to the listing so it cannot reach anything
+     else, and !important because the rule it has to beat is the element's
+     own. Covers the cards, the pagination and the empty line alike. */
+  .listing [hidden] { display: none !important; }
 
   .post__card {
     display: flex;
@@ -386,8 +407,18 @@ const slugOf = (id: string) => id.replace(/^\d{4}-\d{2}(-\d{2})?-/, "");
     const empty = listing.querySelector<HTMLElement>(".empty")!;
     const pagination = listing.querySelector<HTMLElement>(".pagination");
 
-    let category = new URL(location.href).searchParams.get("category") || "";
-    if (category && !chips.some((c) => c.dataset.filter === category)) category = "";
+    /* Two ways the chips can behave, and the difference matters.
+
+       When this view already holds every post there is, filtering in the
+       browser is honest and instant, so the chips do that. When it does not,
+       because the list is paginated or because we are already on a category
+       page, filtering here would only search the cards that happen to be on
+       this page, which is what made a History post on page two invisible
+       under the History chip. In that case the chips are left alone and the
+       browser follows them to the real category route. */
+    const complete = listing.dataset.complete === "true";
+    let category = listing.dataset.activeCategory || "";
+    const filterInPlace = complete && !category;
 
     const apply = () => {
       const q = (field?.value || "").trim().toLowerCase();
@@ -411,16 +442,14 @@ const slugOf = (id: string) => id.replace(/^\d{4}-\d{2}(-\d{2})?-/, "");
       }
     };
 
-    for (const chip of chips) {
-      chip.addEventListener("click", (event) => {
-        event.preventDefault();
-        category = chip.dataset.filter || "";
-        const url = new URL(location.href);
-        if (category) url.searchParams.set("category", category);
-        else url.searchParams.delete("category");
-        history.replaceState(null, "", url);
-        apply();
-      });
+    if (filterInPlace) {
+      for (const chip of chips) {
+        chip.addEventListener("click", (event) => {
+          event.preventDefault();
+          category = chip.dataset.filter || "";
+          apply();
+        });
+      }
     }
 
     field?.addEventListener("input", apply);

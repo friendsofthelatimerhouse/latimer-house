@@ -1,0 +1,55 @@
+---
+/** Everything in one category. A real route, for the same reason the year
+ *  archive is one: the chips used to filter only the cards on the current
+ *  page, so a post that had fallen to page two could not be found under its
+ *  own category. A page is built for every category in the schema, including
+ *  ones with nothing in them yet, so a chip never lands on a 404. */
+import { getCollection } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import PageHero from "../../../components/PageHero.astro";
+import NewsListing from "../../../components/NewsListing.astro";
+import GiveBand from "../../../components/GiveBand.astro";
+import NewsletterBand from "../../../components/NewsletterBand.astro";
+import { newest, yearsOf, categorySlug } from "../../../lib/news";
+import { newsCategories } from "../../../content.config";
+
+export async function getStaticPaths() {
+  const posts = newest(await getCollection("news", (p) => !p.data.draft));
+  const years = yearsOf(posts);
+  return newsCategories.map((c) => ({
+    params: { category: categorySlug(c) },
+    props: { category: c, slice: posts.filter((p) => p.data.category === c), years },
+  }));
+}
+
+const { category, slice, years } = Astro.props;
+const count = slice.length;
+---
+
+<Base
+  title={`News · ${category}`}
+  description={`Posts from the Latimer House filed under ${category}.`}
+>
+  <PageHero
+    crumbs={[{ label: "News", href: "/news/" }, { label: category }]}
+    headline="What is happening at the house."
+    image="/img/news-hero"
+    imageAlt="The Latimer House."
+    scrim={[0.94, 0.86, 0.72]}
+  />
+  <div class="torn-edge" style="--torn-fill: var(--parchment-200);" aria-hidden="true"></div>
+
+  <NewsListing
+    posts={slice}
+    years={years}
+    activeCategory={category}
+    eyebrow="Filed under"
+    heading={`${category}.`}
+    lead={count === 0
+      ? "Nothing filed here yet."
+      : `${count} ${count === 1 ? "post" : "posts"}, newest first.`}
+  />
+
+  <GiveBand />
+  <NewsletterBand />
+</Base>
