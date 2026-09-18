@@ -42,6 +42,11 @@
   --parchment-50: #fffbf2;
   --parchment-100: #fff8ea;
   --parchment-200: #fff4e1;  /* BRAND */
+  /* The signup band's own ground. It has to sit a clear step below the page
+     so the ask reads as a band rather than as more page, which is the one
+     place the retuned light end left too little contrast. It also fills part
+     of the gap between 200 and 300. */
+  --parchment-250: #f8e9d1;
   --parchment-300: #cabca6;
   --parchment-400: #aca08b;
   --parchment-500: #908472;
