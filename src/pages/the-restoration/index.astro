@@ -519,10 +519,15 @@ const full = (stem: string, ws: readonly number[]) =>
      parchment-50, NOT the parchment-100 page ground the other pages use,
      which is why the torn edge above section 01 carries --torn-fill. */
   .band { padding-block: clamp(3.5rem, 2.25rem + 5vw, 6rem); }
-  .band--archive { background: var(--parchment-50); }
-  .band--condition { background: var(--parchment-200); }
+  /* The parchment rhythm was light, dark, light across 01, 02 and 04.
+     Reversed on instruction: 01 opens on the deeper cream, 02 lifts, 04
+     drops back. 03 and 05 are the dark bands and are untouched. 01 carries
+     the torn edge, which takes its fill from this band, so the wave follows
+     without anything else being said. */
+  .band--archive { background: var(--parchment-200); }
+  .band--condition { background: var(--parchment-50); }
   .band--reveal { background: var(--forest-950); }
-  .band--vision { background: var(--parchment-50); }
+  .band--vision { background: var(--parchment-200); }
   .band--watch { background: var(--charcoal-900); }
 
   .sec__headline {
