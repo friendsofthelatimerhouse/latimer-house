@@ -407,10 +407,15 @@ const signupReady = Boolean(newsletter.action);
     width: 3.125rem;
     height: 3.125rem;
     border-radius: 50%;
-    background: var(--parchment-200);
+    /* States reversed on instruction. The disc rests on the warm hewn tone
+       and cools to parchment on hover, rather than the other way round. It
+       also reads better at rest than it did: parchment-200 is now one step
+       off the signup band's own ground, so the disc had almost disappeared
+       until you pointed at it. */
+    background: var(--hewn-200);
     transition: background-color 150ms ease;
   }
-  .band-signup__give:hover .band-signup__givedisc { background: var(--hewn-200); }
+  .band-signup__give:hover .band-signup__givedisc { background: var(--parchment-200); }
   .band-signup__givetext {
     font-family: var(--font-body);
     font-weight: 700;
