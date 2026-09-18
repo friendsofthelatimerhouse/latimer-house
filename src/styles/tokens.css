@@ -31,9 +31,17 @@
   --sage-900: #152c1f;
   --sage-950: #04190e;
   /* parchment */
-  --parchment-50: #fff4e1;
-  --parchment-100: #f8e9d1;
-  --parchment-200: #ecddc5;  /* BRAND */
+  /* The light end was retuned 2026-09-18. The page ground moved up to what
+     used to be the card colour, and everything that sits on the page moved
+     lighter than that, so a card or a field now reads as raised rather than
+     as a hole cut in a darker sheet. Every name kept its meaning, so no
+     component had to change: whatever referenced 200 is still the deepest
+     cream, whatever referenced 50 is still the lifted surface. 25 is new
+     and is the only step added. */
+  --parchment-25: #fffdf8;
+  --parchment-50: #fffbf2;
+  --parchment-100: #fff8ea;
+  --parchment-200: #fff4e1;  /* BRAND */
   --parchment-300: #cabca6;
   --parchment-400: #aca08b;
   --parchment-500: #908472;
