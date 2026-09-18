@@ -20,7 +20,7 @@ The full County Commission had passed it the day before. The School Board said y
 
 That week is not a delay.
 
-The parcel Mr. Brown reserved for himself has no recorded legal access today. The access he used during his lifetime ended when he died, and on paper the parcel has been landlocked ever since. Whatever line the two attorneys draw on that survey is the line this property lives with in perpetuity.
+The parcel Mr. Brown reserved for himself had no recorded legal access. The access he used during his lifetime ended when he died, and on paper the parcel has been landlocked ever since. Whatever line the two attorneys draw on that survey is the line this property lives with in perpetuity.
 
 Far better that it is drawn correctly now than found to be wrong after the deed is recorded. Both attorneys have until the end of the day on August 26.
 
