@@ -322,7 +322,7 @@ const isExactly = (href: string) => path === href;
     top: 0;
     z-index: 50;
     background: var(--forest-950);
-    color: var(--parchment-200);
+    color: var(--text-on-dark-body);
     transition: background-color 160ms ease, box-shadow 160ms ease;
   }
 
@@ -459,7 +459,7 @@ const isExactly = (href: string) => path === href;
     transition: color 150ms ease;
   }
   .site-header__nav a:hover,
-  .site-header__nav a[aria-current="page"] { color: var(--parchment-50); }
+  .site-header__nav a[aria-current="page"] { color: var(--text-on-dark); }
 
   .site-header__give { flex-shrink: 0; }
 
@@ -601,13 +601,13 @@ const isExactly = (href: string) => path === href;
   }
   .off-canvas__list a:hover {
     background: color-mix(in srgb, var(--parchment-100) 7%, transparent);
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
   }
 
   /* Active reads the same way it does in the desktop header: the label
      and its mark lift to full parchment, everything else stays at 300. */
   .off-canvas__list a[aria-current="page"] {
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
     font-weight: 600;
   }
 
@@ -615,7 +615,7 @@ const isExactly = (href: string) => path === href;
   .off-canvas__list--give { margin-block-start: 1.25rem; }
   .off-canvas__list--give a {
     background: color-mix(in srgb, var(--parchment-100) 13%, transparent);
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
     font-weight: 600;
   }
   .off-canvas__list--give a:hover {

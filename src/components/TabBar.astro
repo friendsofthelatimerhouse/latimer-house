@@ -73,7 +73,7 @@ const isCurrent = (href: string) =>
     align-items: center;
     gap: 0.375rem;
     text-decoration: none;
-    color: var(--sage-300);
+    color: var(--sage-400);
     transition: color 150ms ease;
   }
 
@@ -103,7 +103,7 @@ const isCurrent = (href: string) =>
      draws it. On the dark bar the pill is a parchment tint rather than
      the forest fill the light theme uses, which would be invisible here. */
   .tab-bar a[aria-current="page"] {
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
   }
   .tab-bar a[aria-current="page"] .tab-bar__slot {
     background: color-mix(in srgb, var(--parchment-100) 15%, transparent);

@@ -127,7 +127,7 @@ const srcset = (ext: string, stem: string, ws: readonly number[]) =>
   .page-hero {
     position: relative;
     background: var(--forest-950);
-    color: var(--parchment-200);
+    color: var(--text-on-dark-body);
     padding-block: clamp(3rem, 1.75rem + 6vw, 7rem)
       clamp(4.5rem, 3rem + 7vw, 8.5rem);
   }
@@ -214,7 +214,7 @@ const srcset = (ext: string, stem: string, ws: readonly number[]) =>
     font-weight: 700;
     font-size: clamp(1.25rem, 1rem + 0.9vw, 1.625rem);
     line-height: 1.15;
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
     text-transform: uppercase;
   }
   .page-hero__label {
@@ -224,7 +224,7 @@ const srcset = (ext: string, stem: string, ws: readonly number[]) =>
     font-size: 12.5px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--sage-300);
+    color: var(--sage-400);
   }
 
   /* Canvas values for the hero trail, which differ from the section
@@ -248,14 +248,14 @@ const srcset = (ext: string, stem: string, ws: readonly number[]) =>
   }
   .page-hero__crumb-link:hover,
   .page-hero__crumb-link:focus-visible {
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
   }
   @media (prefers-reduced-motion: reduce) {
     .page-hero__crumb-link { transition: none; }
   }
 
   .page-hero h1 {
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
     max-width: 20ch;
     margin-block-start: 1.25rem;
   }
@@ -263,7 +263,7 @@ const srcset = (ext: string, stem: string, ws: readonly number[]) =>
   /* Wider than the standard measure. The hero standfirst sits under a
      display line and reads as part of it, not as body copy. */
   .page-hero__lead {
-    color: var(--parchment-200);
+    color: var(--text-on-dark-body);
     max-width: 52ch;
     margin-block-start: 1.5rem;
   }

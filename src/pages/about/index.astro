@@ -244,8 +244,8 @@ const board = [
 
   /* The forest band inverts. Restated here rather than left to global.css,
      because these are this page's own selectors and outrank it. */
-  .band--record .sec__headline { color: var(--parchment-50); }
-  .band--record .sec__body { color: var(--parchment-200); }
+  .band--record .sec__headline { color: var(--text-on-dark); }
+  .band--record .sec__body { color: var(--text-on-dark-body); }
 
   .sec__link {
     color: var(--forest-800);
@@ -314,7 +314,7 @@ const board = [
   }
   .pull--invert .pull__quote {
     font-size: clamp(1.375rem, 1.05rem + 1.3vw, 2rem);
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
   }
   .pull__attr {
     margin-block-start: 1.5rem;
@@ -359,13 +359,13 @@ const board = [
     line-height: 1.32;
     letter-spacing: -0.025em;
     text-transform: uppercase;
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
   }
   .board__role {
     margin-block-start: 0.75rem;
     font-size: 0.90625rem;
     line-height: 1.58;
-    color: var(--sage-300);
+    color: var(--sage-400);
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -157,9 +157,9 @@ button, input, textarea, select { font: inherit; color: inherit; }
 }
 .band--forest {
   background: var(--forest-950);
-  color: var(--parchment-200);
+  color: var(--text-on-dark-body);
 }
-.band--forest :is(h1, h2, h3, h4) { color: var(--parchment-50); }
+.band--forest :is(h1, h2, h3, h4) { color: var(--text-on-dark); }
 .band--forest .eyebrow { color: var(--hewn-300); }
 
 .stack > * + * { margin-block-start: var(--stack-gap, 1rem); }
@@ -235,7 +235,7 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 .btn--primary {
   background: var(--hewn-600);
-  color: var(--parchment-50);
+  color: var(--text-on-dark);
 }
 .btn--primary:hover { background: var(--hewn-700); }
 
@@ -246,14 +246,14 @@ button, input, textarea, select { font: inherit; color: inherit; }
 }
 .btn--secondary:hover {
   background: var(--forest-900);
-  color: var(--parchment-50);
+  color: var(--text-on-dark);
   border-color: var(--forest-900);
 }
 
 /* The persistent GIVE button in the header. Hewn, per the Figma. */
 .btn--give {
   background: var(--hewn-600);
-  color: var(--parchment-50);
+  color: var(--text-on-dark);
   padding: 0.8rem 1.35rem;
   font-size: 13px;
   letter-spacing: 0.1em;
@@ -266,7 +266,7 @@ button, input, textarea, select { font: inherit; color: inherit; }
    landscape rather than as a second GIVE button. */
 .btn--hero {
   background: var(--sage-700);
-  color: var(--parchment-50);
+  color: var(--text-on-dark);
   padding: 1.35rem 2rem;
   font-size: 14px;
   letter-spacing: 0.09em;
@@ -279,7 +279,7 @@ button, input, textarea, select { font: inherit; color: inherit; }
    which is why this lives here rather than in a page's scoped block. */
 .btn--join {
   background: var(--forest-900);
-  color: var(--parchment-50);
+  color: var(--text-on-dark);
 }
 .btn--join:hover { background: var(--forest-800); }
 

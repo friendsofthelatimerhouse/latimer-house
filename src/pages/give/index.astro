@@ -239,7 +239,7 @@ const sections = [
     line-height: 1.5;
     color: var(--charcoal-600, #6c625f);
   }
-  .band--dark .head__note { color: var(--sage-300); }
+  .band--dark .head__note { color: var(--sage-400); }
 
   /* A button that cannot do anything yet says so, rather than pretending. */
   .is-disabled {
@@ -266,8 +266,8 @@ const sections = [
 
   /* The forest bands invert. Restated here because this component's own
      selectors carry the [data-astro-cid-*] that outranks global.css. */
-  .band--dark .sec__headline { color: var(--parchment-50); }
-  .band--dark .sec__lead { color: var(--parchment-200); }
+  .band--dark .sec__headline { color: var(--text-on-dark); }
+  .band--dark .sec__lead { color: var(--text-on-dark-body); }
 
   /* ---------- THE FOUR BLOCKS ----------
      Two columns of 588 with a 56 gutter, one on a phone. Space and type,
@@ -299,8 +299,8 @@ const sections = [
     line-height: 1.55;
     color: var(--charcoal-700);
   }
-  .band--dark .card__title { color: var(--parchment-50); }
-  .band--dark .card__body { color: var(--parchment-200); }
+  .band--dark .card__title { color: var(--text-on-dark); }
+  .band--dark .card__body { color: var(--text-on-dark-body); }
 
   /* Same arrow, same travel, same curve as every other one on the site. */
   .card__action { margin-block-start: 1rem; }
@@ -324,7 +324,7 @@ const sections = [
   }
   .card__action a:hover .btn__arrow,
   .card__action a:focus-visible .btn__arrow { transform: translateX(0.25rem); }
-  .band--dark .card__action a { color: var(--parchment-50); }
+  .band--dark .card__action a { color: var(--text-on-dark); }
   .band--dark .card__action a:hover { color: var(--hewn-300); }
 
   @media (prefers-reduced-motion: reduce) {

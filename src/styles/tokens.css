@@ -47,6 +47,10 @@
      place the retuned light end left too little contrast. It also fills part
      of the gap between 200 and 300. */
   --parchment-250: #f8e9d1;
+  /* The pre-retune brand tan, back in the ramp. It is the body colour for
+     type on the dark grounds, and when the light end moved on 18 September
+     it was the one value with nowhere left to land. */
+  --parchment-275: #ecddc5;
   --parchment-300: #cabca6;
   --parchment-400: #aca08b;
   --parchment-500: #908472;
@@ -117,7 +121,14 @@
   --text-primary: var(--charcoal-800);
   --text-secondary: var(--charcoal-700);
   --text-muted: var(--charcoal-600);
-  --text-inverse: var(--parchment-50);
+  /* Type on the dark grounds: the heroes, the forest bands, the footer, the
+     inverted prose. These were pointed straight at ramp steps, so when the
+     light end of the parchment ramp moved they all moved with it and every
+     dark section quietly went pale. Naming them fixes what they mean rather
+     than where they sat in the ramp. */
+  --text-on-dark: var(--parchment-200);       /* #fff4e1, headings */
+  --text-on-dark-body: var(--parchment-275);  /* #ecddc5, standfirst and body */
+  --text-inverse: var(--text-on-dark);
   --text-link: var(--forest-800);
   --text-on-accent: var(--base-white);
   --border-subtle: var(--parchment-300);

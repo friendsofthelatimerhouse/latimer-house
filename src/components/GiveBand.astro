@@ -39,7 +39,7 @@ import { give, membership } from "../site.config";
        the forest footer, so a third value keeps the three bands reading as
        three bands rather than two. */
     background: var(--sage-700);
-    color: var(--parchment-200);
+    color: var(--text-on-dark-body);
     /* 196px tall on the canvas at desktop. */
     padding-block: clamp(2.5rem, 1.75rem + 3vw, 3.75rem);
   }
@@ -55,7 +55,7 @@ import { give, membership } from "../site.config";
   .give-band__text { flex: 1 1 26rem; }
 
   .give-band__heading {
-    color: var(--parchment-50);
+    color: var(--text-on-dark);
     font-size: var(--type-h2-size);
     line-height: var(--type-h2-line);
     letter-spacing: var(--type-h2-track);
@@ -87,11 +87,11 @@ import { give, membership } from "../site.config";
     letter-spacing: 0.08em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--parchment-200);
+    color: var(--text-on-dark-body);
     transition: color 260ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
   .give-band__alt:hover,
-  .give-band__alt:focus-visible { color: var(--parchment-50); }
+  .give-band__alt:focus-visible { color: var(--text-on-dark); }
   /* The arrow steps right on hover and slides back when the pointer
      leaves, because the transition is on the arrow itself rather than on
      the hover state. 4px is enough to read as movement without the link
