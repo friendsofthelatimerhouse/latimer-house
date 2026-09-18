@@ -150,11 +150,9 @@ button, input, textarea, select { font: inherit; color: inherit; }
 /* Band color treatments, matching the alternating rhythm on the
    Give and About pages: parchment, then forest, then parchment. */
 .band--parchment {
-  /* The wave is a mask on the band BELOW it, so its fill has to be that
-     band's color or it reads as a pale stripe. --bg-canvas is the page
-     ground, which is what almost every band under a torn edge uses. A page
-     tearing into something else sets --torn-fill on the element. */
-  background: var(--torn-fill, var(--bg-canvas));
+  /* The tear is drawn by the band itself now, see .torn-top, so there is
+     no --torn-fill to honour here. This is simply the page ground. */
+  background: var(--bg-canvas);
   color: var(--text-primary);
 }
 .band--forest {
@@ -305,22 +303,40 @@ button, input, textarea, select { font: inherit; color: inherit; }
    any width instead of being pinned to three fixed sizes.
    ============================================================ */
 
-.torn-edge {
+/* The torn edge is a wave cut into the TOP of the band it belongs to, and it
+   is drawn by that band rather than by a separate element sitting above it.
+
+   It used to be a sibling div that had to be told, per page, what colour the
+   band beneath it was. That is a standing invitation to drift: give a band a
+   ground of its own and its tear keeps painting the old one, which is exactly
+   what happened when the signup band moved to parchment-250. background-color
+   here is `inherit`, so the wave takes the band's own ground by construction
+   and there is nothing left to get wrong.
+
+   Geometry matches what it replaces. The pseudo element is absolutely
+   positioned at bottom: 100%, so it occupies the strip directly above the
+   band's top edge and takes no part in layout, the same net effect the old
+   negative margin had. position: relative on the band anchors it without
+   creating a stacking context, so z-index: 2 still resolves against the page
+   and the wave paints over the section above it. */
+.torn-top {
   --torn-height: clamp(22px, 2.4vw, 46px);
   position: relative;
+}
+.torn-top::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 100%;
   height: var(--torn-height);
-  margin-block-start: calc(var(--torn-height) * -1);
-  /* The wave is a mask on the band BELOW it, so its fill has to be that
-     band's color or it reads as a pale stripe. --bg-canvas is the page
-     ground, which is what almost every band under a torn edge uses. A page
-     tearing into something else sets --torn-fill on the element. */
-  background: var(--torn-fill, var(--bg-canvas));
+  background-color: inherit;
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40 V16 c50 -8 100 6 150 8 s100 -4 150 -10 s100 -8 150 -2 s100 12 150 10 s100 -12 150 -14 s100 8 150 10 s100 -6 150 -8 s100 10 150 6 V40 Z' fill='%23000'/%3E%3C/svg%3E");
   mask-size: 100% 100%;
   mask-repeat: no-repeat;
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40 V16 c50 -8 100 6 150 8 s100 -4 150 -10 s100 -8 150 -2 s100 12 150 10 s100 -12 150 -14 s100 8 150 10 s100 -6 150 -8 s100 10 150 6 V40 Z' fill='%23000'/%3E%3C/svg%3E");
   -webkit-mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
+  pointer-events: none;
   z-index: 2;
 }
 

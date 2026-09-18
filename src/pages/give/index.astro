@@ -142,10 +142,8 @@ const sections = [
     stats={stats}
     scrim={[0.94, 0.86, 0.72]}
   />
-  <div class="torn-edge" style="--torn-fill: var(--parchment-200);" aria-hidden="true"></div>
-
-  {sections.map((s) => (
-    <section class:list={["band", `band--${s.tone}`, s.tone === "dark" && "band--forest"]}>
+  {sections.map((s, i) => (
+    <section class:list={["band", `band--${s.tone}`, s.tone === "dark" && "band--forest", i === 0 && "torn-top"]}>
       <div class="container">
         <div class="head">
           <div class="head__copy" data-aos="fade-up">

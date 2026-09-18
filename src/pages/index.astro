@@ -65,18 +65,11 @@ const signupReady = Boolean(newsletter.action);
     </div>
   </section>
 
-  {/* The wave is a mask on the band BELOW it, so its fill has to be that
-      band's colour. The signup band has its own ground now rather than the
-      page's, so the default of --bg-canvas leaves a pale stripe across the
-      tear. This is the one page where the band under the wave is not the
-      page colour. */}
-  <div class="torn-edge" style="--torn-fill: var(--parchment-250);" aria-hidden="true"></div>
-
   <!-- The home signup band carries three things where the shared one
        carries two: the signup, and beside it the mission line and the
        gift invitation. This composition appears once, so it lives here
        rather than in a component. -->
-  <section class="band-signup">
+  <section class="band-signup torn-top">
     <div class="container band-signup__inner">
       <div class="band-signup__intro" data-aos="fade-up">
         <span class="band-signup__disc" aria-hidden="true">
