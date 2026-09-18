@@ -65,7 +65,12 @@ const signupReady = Boolean(newsletter.action);
     </div>
   </section>
 
-  <div class="torn-edge" aria-hidden="true"></div>
+  {/* The wave is a mask on the band BELOW it, so its fill has to be that
+      band's colour. The signup band has its own ground now rather than the
+      page's, so the default of --bg-canvas leaves a pale stripe across the
+      tear. This is the one page where the band under the wave is not the
+      page colour. */}
+  <div class="torn-edge" style="--torn-fill: var(--parchment-250);" aria-hidden="true"></div>
 
   <!-- The home signup band carries three things where the shared one
        carries two: the signup, and beside it the mission line and the
