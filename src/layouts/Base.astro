@@ -38,6 +38,8 @@ const {
   noindex = false,
 } = Astro.props;
 const fullTitle = bare ? title : `${title} · ${site.title}`;
+const ogImage = new URL("/og-image.jpg", Astro.site ?? "https://friendsofthelatimerhouse.org").href;
+const ogImageAlt = "The Friends of the Latimer House mark, established 1790's, over the hand hewn logs of the house showing through its brick.";
 
 /**
  * Two different reasons a page stays out of search, and they are not the same
@@ -79,7 +81,20 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <!-- The link preview image, the same on every page because it is
+         the organization, not the page: canvas "OG · 1200x630 · C" on
+         Visual Concepts (10. SOCIAL). The full mark over the logs between
+         the brick, and the address. Evergreen on purpose: no launch
+         wording, because it shows whenever any page is shared. Absolute,
+         because Facebook will not resolve a relative path. -->
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <!-- The L Mark is the secondary form, made for small sizes, which
          is exactly what a favicon is. Forest, because the browser tab is
