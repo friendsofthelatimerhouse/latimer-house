@@ -35,6 +35,20 @@ const board = [
   { name: "Cindy McClard", role: "Treasurer. A lifelong neighbor of William and Martha Brown." },
   { name: "Unpaid", role: "Every seat on the board, and no staff." },
 ] as const;
+
+/**
+ * Working with the board, not on it. Canvas node "Working with the board ·
+ * Tommy Latimer" under the Board row on all three About screens. It is
+ * deliberately NOT a seat: centered rather than in the row, a hairline
+ * instead of the hewn rule, his title as the eyebrow, and a smaller name.
+ * "Latimer Family Historian" describes what he does; it is not an office
+ * under the bylaws, and he holds no seat.
+ */
+const historian = {
+  title: "Latimer Family Historian",
+  name: "Tommy Latimer",
+  about: "A direct descendant of Colonel Jonathan Latimer, and the family's local historian.",
+} as const;
 ---
 
 <Base
@@ -164,6 +178,13 @@ const board = [
           </li>
         ))}
       </ul>
+
+      <div class="historian" data-aos="fade-up">
+        <span class="historian__rule" aria-hidden="true"></span>
+        <p class="eyebrow historian__title">{historian.title}</p>
+        <p class="historian__name">{historian.name}</p>
+        <p class="historian__about">{historian.about}</p>
+      </div>
 
       <div class="column" data-aos="fade-up">
         <p class="sec__body">
@@ -344,6 +365,46 @@ const board = [
   }
   @media (min-width: 34rem) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 68rem) { .board { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2rem; } }
+
+  /* ---------- WORKING WITH THE BOARD ----------
+     Canvas: 64 below the row, a 64 by 1 hairline, then title, name and
+     line at 12 apart, all centered. Everything that makes a seat a seat
+     (the hewn rule, the 26 name, the place in the row) is left off, so it
+     cannot be read as a fifth or sixth board member. */
+  .historian {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-block-start: 4rem;
+    text-align: center;
+  }
+  .historian__rule {
+    display: block;
+    width: 4rem;
+    height: 1px;
+    margin-block-end: 1.75rem;
+    background: rgba(255, 251, 242, 0.22);
+  }
+  .historian__title { color: var(--hewn-400); }
+  .historian__name {
+    margin-block-start: 0.75rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.375rem;
+    line-height: 1.32;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    color: var(--text-on-dark);
+  }
+  .historian__about {
+    max-width: 22.5rem;
+    margin-block-start: 0.75rem;
+    font-size: 0.90625rem;
+    line-height: 1.58;
+    color: var(--sage-400);
+  }
+  /* The paragraph after it gets the canvas's 80. */
+  .historian + .column { margin-block-start: 5rem; }
 
   .board__rule {
     display: block;
