@@ -1,20 +1,11 @@
 ---
-title: Ready to start, in the Hendersonville Standard
+title: Friends of the Latimer House ready to start preservation work
 date: 2026-09-10
 datePrecision: day
 category: Restoration
-excerpt: Main Street Media wrote about the transfer of the Latimer House and the first work ahead, with Jim Latimer on the years the house waited and the one request Mr. Brown made. The full article is reprinted here with the paper's permission.
-standfirst: The paper on the transfer, the years before it, and what comes first. Reprinted in full with permission.
+excerpt: Main Street Media on the transfer of the Latimer House and the first work ahead, with Jim Latimer on the years the house waited and the one request Mr. Brown made.
 tags: [press, Main Street Media, Hendersonville Standard, Jim Latimer, deed]
 ---
-
-### In the paper
-## The story in the Standard.
-
-On September 10, 2026, the Hendersonville Standard and Main Street Media published a story by Abbey Nutter on the transfer of the Latimer House and what the Friends of the Latimer House plan to do first. Jim Latimer, a direct descendant of Colonel Jonathan Latimer and President of the organization, spoke for the Friends. The article is reprinted below in full, with the paper's permission, and can also be read [on the Main Street Media site](https://mainstreetmediatn.com/articles/headlines-newsletter/friends-of-the-latimer-house-ready-to-start-preservation-work/).
-
-### Reprinted with permission
-## Friends of the Latimer House ready to start preservation work.
 
 *By Abbey Nutter, Main Street Media. Published September 10, 2026.*
 
