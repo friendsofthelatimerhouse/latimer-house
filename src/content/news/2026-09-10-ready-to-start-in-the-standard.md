@@ -40,10 +40,6 @@ The first step for the Friends of the Latimer House will be to create an entranc
 
 "We always want to acknowledge the tremendous gift that Mr. Brown gave the county," Latimer said. "It's still the largest gift of monetary value that anybody has ever given the county. He made one simple request. He just wanted the house preserved as the center of a park bearing his wife's and his name."
 
-*Copyright Main Street Media. Reprinted with permission.*
-
 The full record of how the house came to us, with the documents behind it, is on [The Story](/the-story/).
-
-Thank you to Abbey Nutter and Main Street Media for the story, and for letting it be shared here.
 
 *Source: Abbey Nutter, ["Friends of the Latimer House ready to start preservation work,"](https://mainstreetmediatn.com/articles/headlines-newsletter/friends-of-the-latimer-house-ready-to-start-preservation-work/) Main Street Media, September 10, 2026.*
