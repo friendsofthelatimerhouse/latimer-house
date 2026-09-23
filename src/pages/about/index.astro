@@ -35,17 +35,6 @@ const board = [
   { name: "Cindy McClard", role: "Treasurer. A lifelong neighbor of William and Martha Brown." },
   { name: "Unpaid", role: "Every seat on the board, and no staff." },
 ] as const;
-
-/**
- * People who work with the board without holding a seat on it. Kept out of
- * the board list on purpose: the board row is who governs, and the fifth
- * card says every seat is unpaid, so nobody without a seat belongs in it.
- * Tommy Latimer is not a director. "Latimer Family Historian" is a title
- * describing what he does, not an office under the bylaws.
- */
-const alongside = [
-  { name: "Tommy Latimer", role: "Latimer Family Historian. A direct descendant of Colonel Jonathan Latimer, and the family's local historian." },
-] as const;
 ---
 
 <Base
@@ -175,19 +164,6 @@ const alongside = [
           </li>
         ))}
       </ul>
-
-      <div class="alongside" data-aos="fade-up">
-        <p class="eyebrow alongside__eyebrow">Working with the board</p>
-        <ul class="board board--alongside" role="list">
-          {alongside.map((m) => (
-            <li class="board__seat">
-              <span class="board__rule" aria-hidden="true"></span>
-              <p class="board__name">{m.name}</p>
-              <p class="board__role">{m.role}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
 
       <div class="column" data-aos="fade-up">
         <p class="sec__body">
@@ -368,17 +344,6 @@ const alongside = [
   }
   @media (min-width: 34rem) { .board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 68rem) { .board { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2rem; } }
-
-  /* Working with the board: same card as a seat, in its own row under a
-     hairline, so it reads as alongside the board rather than on it. Same
-     grid as the board, so a single card lines up with the first seat. */
-  .alongside {
-    margin-block-start: clamp(2.5rem, 1.75rem + 2vw, 3.5rem);
-    padding-block-start: clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem);
-    border-block-start: 1px solid rgba(236, 221, 197, 0.18);
-  }
-  .alongside__eyebrow { color: var(--hewn-400); }
-  .board--alongside { margin-block-start: 1.5rem; }
 
   .board__rule {
     display: block;
