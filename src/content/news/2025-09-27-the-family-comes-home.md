@@ -40,7 +40,7 @@ The family heard from Sumner County Commissioners Jeremy Mansfield, Tim Jones, D
 <li><button type="button" data-lb="image" data-lb-src="/img/news/reunion-2025-15-1600.jpg" data-lb-alt="A man pointing out features of the house to the group." data-lb-caption="A walk through the rooms, September 27, 2025" tabindex="-1"></button></li>
 <li><button type="button" data-lb="image" data-lb-src="/img/news/reunion-2025-16-1600.jpg" data-lb-alt="The group spread through the front room, with the fireplace at the far wall." data-lb-caption="The front room, September 27, 2025" tabindex="-1"></button></li>
 <li><button type="button" data-lb="image" data-lb-src="/img/news/reunion-2025-17-1600.jpg" data-lb-alt="The reunion group standing together on the front porch of the house." data-lb-caption="The family on the front porch, September 27, 2025" tabindex="-1"></button></li>
-<li><button type="button" data-lb="image" data-lb-src="/img/news/reunion-2025-18-1600.jpg" data-lb-alt="The reunion group standing together in the front room of the log house." data-lb-caption="Everyone together inside the house, September 27, 2025" tabindex="-1"></button></li>
+<li><button type="button" data-lb="image" data-lb-src="/img/news/reunion-2025-18-1600.jpg" data-lb-alt="The reunion group in the front room of the log house, with Sumner County Commissioners Tim Jones and Jeremy Mansfield kneeling in front." data-lb-caption="The reunion group with Sumner County Commissioners Tim Jones, left, and Jeremy Mansfield, right, kneeling in front, September 27, 2025" tabindex="-1"></button></li>
 </ul>
 </figure>
 
