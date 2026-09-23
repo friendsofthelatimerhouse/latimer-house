@@ -42,12 +42,7 @@ The first step for the Friends of the Latimer House will be to create an entranc
 
 *Copyright Main Street Media. Reprinted with permission.*
 
-### How it got here
-## How the money came back.
-
-The money Mr. Brown left for the house was wrongfully confiscated and combined into the school system's education technology trust, a fund it was never left to. Citizens and a small group of county commissioners pressed for years to see his wishes honored. The money was separated back out and returned to the county in 2025. The Commission approved the conveyance of the house and the transfer of the fund by Resolution 2608-07 on August 17, 2026, the Board of Education approved it on August 18, and the deed was recorded on August 27 in Record Book 6928, pages 761 through 769.
-
-Volunteer days will be announced once the house is insured.
+The full record of how the house came to us, with the documents behind it, is on [The Story](/the-story/).
 
 Thank you to Abbey Nutter and Main Street Media for the story, and for letting it be shared here.
 
