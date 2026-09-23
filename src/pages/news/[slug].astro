@@ -17,11 +17,21 @@
  * h2 is an eyebrow, a blockquote is a pull quote with its second paragraph
  * as the attribution, and an image followed by an italic line is a
  * captioned figure.
+ *
+ * A PHOTO GALLERY is the canvas Figure (1000 by 540, node 288:918) with
+ * every photograph behind it. It is written as raw HTML in the post, a
+ * figure.post-gallery holding one visible data-lb button, its figcaption,
+ * and a hidden list of the remaining data-lb buttons. The shared Lightbox
+ * treats every data-lb="image" on the page as one gallery, so clicking the
+ * big photograph opens it and the arrows walk the rest. See the family
+ * reunion post for the pattern, and keep the markup free of blank lines or
+ * markdown will split it.
  */
 import { getCollection, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import GiveBand from "../../components/GiveBand.astro";
 import NewsletterBand from "../../components/NewsletterBand.astro";
+import Lightbox from "../../components/Lightbox.astro";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("news", (p) => !p.data.draft)).sort(
@@ -126,6 +136,7 @@ const year = d.date.getUTCFullYear();
 
   <GiveBand />
   <NewsletterBand />
+  <Lightbox />
 </Base>
 
 <style>
@@ -292,6 +303,71 @@ const year = d.date.getUTCFullYear();
   }
   .article :global(p:has(> img:only-child) + p > em:only-child) { font-style: normal; }
 
+  /* ---------- PHOTO GALLERY ----------
+     The canvas Figure: 1000 wide, a 1000 by 540 crop, caption under it.
+     The frame is a button into the Lightbox; the badge says there is more
+     than one picture behind it, which the crop alone cannot. Hover matches
+     the photographs on The Restoration. */
+  .article > :global(figure.post-gallery) {
+    width: min(100%, 62.5rem);
+    margin: clamp(2.5rem, 1.75rem + 2.5vw, 5rem) 0 0;
+  }
+  .article :global(.post-gallery__open) {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    cursor: zoom-in;
+  }
+  .article :global(.post-gallery__open:focus-visible) { outline: 2px solid var(--hewn-400); outline-offset: 3px; }
+  .article :global(.post-gallery__frame) {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--parchment-300);
+    aspect-ratio: 1000 / 540;
+  }
+  @media (max-width: 39.99rem) {
+    .article :global(.post-gallery__frame) { aspect-ratio: 4 / 3; }
+  }
+  .article :global(.post-gallery__frame picture) { display: block; width: 100%; height: 100%; }
+  .article :global(.post-gallery__frame img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 60%;
+    transition: transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .article :global(.post-gallery__open:hover .post-gallery__frame img),
+  .article :global(.post-gallery__open:focus-visible .post-gallery__frame img) { transform: scale(1.035); }
+  .article :global(.post-gallery__badge) {
+    position: absolute;
+    inset-inline-start: 1rem;
+    inset-block-end: 1rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    background: rgba(0, 25, 14, 0.72);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-on-dark);
+  }
+  .article :global(.post-gallery figcaption) {
+    margin-block-start: 0.875rem;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--charcoal-600, #6c625f);
+  }
+
   /* ---------- TAGS AND POST NAVIGATION ---------- */
   .chips {
     display: flex;
@@ -399,6 +475,8 @@ const year = d.date.getUTCFullYear();
   @media (prefers-reduced-motion: reduce) {
     .post-hero__crumb, .chip, .post-nav__title,
     .post-all a, .post-all__arrow { transition: none; }
+    .article :global(.post-gallery__frame img) { transition: none; }
+    .article :global(.post-gallery__open:hover .post-gallery__frame img) { transform: none; }
     .post-all a:hover .post-all__arrow { transform: none; }
   }
 </style>
