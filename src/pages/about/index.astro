@@ -367,7 +367,7 @@ const historian = {
   @media (min-width: 68rem) { .board { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2rem; } }
 
   /* ---------- WORKING WITH THE BOARD ----------
-     Canvas: 64 below the row, a 64 by 1 hairline, then title, name and
+     Canvas: 64 below the row, a 64 by 2 rule, then title, name and
      line at 12 apart, all centered. Everything that makes a seat a seat
      (the hewn rule, the 26 name, the place in the row) is left off, so it
      cannot be read as a fifth or sixth board member. */
@@ -381,7 +381,8 @@ const historian = {
   .historian__rule {
     display: block;
     width: 4rem;
-    height: 1px;
+    /* 2, the same weight as the pull quote rule below it. */
+    height: 2px;
     margin-block-end: 1.75rem;
     background: rgba(255, 251, 242, 0.22);
   }
