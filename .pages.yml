@@ -1,0 +1,88 @@
+# Pages CMS (https://pagescms.org) configuration.
+#
+# Pages CMS is a browser editor that reads and writes the files already in
+# this repository. Nothing moves to another service: a News post is still one
+# markdown file in src/content/news, and every save is a git commit.
+#
+# The fields below mirror the schema in src/content.config.ts. If a field is
+# added or a category changes there, change it here too, or the editor will
+# offer choices the build rejects.
+#
+# There is deliberately no author or byline field. Posts are unsigned and
+# published by the organization (Voice and Style Guide, Section 2).
+#
+# Every save to main is a production deploy on Netlify (15 build credits).
+# Save drafts with "Draft" switched on, and publish in batches.
+
+media:
+  input: public/img/news
+  output: /img/news
+
+content:
+  - name: news
+    label: News
+    type: collection
+    path: src/content/news
+    filename: "{year}-{month}-{day}-{primary}.md"
+    format: yaml-frontmatter
+    view:
+      fields: [title, date, category, draft]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Headline
+        type: string
+        required: true
+      - name: date
+        label: Date
+        description: The day it happened, not the day it was written.
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: datePrecision
+        label: Date shown as
+        description: Use "month" when the record only gives the month.
+        type: select
+        default: day
+        options:
+          values:
+            - name: day
+              label: Full date
+            - name: month
+              label: Month and year only
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          values: [Restoration, The Record, Events, History]
+      - name: excerpt
+        label: Card summary
+        description: The two or three lines on the News card. Not the first paragraph of the article.
+        type: text
+        required: true
+      - name: standfirst
+        label: Standfirst
+        description: The line under the headline on the post itself. Optional.
+        type: text
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: draft
+        label: Draft
+        description: While on, the post is kept out of the site entirely.
+        type: boolean
+        default: false
+      - name: body
+        label: Article
+        description: "Conventions: a small heading (H3) directly above a large one (H2) becomes the eyebrow over a section. A quote's second paragraph is its attribution. An image followed by an italic line becomes a captioned photo."
+        type: rich-text
+        options:
+          format: markdown
+          path: public/img/news
