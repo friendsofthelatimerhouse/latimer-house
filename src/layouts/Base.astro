@@ -13,7 +13,7 @@ import "../styles/global.css";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import ToTop from "../components/ToTop.astro";
-import { site, org, mailing, prelaunch } from "../site.config";
+import { site, org, mailing, prelaunch, socials, house } from "../site.config";
 
 interface Props {
   title: string;
@@ -115,43 +115,76 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
       />
     )}
 
-    <!-- Structured data. Helps a local nonprofit show up correctly in
-         search and maps, and costs nothing to include. -->
+    <!-- Structured data. Three linked descriptions Google reads together:
+         the website (its name is what Google shows as the site name in
+         results), the house itself as a historic building with an address
+         and a map position, and the nonprofit that looks after it. The
+         house is the thing people search for, so it gets its own entry
+         rather than being a footnote to the organization. -->
     <script
       type="application/ld+json"
       set:html={JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "NGO",
-        name: org.legalName,
-        alternateName: org.shortName,
-        url: site.url,
-        description: org.tagline,
-        email: org.email,
-        /* The ORGANIZATION's address is the charter address on Latimer
-           Lane. Wolfpack Way is where the house stands and nothing else,
-           so it is the location rather than the address. Putting the house
-           here would tell search engines to send post to a building nobody
-           collects mail at. */
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: mailing.streetAddress,
-          addressLocality: mailing.addressLocality,
-          addressRegion: mailing.addressRegion,
-          postalCode: mailing.postalCode,
-          addressCountry: "US",
-        },
-        location: {
-          "@type": "Place",
-          name: "The Latimer House at the William and Martha Brown Park",
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: org.streetAddress,
-            addressLocality: org.addressLocality,
-            addressRegion: org.addressRegion,
-            postalCode: org.postalCode,
-            addressCountry: "US",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": `${site.url}/#website`,
+            url: `${site.url}/`,
+            name: house.name,
+            alternateName: [org.shortName, org.legalName],
+            publisher: { "@id": `${site.url}/#org` },
           },
-        },
+          {
+            "@type": "LandmarksOrHistoricalBuildings",
+            "@id": `${site.url}/#house`,
+            name: house.name,
+            alternateName: house.alternateNames,
+            description: house.description,
+            url: `${site.url}/`,
+            image: ogImage,
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: org.streetAddress,
+              addressLocality: org.addressLocality,
+              addressRegion: org.addressRegion,
+              postalCode: org.postalCode,
+              addressCountry: "US",
+            },
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: house.latitude,
+              longitude: house.longitude,
+            },
+            containedInPlace: {
+              "@type": "Park",
+              name: "William and Martha Brown Park",
+            },
+          },
+          {
+            "@type": "NGO",
+            "@id": `${site.url}/#org`,
+            name: org.legalName,
+            alternateName: org.shortName,
+            url: site.url,
+            description: org.tagline,
+            email: org.email,
+            sameAs: socials.map((s) => s.href),
+            /* The ORGANIZATION's address is the charter address on Latimer
+               Lane. Wolfpack Way is where the house stands and nothing else,
+               so it belongs to the house above, not here. Putting the house
+               here would tell search engines to send post to a building
+               nobody collects mail at. */
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: mailing.streetAddress,
+              addressLocality: mailing.addressLocality,
+              addressRegion: mailing.addressRegion,
+              postalCode: mailing.postalCode,
+              addressCountry: "US",
+            },
+            location: { "@id": `${site.url}/#house` },
+          },
+        ],
       })}
     />
   </head>

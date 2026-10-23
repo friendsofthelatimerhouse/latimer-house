@@ -91,11 +91,34 @@ export const mailingLine =
  */
 export const prelaunch = false;
 
+/**
+ * The house, as search engines should know it. "Latimer House" is what
+ * people type, so it leads; the other names catch the ways the house is
+ * also written. Used by the structured data in Base.astro.
+ *
+ * The coordinates are for the structured data only, where Google wants a
+ * point on the map. The map LINK in the footer still resolves the street
+ * address, for the reason given on mapUrl below.
+ */
+export const house = {
+  name: "Latimer House",
+  alternateNames: [
+    "The Latimer House",
+    "Latimer House at the William and Martha Brown Park",
+    "Latimer Brown House",
+    "Latimer log house",
+  ],
+  description:
+    "A hand hewn log house raised in the 1790's in Sumner County, Tennessee, covered in brick in the mid 1900's. The logs are still underneath.",
+  latitude: 36.39804,
+  longitude: -86.58092,
+} as const;
+
 export const site = {
   url: "https://friendsofthelatimerhouse.org",
   title: "Friends of the Latimer House",
   description:
-    "A hand hewn log house raised in the 1790's in Sumner County, Tennessee. There is a log house inside that brick house, and we are uncovering it.",
+    "The Latimer House, a hand hewn log house raised in the 1790's in Gallatin, Sumner County, Tennessee. There is a log house inside that brick house, and we are uncovering it.",
 } as const;
 
 /**
