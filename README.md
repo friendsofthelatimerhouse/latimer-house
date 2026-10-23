@@ -6,7 +6,9 @@ a Tennessee 501(c)(3) restoring a 1790's hand hewn log house in Sumner County.
 ## Stack
 
 - **Astro**, static output. No server, no database.
-- **Cloudflare Pages** hosting. Push to `main` deploys.
+- **Cloudflare Workers** hosting (static assets only, configured in
+  `wrangler.jsonc`). Cloudflare builds and deploys every push to `main`.
+  The site moved off Netlify in October 2026.
 - Design tokens in `src/styles/tokens.css`, generated from the Figma
   variables in LH-Master-Brand. Do not hand-edit colour or type values there.
 - Everything that appears on every page lives in `src/site.config.ts`.
