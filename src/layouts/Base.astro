@@ -12,6 +12,7 @@ import "../styles/global.css";
 
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import ToTop from "../components/ToTop.astro";
 import { site, org, mailing, prelaunch } from "../site.config";
 
 interface Props {
@@ -162,6 +163,7 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
       <slot />
     </main>
     <SiteFooter />
+    <ToTop />
     {/*
       The mobile tab bar is deliberately not mounted. The hamburger and
       the off canvas rail already cover navigation on a phone, and a second

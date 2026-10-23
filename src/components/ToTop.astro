@@ -1,0 +1,112 @@
+---
+/**
+ * Back to top. A small fixed button, bottom right, on every page.
+ *
+ * The same pattern as brandaiddesignco.com and jeremymansfield.com: hidden
+ * at the top of the page, it scales in once the reader is a screen or so
+ * down, and the arrow lifts on hover. Hewn, the GIVE button's colour,
+ * because it has to read on parchment, on the forest bands and footer, and
+ * over photographs, and hewn is the one brand colour that does all three.
+ *
+ * Without JavaScript it is a plain link to #top and is always shown, so it
+ * still works. With JavaScript it scrolls smoothly (instantly under reduced
+ * motion), and while hidden it is taken out of the tab order and away from
+ * screen readers, so nobody can land on a control they cannot see. After
+ * it is used, focus moves to the logo, the first thing at the top.
+ */
+---
+
+<a class="to-top" href="#top" aria-label="Back to top">
+  <svg class="to-top__arr" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+    <path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</a>
+
+<script>
+  const btn = document.querySelector<HTMLAnchorElement>(".to-top");
+  if (btn) {
+    document.documentElement.classList.add("has-to-top-js");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let shown: boolean | null = null;
+
+    const update = () => {
+      const next = window.scrollY > 480;
+      if (next === shown) return;
+      shown = next;
+      btn.classList.toggle("is-shown", next);
+      if (next) {
+        btn.removeAttribute("tabindex");
+        btn.removeAttribute("aria-hidden");
+      } else {
+        btn.setAttribute("tabindex", "-1");
+        btn.setAttribute("aria-hidden", "true");
+      }
+    };
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" });
+      document.querySelector<HTMLElement>(".site-header__brand")?.focus({ preventScroll: true });
+    });
+
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+</script>
+
+<style>
+  .to-top {
+    --size: 3.25rem;
+    --edge: clamp(1rem, 3vw, 2rem);
+    position: fixed;
+    right: var(--edge);
+    bottom: calc(var(--edge) + env(safe-area-inset-bottom, 0px));
+    z-index: 45; /* under the header (50) and the open menu (100) */
+    display: grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 3px;
+    background: var(--hewn-600);
+    color: var(--text-on-dark);
+    box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.45);
+    text-decoration: none;
+    transition:
+      opacity 0.4s ease-out,
+      scale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 0.3s ease-out,
+      box-shadow 0.4s ease-out;
+  }
+
+  /* Hidden until scrolled, but only when the script is running. */
+  :global(.has-to-top-js) .to-top:not(.is-shown) {
+    opacity: 0;
+    scale: 0.6;
+    pointer-events: none;
+  }
+
+  .to-top:hover {
+    background: var(--hewn-700);
+    box-shadow: 0 16px 32px -14px rgb(0 0 0 / 0.55);
+  }
+  .to-top:active { scale: 0.92; }
+
+  .to-top__arr { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  .to-top:hover .to-top__arr,
+  .to-top:focus-visible .to-top__arr { transform: translateY(-4px); }
+
+  /* The global focus outline is hewn, the same as the button, so use the
+     light ring here instead. */
+  .to-top:focus-visible { outline-color: var(--text-on-dark); outline-offset: 3px; }
+
+  @media (max-width: 40rem) {
+    .to-top { --size: 2.875rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .to-top, .to-top__arr { transition: opacity 0.2s linear; }
+    .to-top:hover .to-top__arr,
+    .to-top:focus-visible .to-top__arr { transform: none; }
+    :global(.has-to-top-js) .to-top:not(.is-shown) { scale: 1; }
+  }
+</style>
