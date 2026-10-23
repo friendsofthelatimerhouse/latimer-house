@@ -32,6 +32,7 @@ import Base from "../../layouts/Base.astro";
 import GiveBand from "../../components/GiveBand.astro";
 import NewsletterBand from "../../components/NewsletterBand.astro";
 import Lightbox from "../../components/Lightbox.astro";
+import { site, org } from "../../site.config";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("news", (p) => !p.data.draft)).sort(
@@ -60,9 +61,41 @@ const stamp = d.datePrecision === "month"
   ? `${MONTHS[d.date.getUTCMonth()]} ${d.date.getUTCFullYear()}`
   : `${MONTHS[d.date.getUTCMonth()]} ${d.date.getUTCDate()}, ${d.date.getUTCFullYear()}`;
 const year = d.date.getUTCFullYear();
+
+/**
+ * Article data for search engines: headline, date, image and who wrote it,
+ * so a post can show in results with its date and picture.
+ *
+ * The author is read from the byline a reprint opens with ("*By Abbey
+ * Nutter, Main Street Media.") so a newspaper's piece is credited to its
+ * writer. Every other post is the organization's own. The image is the
+ * first photograph in the post, falling back to the site's link preview.
+ */
+const body = post.body ?? "";
+const byline = body.match(/^\s*\*By ([^,*]+)/);
+const firstImg = body.match(/src="(\/img\/[^"]+\.(?:jpe?g|png|webp))"/);
+const pageUrl = new URL(Astro.url.pathname, site.url).href;
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: d.title,
+  description: d.excerpt,
+  datePublished: d.date.toISOString().slice(0, 10),
+  mainEntityOfPage: pageUrl,
+  url: pageUrl,
+  image: new URL(firstImg ? firstImg[1] : "/og-image.jpg", site.url).href,
+  articleSection: d.category,
+  keywords: d.tags?.join(", "),
+  about: { "@id": `${site.url}/#house` },
+  author: byline
+    ? { "@type": "Person", name: byline[1].trim() }
+    : { "@id": `${site.url}/#org` },
+  publisher: { "@type": "NGO", "@id": `${site.url}/#org`, name: org.legalName },
+};
 ---
 
 <Base title={d.title} description={d.excerpt}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleLd)} />
   <article>
     <header class="post-hero">
       <div class="container">
