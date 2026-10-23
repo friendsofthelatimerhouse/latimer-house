@@ -42,7 +42,18 @@ const signupReady = Boolean(newsletter.action);
 
     <div class="container hero__inner">
       <div class="hero__copy">
+        {/*
+          The eyebrow sits INSIDE the h1 on purpose. People search for
+          "Latimer House", and the main heading is where Google looks
+          hardest for what a page is about, so the name has to be part of
+          it. Read aloud it runs "The Latimer House, Sumner County,
+          Tennessee. Revolutionary history lives here." The separator dot
+          is hidden from screen readers and replaced by a comma.
+        */}
         <h1 class="hero__headline" data-aos="fade-up">
+          <span class="hero__eyebrow">
+            The Latimer House<span class="hero__eyebrow-sep" aria-hidden="true">&middot;</span><span class="visually-hidden">, </span>Sumner County, Tennessee<span class="visually-hidden">.</span>
+          </span>
           Revolutionary<br />history<br />lives here.
         </h1>
         <hr class="hero__rule" data-aos="fade-up" data-aos-delay="150" />
@@ -225,6 +236,26 @@ const signupReady = Boolean(newsletter.action);
     line-height: 1.03;
     letter-spacing: -0.01em;
     color: var(--parchment-100);
+  }
+
+  /* Option A from the Figma board "2.2 HOME HERO · NAME THE LATIMER
+     HOUSE": a small hewn label over the headline, 16px Inter Bold at 14%
+     tracking on the canvas. */
+  .hero__eyebrow {
+    display: block;
+    margin-block-end: 1.1rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(0.75rem, 0.7rem + 0.22vw, 1rem);
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    color: var(--hewn-300);
+  }
+  .hero__eyebrow-sep { margin-inline: 0.6em; }
+  /* On a phone the label wraps to two lines with the county on the second,
+     rather than breaking somewhere arbitrary. */
+  @media (max-width: 34rem) {
+    .hero__eyebrow-sep { display: block; height: 0; overflow: hidden; margin: 0; }
   }
 
   .hero__rule {
