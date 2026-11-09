@@ -25,7 +25,7 @@ npm run build    # outputs to dist/
 
 - **No em dashes**, anywhere, in code comments or copy.
 - The founding date is **the 1790's**, the decade, never the year.
-- **0.805 acres** is the only acreage this organisation publishes.
+- **0.805 acres** is the house's parcel. The original Latimer tract was **640 acres along Station Camp Creek**.
 - Full chartered name in anything legal. Never ", Inc."
 - Express type and spacing in **relative units**. A pixel line-height that
   did not scale with font size was the one bug that hit 24 screens in Figma.
