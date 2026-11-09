@@ -7,6 +7,8 @@
  * ("THE STORY · THE LOG HOUSE"). Passing an array rather than a string
  * keeps the middle dot out of the copy, so the separator can change once.
  */
+import { site } from "../site.config";
+
 type Crumb = { label: string; href?: string };
 
 interface Props {
@@ -63,11 +65,33 @@ const {
   imageWidths = [700, 1000, 1440, 2000],
   scrim = [0.95, 0.8, 0.45],
 } = Astro.props;
-const scrimVars = `--scrim-top:${scrim[0]};--scrim-mid:${scrim[1]};--scrim-foot:${scrim[2]};`;
+/**
+ * The same trail as structured data, led by Home, so Google can show
+ * "friendsofthelatimerhouse.org › The Story › The Latimers" in place of the
+ * bare URL. The last crumb is this page. An ancestor with no href has
+ * nowhere to point and is left out rather than given a guessed address.
+ */
+const trail = [
+  { name: "Home", item: `${site.url}/` },
+  ...crumbs.flatMap((c, i) =>
+    i === crumbs.length - 1
+      ? [{ name: c.label, item: new URL(Astro.url.pathname, site.url).href }]
+      : c.href
+        ? [{ name: c.label, item: new URL(c.href, site.url).href }]
+        : [],
+  ),
+];
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: trail.map((t, i) => ({ "@type": "ListItem", position: i + 1, ...t })),
+};
+const scrimVars =`--scrim-top:${scrim[0]};--scrim-mid:${scrim[1]};--scrim-foot:${scrim[2]};`;
 const srcset = (ext: string, stem: string, ws: readonly number[]) =>
   ws.map((w) => `${stem}-${w}.${ext} ${w}w`).join(", ");
 ---
 
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 <section class="page-hero" class:list={[image && "page-hero--media"]}>
   {image && (
     <>

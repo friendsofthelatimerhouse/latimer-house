@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { satteri } from "@astrojs/markdown-satteri";
+import { readdirSync, readFileSync } from "node:fs";
 
 /**
  * Pages that carry a permanent noindex, and so have no business in a
@@ -48,11 +49,39 @@ const externalLinks = {
   },
 };
 
+/**
+ * Each news post's date, keyed by its URL, so the sitemap can tell search
+ * engines when a post appeared. Read straight from the frontmatter because
+ * the content collection is not available to the config. The slug rule
+ * matches slugOf in src/pages/news/[slug].astro. Drafts are skipped, since
+ * they are not built.
+ *
+ * Only posts get a date. A fixed page has no honest "last changed" date to
+ * give, and a wrong one teaches Google to ignore the field for the whole
+ * site.
+ */
+const NEWS_DIR = new URL("./src/content/news/", import.meta.url);
+const newsDates = Object.fromEntries(
+  readdirSync(NEWS_DIR)
+    .filter((f) => f.endsWith(".md"))
+    .flatMap((f) => {
+      const fm = readFileSync(new URL(f, NEWS_DIR), "utf8").split(/^---$/m)[1] ?? "";
+      if (/^draft:\s*true/m.test(fm)) return [];
+      const date = fm.match(/^date:\s*["']?(\d{4}-\d{2}-\d{2})/m)?.[1];
+      const slug = f.replace(/\.md$/, "").replace(/^\d{4}-\d{2}(-\d{2})?-/, "");
+      return date ? [[`/news/${slug}/`, date]] : [];
+    }),
+);
+
 export default defineConfig({
   site: "https://friendsofthelatimerhouse.org",
   integrations: [
     sitemap({
       filter: (page) => !NOINDEX.some((path) => page.endsWith(path)),
+      serialize(item) {
+        const date = newsDates[new URL(item.url).pathname];
+        return date ? { ...item, lastmod: date } : item;
+      },
     }),
   ],
   // Static output. The build produces plain HTML/CSS files, which is

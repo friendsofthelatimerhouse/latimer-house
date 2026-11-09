@@ -21,7 +21,7 @@ export async function getStaticPaths() {
 const { year, slice, years } = Astro.props;
 ---
 
-<Base title={`News from ${year}`} description={`Posts from the Latimer House in ${year}.`}>
+<Base title={`News from ${year}`} description={`News from the Latimer House in ${year}: the restoration, the record and the people of the 1790's log house in Gallatin, Tennessee.`}>
   <PageHero
     crumbs={[{ label: "News", href: "/news/" }, { label: String(year) }]}
     headline="What is happening at the house."

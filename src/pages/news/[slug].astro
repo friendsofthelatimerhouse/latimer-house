@@ -81,6 +81,7 @@ const articleLd = {
   headline: d.title,
   description: d.excerpt,
   datePublished: d.date.toISOString().slice(0, 10),
+  dateModified: d.date.toISOString().slice(0, 10),
   mainEntityOfPage: pageUrl,
   url: pageUrl,
   image: new URL(firstImg ? firstImg[1] : "/og-image.jpg", site.url).href,
@@ -92,10 +93,27 @@ const articleLd = {
     : { "@id": `${site.url}/#org` },
   publisher: { "@type": "NGO", "@id": `${site.url}/#org`, name: org.legalName },
 };
+
+/* The trail Google shows in place of the bare URL: Home, News, the post.
+   Posts have no PageHero, so it is written here rather than there. */
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${site.url}/` },
+    { "@type": "ListItem", position: 2, name: "News", item: `${site.url}/news/` },
+    { "@type": "ListItem", position: 3, name: d.title, item: pageUrl },
+  ],
+};
 ---
 
-<Base title={d.title} description={d.excerpt}>
+<Base
+  title={d.title}
+  description={d.excerpt}
+  article={{ published: d.date.toISOString().slice(0, 10), section: d.category }}
+>
   <script type="application/ld+json" set:html={JSON.stringify(articleLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
   <article>
     <header class="post-hero">
       <div class="container">
