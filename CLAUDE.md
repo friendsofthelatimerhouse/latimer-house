@@ -112,6 +112,16 @@ npm run dev      # http://localhost:4321, or the next free port
   and never in or signed with Jeremy's name.
 - The Voice and Style Guide is internal. Never quote it on the site.
 
+## Done outside the code
+
+Already handled. Don't suggest these again.
+
+- Google Search Console: Domain property verified and sitemap submitted,
+  23 October 2026.
+- Google Maps: the house is submitted as a historical landmark. Don't
+  recommend a Google Business Profile until the house has posted visiting
+  hours.
+
 ## Lessons already paid for
 
 - Type on dark grounds uses `--text-on-dark` and `--text-on-dark-body`,
